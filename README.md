@@ -1,6 +1,6 @@
 # LanSoEditor_common  ---android平台的视频编辑SDK
 
-###当前版本是LanSoEditor-v1.3
+###当前版本是LanSoEditor-v1.4
 *  主要使用在音视频的: 裁剪,剪切,分离,合并,转换,拼接,水印,叠加,混合,转码等场合;
 *  
 *  我们是针对android平台对ffmpeg做了硬件加速优化,经过多款手机的测试,优化性能大概提升4倍左右
@@ -25,13 +25,17 @@
 ###本SDK的编解码有:
 *  软解码器H264
 *  硬件加速解码器lansoh264_dec
+*
 *  软编码器libx264
-*  硬编码器lansoh264_enc
+*  硬件加速编码器lansoh264_enc
+*
+*  音频mp3解码器mp3
 *  音频mp3编码器libmp3lame
+*
+*  音频aac解码器aac
 *  音频aac编码器 faac
+*  音频pcm编解码器 pcm_s16le
 
-####我们有免费的,仅供个人视频爱好者使用的版本,欢迎您的使用
-*   下载地址 https://github.com/LanSoSdk/video_play_edit_sdk  
    
 
 
