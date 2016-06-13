@@ -18,20 +18,16 @@
 *   QQ 1852600324 
 *   Email:support@lansongtech.com
 
-###您可以直接下载APK来安装测试:
-  [LanSoEditor_common.apk][id]
-[id]:http://files.cnblogs.com/files/guobaPlayer/LanSoEditor_common.apk 
+###直接下载获取APK:
+   下载整个项目后, 在bin文件下有apk, 直接安装后即可演示.
 
 ###本SDK的编解码有:
 *  软解码器H264
 *  硬件加速解码器lansoh264_dec
-*
 *  软编码器libx264
 *  硬件加速编码器lansoh264_enc
-*
 *  音频mp3解码器mp3
 *  音频mp3编码器libmp3lame
-*
 *  音频aac解码器aac
 *  音频aac编码器 faac
 *  音频pcm编解码器 pcm_s16le

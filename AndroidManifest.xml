@@ -46,8 +46,9 @@
      
          <activity android:name="com.lansosdk.editorDemo.SdkHintActivity"></activity>
          
-         
          <activity android:name="com.lansosdk.editorDemo.VideoPlayerActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.FileExplorerActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.MediaInfoActivity"></activity>
         
         
     </application>

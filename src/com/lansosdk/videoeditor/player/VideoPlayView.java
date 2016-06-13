@@ -487,38 +487,19 @@ public class VideoPlayView extends FrameLayout {
 
     private VideoPlayer createPlayer() {
 
-    	VideoPlayer ijkMediaPlayer = null;
+    	VideoPlayer videoPlayer = null;
                 if (mUri != null) {
-                    ijkMediaPlayer = new VideoPlayer();
-                  //  if (mSettings.getUsingMediaCodec()) {
-                        ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-                      //  if (mSettings.getUsingMediaCodecAutoRotate()) {
-                            ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
-                       // } else {
-                       //     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 0);
-                       // }
-                    //} else {
-                   //     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
-                   // }
-
-                  //  if (mSettings.getUsingOpenSLES()) {
-                  //      ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
-                   // } else {
-                        ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
-                    //}
-
-                   // String pixelFormat = mSettings.getPixelFormat();
-                   // if (TextUtils.isEmpty(pixelFormat)) {
-                        ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "overlay-format", VideoPlayer.SDL_FCC_RV32);
-                   // } else {
-                   //     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", pixelFormat);
-                   // }
-                    ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
-                    ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
-                    ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
-                    ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+                    videoPlayer = new VideoPlayer();
+                        videoPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+                            videoPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+                        videoPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
+                        videoPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "overlay-format", VideoPlayer.SDL_FCC_RV32);
+                    videoPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
+                    videoPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+                    videoPlayer.setOption(VideoPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
+                    videoPlayer.setOption(VideoPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
                 }
-        return ijkMediaPlayer;
+        return videoPlayer;
     }
     public IMediaPlayer getMediaPlayer()
     {

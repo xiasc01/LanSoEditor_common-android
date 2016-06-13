@@ -13,17 +13,6 @@
         android:layout_margin="20dip"/>
     
     
-        <TextView  
-         android:id="@+id/id_video_edit_progress_hint"
-         android:layout_below="@id/id_video_editor_demo_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="0%"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/white"/>
-        
-        
             <Button 
         android:id="@+id/id_video_edit_btn"
         android:layout_width="match_parent"

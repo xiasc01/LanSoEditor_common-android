@@ -537,38 +537,52 @@ R35 B50,G71
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
-        public static final int right_arrow=0x7f020001;
-        public static final int start=0x7f020002;
-        public static final int start_background=0x7f020003;
+        public static final int ic_menu_archive=0x7f020001;
+        public static final int ic_menu_back=0x7f020002;
+        public static final int ic_menu_block=0x7f020003;
+        public static final int ic_menu_gallery=0x7f020004;
+        public static final int right_arrow=0x7f020005;
+        public static final int start=0x7f020006;
+        public static final int start_background=0x7f020007;
     }
     public static final class id {
-        public static final int id_main_demoedit=0x7f080002;
-        public static final int id_main_demoplay=0x7f080001;
-        public static final int id_main_etvideo=0x7f080000;
-        public static final int id_playbox_hint_1=0x7f080007;
-        public static final int id_playbox_hint_2=0x7f080008;
-        public static final int id_playbox_hint_3=0x7f080009;
-        public static final int id_playbox_hint_4=0x7f08000a;
-        public static final int id_playbox_hint_btn=0x7f08000c;
-        public static final int id_playbox_tv_count=0x7f08000b;
-        public static final int id_player_control_linear=0x7f080004;
-        public static final int id_player_pause=0x7f080006;
-        public static final int id_player_start=0x7f080005;
-        public static final int id_video_edit_btn=0x7f080011;
-        public static final int id_video_edit_progress_hint=0x7f080010;
-        public static final int id_video_editor_demo_hint=0x7f08000f;
-        public static final int id_video_play_btn=0x7f080012;
-        public static final int surface1=0x7f08000d;
-        public static final int surface2=0x7f08000e;
-        public static final int video_view=0x7f080003;
+        public static final int id_main_demoedit=0x7f080004;
+        public static final int id_main_demoplay=0x7f080003;
+        public static final int id_main_mediainfo=0x7f080002;
+        public static final int id_main_select_video=0x7f080001;
+        public static final int id_main_tv_videopath=0x7f080000;
+        public static final int id_mediainfo_tv=0x7f08000d;
+        public static final int id_playbox_hint_1=0x7f08000e;
+        public static final int id_playbox_hint_2=0x7f08000f;
+        public static final int id_playbox_hint_3=0x7f080010;
+        public static final int id_playbox_hint_4=0x7f080011;
+        public static final int id_playbox_hint_btn=0x7f080013;
+        public static final int id_playbox_tv_count=0x7f080012;
+        public static final int id_player_control_linear=0x7f080006;
+        public static final int id_player_pause=0x7f080008;
+        public static final int id_player_start=0x7f080007;
+        public static final int id_video_edit_btn=0x7f080017;
+        public static final int id_video_edit_progress_hint=0x7f080016;
+        public static final int id_video_editor_demo_hint=0x7f080015;
+        public static final int id_video_play_btn=0x7f080018;
+        public static final int imageview_rowicon=0x7f08000a;
+        public static final int linearlayout_row=0x7f080009;
+        public static final int surface1=0x7f080014;
+        public static final int textview_path=0x7f08000c;
+        public static final int textview_rowtext=0x7f08000b;
+        public static final int video_view=0x7f080005;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_player=0x7f030001;
-        public static final int playbox_hint_layout=0x7f030002;
-        public static final int player_layout=0x7f030003;
-        public static final int start_layout3=0x7f030004;
-        public static final int video_edit_demo_layout=0x7f030005;
+        public static final int file_explore_item=0x7f030002;
+        public static final int file_explore_layout=0x7f030003;
+        public static final int mediainfo_layout=0x7f030004;
+        public static final int playbox_hint_layout=0x7f030005;
+        public static final int player_layout=0x7f030006;
+        public static final int start_layout3=0x7f030007;
+        public static final int video_compress_layout=0x7f030008;
+        public static final int video_edit_demo_layout=0x7f030009;
     }
     public static final class string {
         public static final int adv_hint1=0x7f060002;
@@ -580,6 +594,7 @@ R35 B50,G71
         public static final int lansong_hint=0x7f060001;
         public static final int sdk_hnit=0x7f060007;
         public static final int video_editor_demo_hint=0x7f060006;
+        public static final int videoplay_hint=0x7f060009;
     }
     public static final class style {
         /** 
@@ -608,6 +623,7 @@ R35 B50,G71
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int dialog=0x7f070007;
         public static final int main_item_arrow=0x7f070006;
         public static final int main_item_linearlayout=0x7f070003;
         public static final int main_item_reletivelayout=0x7f070002;

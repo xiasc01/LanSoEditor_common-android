@@ -58,5 +58,12 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginRight">20dip</item>
         <item name="android:background">@drawable/right_arrow</item>
-    </style>	   
+    </style>
+    
+     
+      <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:textSize">25sp</item>
+    </style>
+    
+      	   
 </resources>

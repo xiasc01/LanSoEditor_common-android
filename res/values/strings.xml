@@ -12,4 +12,5 @@
     
 	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求\n 欢迎联系我们:\n 手机:18006716739 \n QQ:1852600324 \n email:support@lansongtech.com"</string>
 	<string name="file_not_exist">文件不存在</string>
+	<string name="videoplay_hint">视频小知识:\n当前是等比例的显示到屏幕上, 目的是保持视频的宽高比一致,视频不变形;\n\n 或许会导致分辨率小的画面被放大了,画面质量下降,这是正常情况,只是播放的界面事情,不影响视频本身</string>
 </resources>

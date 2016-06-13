@@ -133,10 +133,6 @@ public class VideoPlayer implements IMediaPlayer{
         native_setup(new WeakReference<VideoPlayer>(this));
     }
 
-    /*
-     * Update the IjkMediaPlayer SurfaceTexture. Call after setting a new
-     * display surface.
-     */
     private native void _setVideoSurface(Surface surface);
 
     
@@ -548,7 +544,7 @@ public class VideoPlayer implements IMediaPlayer{
         // do nothing
     }
     
-    private native void native_setup(Object IjkMediaPlayer_this);
+    private native void native_setup(Object play_this);
     private native void _release();
 //-----------------------------------------------------------------------------------------
     private OnPlayerPreparedListener mOnPreparedListener;
@@ -652,7 +648,7 @@ public class VideoPlayer implements IMediaPlayer{
             VideoPlayer player = mWeakPlayer.get();
             if (player == null || player.mNativeMediaPlayer == 0) {
                 DLog.w(TAG,
-                        "IjkMediaPlayer went away with unhandled events");
+                        "VideoPlayer went away with unhandled events");
                 return;
             }
 
@@ -917,19 +913,4 @@ public class VideoPlayer implements IMediaPlayer{
             return bestCodec.mCodecInfo.getName();
         }
     }
-
-//    public static void initSo()
-//    {
-//    	   System.loadLibrary("ffmpegeditor");
-//    	    System.loadLibrary("ijksdl");
-//    	    System.loadLibrary("ijkplayer");
-//    	    
-//           IjkMediaPlayer.native_profileBegin();
-//    }
-//    public static void unInitSo()
-//    {
-//   	 	IjkMediaPlayer.native_profileEnd();
-//    }
-//    public static native void native_profileBegin();
-//    public static native void native_profileEnd();
 }
