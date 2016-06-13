@@ -108,52 +108,52 @@ public interface IMediaPlayer {
     @Deprecated
     boolean isPlayable();
 
-    void setOnPreparedListener(OnPreparedListener listener);
+    void setOnPreparedListener(OnPlayerPreparedListener listener);
 
-    void setOnCompletionListener(OnCompletionListener listener);
+    void setOnCompletionListener(OnPlayerCompletionListener listener);
 
     void setOnBufferingUpdateListener(
-            OnBufferingUpdateListener listener);
+            OnPlayerBufferingUpdateListener listener);
 
     void setOnSeekCompleteListener(
-            OnSeekCompleteListener listener);
+            OnPlayerSeekCompleteListener listener);
 
     void setOnVideoSizeChangedListener(
-            OnVideoSizeChangedListener listener);
+            OnPlayerVideoSizeChangedListener listener);
 
-    void setOnErrorListener(OnErrorListener listener);
+    void setOnErrorListener(OnPlayerErrorListener listener);
 
-    void setOnInfoListener(OnInfoListener listener);
+    void setOnInfoListener(OnPlayerInfoListener listener);
 
     /*--------------------
      * Listeners
      */
-    interface OnPreparedListener {
+    interface OnPlayerPreparedListener {
         void onPrepared(IMediaPlayer mp);
     }
 
-    interface OnCompletionListener {
+    interface OnPlayerCompletionListener {
         void onCompletion(IMediaPlayer mp);
     }
 
-    interface OnBufferingUpdateListener {
+    interface OnPlayerBufferingUpdateListener {
         void onBufferingUpdate(IMediaPlayer mp, int percent);
     }
 
-    interface OnSeekCompleteListener {
+    interface OnPlayerSeekCompleteListener {
         void onSeekComplete(IMediaPlayer mp);
     }
 
-    interface OnVideoSizeChangedListener {
+    interface OnPlayerVideoSizeChangedListener {
         void onVideoSizeChanged(IMediaPlayer mp, int width, int height,
                                 int sar_num, int sar_den);
     }
 
-    interface OnErrorListener {
+    interface OnPlayerErrorListener {
         boolean onError(IMediaPlayer mp, int what, int extra);
     }
 
-    interface OnInfoListener {
+    interface OnPlayerInfoListener {
         boolean onInfo(IMediaPlayer mp, int what, int extra);
     }
 

@@ -29,17 +29,20 @@ import android.widget.Toast;
 
 public class VideoEditDemoActivity extends Activity{
 
+
+	private final static String TAG="videoEditDemoActivity";
+	private final static  boolean VERBOSE = false;   
+	
+	
 	String videoPath=null;
 	VideoEditor mEditor = new VideoEditor();
 	ProgressDialog  mProgressDialog;
 	int videoDuration;
-	boolean isRuned=false;
 	MediaInfo   mMediaInfo;
-	TextView tvProgressHint;
-	TextView  tvHint;
-	private final static String TAG="videoEditDemoActivity";
-	private static final boolean VERBOSE = false;   
 	private String dstPath="/sdcard/video_demo_framecrop.mp4";
+	
+
+	private boolean isRunning=false;  //当前视频处理不支持 处理过程中中止.
 	
 	  @Override
 	    protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +55,8 @@ public class VideoEditDemoActivity extends Activity{
 				
 			 mMediaInfo=new MediaInfo(videoPath);
 				
-			 tvHint=(TextView)findViewById(R.id.id_video_editor_demo_hint);
+			 TextView tvHint=(TextView)findViewById(R.id.id_video_editor_demo_hint);
 			 tvHint.setText(R.string.video_editor_demo_hint);
-			 tvProgressHint=(TextView)findViewById(R.id.id_video_edit_progress_hint);
 			 
 			 
 	        findViewById(R.id.id_video_edit_btn).setOnClickListener(new OnClickListener() {
@@ -71,7 +73,7 @@ public class VideoEditDemoActivity extends Activity{
 					if(mMediaInfo.vDuration>60*1000){//大于60秒
 						showHintDialog();
 					}else{
-						new SubAsyncTask().execute();
+						startVideoEditorTask();
 					}
 				}
 			});
@@ -97,7 +99,8 @@ public class VideoEditDemoActivity extends Activity{
 				public void onProgress(VideoEditor v, int percent) {
 					// TODO Auto-generated method stub
 					Log.i(TAG,"current percent is:"+percent);
-					tvProgressHint.setText(String.valueOf(percent)+"%");
+					if(mProgressDialog!=null)
+						mProgressDialog.setMessage("正在处理中..."+String.valueOf(percent)+"%");
 				}
 			});
 	  } 
@@ -109,6 +112,7 @@ public class VideoEditDemoActivity extends Activity{
         if(FileUtils.fileExist(dstPath)){
         	FileUtils.deleteFile(dstPath);
         }
+        findViewById(R.id.id_video_play_btn).setEnabled(false);
 	}
 		private void showHintDialog()
 		{
@@ -120,11 +124,17 @@ public class VideoEditDemoActivity extends Activity{
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					new SubAsyncTask().execute();
+					startVideoEditorTask();
 				}
 			})
 			.setNegativeButton("取消", null)
 	        .show();
+		}
+		private void startVideoEditorTask()
+		{
+			if(isRunning)
+				return;
+			new SubAsyncTask().execute();
 		}
 	  public class SubAsyncTask extends AsyncTask<Object, Object, Boolean>{
 			  @Override
@@ -133,9 +143,9 @@ public class VideoEditDemoActivity extends Activity{
 				  mProgressDialog = new ProgressDialog(VideoEditDemoActivity.this);
 		          mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		          mProgressDialog.setMessage("正在处理中...");
-		        
-		          mProgressDialog.setCanceledOnTouchOutside(false);
+		          mProgressDialog.setCancelable(false);
 		          mProgressDialog.show();
+		          isRunning=true;
 		          super.onPreExecute();
 			}
       	    @Override
@@ -153,7 +163,7 @@ public class VideoEditDemoActivity extends Activity{
       	    	
 //      	    	mEditor.executeVideoCutOut(videoPath,"/sdcard/2x_cut.mp4",5,5);
 //	mEditor.executeGetAllFrames("/sdcard/2x.mp4","/sdcard/","getpng");
-      	    	
+      	    	 isRunning=true;
       	    	mEditor.executeVideoFrameCrop(videoPath, 240, 240, 0, 0, dstPath,mMediaInfo.vCodecName,mMediaInfo.vBitRate);
       	    	
       	    	
@@ -187,8 +197,25 @@ public class VideoEditDemoActivity extends Activity{
 	       		 mProgressDialog.cancel();
 	       		 mProgressDialog=null;
     		}
-    		Log.i(TAG,"onPostExecute-------------------end");
+    		isRunning=false;
+    		
+    		if(FileUtils.fileExist(dstPath))
+    			findViewById(R.id.id_video_play_btn).setEnabled(true);
+    		
     	}
     }
+	  @Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		  if(isRunning){
+			  Log.e(TAG,"VideoEditor is running...cannot back!!! ");
+			  return ;
+		  }
+			  
+		  
+		super.onBackPressed();
+	}
+	  //-------------------------------------------------------------------------
+	 
 }
 

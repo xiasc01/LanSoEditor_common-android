@@ -925,7 +925,8 @@ public class VideoEditor {
 					cmdList.add("copy");
 					
 					cmdList.add("-vcodec");
-					cmdList.add("lansoh264_enc"); 
+					cmdList.add("libx264");
+//					cmdList.add("lansoh264_enc"); 
 					
 					cmdList.add("-b:v");
 					cmdList.add(String.valueOf(bitrate)); 

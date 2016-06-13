@@ -51,11 +51,11 @@ public class VPlayer {
     private int mSurfaceHeight;
     private int mVideoRotationDegree;
     
-    private IMediaPlayer.OnVideoSizeChangedListener mOnSizeChangedListener;
-    private IMediaPlayer.OnCompletionListener mOnCompletionListener;
-    private IMediaPlayer.OnPreparedListener mOnPreparedListener;
-    private IMediaPlayer.OnErrorListener mOnErrorListener;
-    private IMediaPlayer.OnInfoListener mOnInfoListener;
+    private IMediaPlayer.OnPlayerVideoSizeChangedListener mOnSizeChangedListener;
+    private IMediaPlayer.OnPlayerCompletionListener mOnCompletionListener;
+    private IMediaPlayer.OnPlayerPreparedListener mOnPreparedListener;
+    private IMediaPlayer.OnPlayerErrorListener mOnErrorListener;
+    private IMediaPlayer.OnPlayerInfoListener mOnInfoListener;
     
     private int mCurrentBufferPercentage;
     
@@ -128,8 +128,8 @@ public class VPlayer {
         }
     }
 
-    IMediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
-            new IMediaPlayer.OnVideoSizeChangedListener() {
+    IMediaPlayer.OnPlayerVideoSizeChangedListener mSizeChangedListener =
+            new IMediaPlayer.OnPlayerVideoSizeChangedListener() {
                 public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sarNum, int sarDen) {
                     mMainVideoWidth = mp.getVideoWidth();
                     mMainVideoHeight = mp.getVideoHeight();
@@ -142,7 +142,7 @@ public class VPlayer {
                 }
             };
 
-    IMediaPlayer.OnPreparedListener mPreparedListener = new IMediaPlayer.OnPreparedListener() {
+    IMediaPlayer.OnPlayerPreparedListener mPreparedListener = new IMediaPlayer.OnPlayerPreparedListener() {
         public void onPrepared(IMediaPlayer mp) {
             mCurrentState = STATE_PREPARED;
 
@@ -160,8 +160,8 @@ public class VPlayer {
         }
     };
 
-    private IMediaPlayer.OnCompletionListener mCompletionListener =
-            new IMediaPlayer.OnCompletionListener() {
+    private IMediaPlayer.OnPlayerCompletionListener mCompletionListener =
+            new IMediaPlayer.OnPlayerCompletionListener() {
                 public void onCompletion(IMediaPlayer mp) {
                     mCurrentState = STATE_PLAYBACK_COMPLETED;
                     if (mOnCompletionListener != null) {
@@ -170,8 +170,8 @@ public class VPlayer {
                 }
    };
 
-    private IMediaPlayer.OnInfoListener mInfoListener =
-            new IMediaPlayer.OnInfoListener() {
+    private IMediaPlayer.OnPlayerInfoListener mInfoListener =
+            new IMediaPlayer.OnPlayerInfoListener() {
                 public boolean onInfo(IMediaPlayer mp, int arg1, int arg2) {
                     if (mOnInfoListener != null) {
                      return   mOnInfoListener.onInfo(mp, arg1, arg2);
@@ -180,8 +180,8 @@ public class VPlayer {
                 }
             };
 
-    private IMediaPlayer.OnErrorListener mErrorListener =
-            new IMediaPlayer.OnErrorListener() {
+    private IMediaPlayer.OnPlayerErrorListener mErrorListener =
+            new IMediaPlayer.OnPlayerErrorListener() {
                 public boolean onError(IMediaPlayer mp, int framework_err, int impl_err) {
                     Log.d(TAG, "Error: " + framework_err + "," + impl_err);
                     mCurrentState = STATE_ERROR;
@@ -194,15 +194,15 @@ public class VPlayer {
                 }
             };
 
-    private IMediaPlayer.OnBufferingUpdateListener mBufferingUpdateListener =
-            new IMediaPlayer.OnBufferingUpdateListener() {
+    private IMediaPlayer.OnPlayerBufferingUpdateListener mBufferingUpdateListener =
+            new IMediaPlayer.OnPlayerBufferingUpdateListener() {
                 public void onBufferingUpdate(IMediaPlayer mp, int percent) {
                     mCurrentBufferPercentage = percent;
                 }
             };
 
   
-    public void setOnPreparedListener(IMediaPlayer.OnPreparedListener l) {
+    public void setOnPreparedListener(IMediaPlayer.OnPlayerPreparedListener l) {
         mOnPreparedListener = l;
     }
 
@@ -212,7 +212,7 @@ public class VPlayer {
      *
      * @param l The callback that will be run
      */
-    public void setOnCompletionListener(IMediaPlayer.OnCompletionListener l) {
+    public void setOnCompletionListener(IMediaPlayer.OnPlayerCompletionListener l) {
         mOnCompletionListener = l;
     }
 
@@ -224,7 +224,7 @@ public class VPlayer {
      *
      * @param l The callback that will be run
      */
-    public void setOnErrorListener(IMediaPlayer.OnErrorListener l) {
+    public void setOnErrorListener(IMediaPlayer.OnPlayerErrorListener l) {
         mOnErrorListener = l;
     }
 
@@ -234,7 +234,7 @@ public class VPlayer {
      *
      * @param l The callback that will be run
      */
-    public void setOnInfoListener(IMediaPlayer.OnInfoListener l) {
+    public void setOnInfoListener(IMediaPlayer.OnPlayerInfoListener l) {
         mOnInfoListener = l;
     }
 

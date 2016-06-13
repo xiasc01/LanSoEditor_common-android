@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.lansoeditor.demo.R;
 import com.lansosdk.videoeditor.player.IMediaPlayer;
 import com.lansosdk.videoeditor.player.VPlayer;
-import com.lansosdk.videoeditor.player.IMediaPlayer.OnPreparedListener;
+import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerPreparedListener;
 import com.lansosdk.videoeditor.utils.TextureRenderView;
 
 import android.app.Activity;
@@ -130,7 +130,7 @@ public class VideoPlayerActivity extends Activity {
           if (videoPath != null){
         	  mVPlayer=new VPlayer(this);
         	  mVPlayer.setVideoPath(videoPath);
-              mVPlayer.setOnPreparedListener(new OnPreparedListener() {
+              mVPlayer.setOnPreparedListener(new OnPlayerPreparedListener() {
     			
     			@Override
     			public void onPrepared(IMediaPlayer mp) {
@@ -152,7 +152,7 @@ public class VideoPlayerActivity extends Activity {
     {
         	  mVPlayer2=new VPlayer(this);
         	  mVPlayer2.setVideoPath(videoPath);
-              mVPlayer2.setOnPreparedListener(new OnPreparedListener() {
+              mVPlayer2.setOnPreparedListener(new OnPlayerPreparedListener() {
     			
     			@Override
     			public void onPrepared(IMediaPlayer mp) {

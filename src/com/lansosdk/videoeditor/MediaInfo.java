@@ -16,7 +16,7 @@ public class MediaInfo {
 //
 
 	 private static final String TAG="MediaInfo";
-	 private static final boolean VERBOSE = true; 
+	 private static final boolean VERBOSE = false; 
 	 
 	 /***************video track info(total 12)*************** */
 	 /**
@@ -42,10 +42,16 @@ public class MediaInfo {
      public float vRotateAngle;
      
      public boolean vHasBFrame;
+     /**
+      * 视频可以使用的解码器
+      */
      public String vCodecName;
+     /**
+      * 视频的 像素格式.
+      */
      public String vPixelFmt;
      
-     /********************audio track info (total 12)**************************/
+     /********************audio track info******************/
      
      public int aSampleRate;
      public int aChannels;

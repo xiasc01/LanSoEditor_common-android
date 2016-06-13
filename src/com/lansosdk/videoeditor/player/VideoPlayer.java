@@ -133,6 +133,10 @@ public class VideoPlayer implements IMediaPlayer{
         native_setup(new WeakReference<VideoPlayer>(this));
     }
 
+    /*
+     * Update the IjkMediaPlayer SurfaceTexture. Call after setting a new
+     * display surface.
+     */
     private native void _setVideoSurface(Surface surface);
 
     
@@ -544,44 +548,44 @@ public class VideoPlayer implements IMediaPlayer{
         // do nothing
     }
     
-    private native void native_setup(Object player_this);
+    private native void native_setup(Object IjkMediaPlayer_this);
     private native void _release();
 //-----------------------------------------------------------------------------------------
-    private OnPreparedListener mOnPreparedListener;
-    private OnCompletionListener mOnCompletionListener;
-    private OnBufferingUpdateListener mOnBufferingUpdateListener;
-    private OnSeekCompleteListener mOnSeekCompleteListener;
-    private OnVideoSizeChangedListener mOnVideoSizeChangedListener;
-    private OnErrorListener mOnErrorListener;
-    private OnInfoListener mOnInfoListener;
+    private OnPlayerPreparedListener mOnPreparedListener;
+    private OnPlayerCompletionListener mOnCompletionListener;
+    private OnPlayerBufferingUpdateListener mOnBufferingUpdateListener;
+    private OnPlayerSeekCompleteListener mOnSeekCompleteListener;
+    private OnPlayerVideoSizeChangedListener mOnVideoSizeChangedListener;
+    private OnPlayerErrorListener mOnErrorListener;
+    private OnPlayerInfoListener mOnInfoListener;
 
-    public final void setOnPreparedListener(OnPreparedListener listener) {
+    public final void setOnPreparedListener(OnPlayerPreparedListener listener) {
         mOnPreparedListener = listener;
     }
 
-    public final void setOnCompletionListener(OnCompletionListener listener) {
+    public final void setOnCompletionListener(OnPlayerCompletionListener listener) {
         mOnCompletionListener = listener;
     }
 
     public final void setOnBufferingUpdateListener(
-            OnBufferingUpdateListener listener) {
+            OnPlayerBufferingUpdateListener listener) {
         mOnBufferingUpdateListener = listener;
     }
 
-    public final void setOnSeekCompleteListener(OnSeekCompleteListener listener) {
+    public final void setOnSeekCompleteListener(OnPlayerSeekCompleteListener listener) {
         mOnSeekCompleteListener = listener;
     }
 
     public final void setOnVideoSizeChangedListener(
-            OnVideoSizeChangedListener listener) {
+            OnPlayerVideoSizeChangedListener listener) {
         mOnVideoSizeChangedListener = listener;
     }
 
-    public final void setOnErrorListener(OnErrorListener listener) {
+    public final void setOnErrorListener(OnPlayerErrorListener listener) {
         mOnErrorListener = listener;
     }
 
-    public final void setOnInfoListener(OnInfoListener listener) {
+    public final void setOnInfoListener(OnPlayerInfoListener listener) {
         mOnInfoListener = listener;
     }
 
@@ -648,7 +652,7 @@ public class VideoPlayer implements IMediaPlayer{
             VideoPlayer player = mWeakPlayer.get();
             if (player == null || player.mNativeMediaPlayer == 0) {
                 DLog.w(TAG,
-                        "VideoPlayer went away with unhandled events");
+                        "IjkMediaPlayer went away with unhandled events");
                 return;
             }
 
@@ -913,4 +917,19 @@ public class VideoPlayer implements IMediaPlayer{
             return bestCodec.mCodecInfo.getName();
         }
     }
+
+//    public static void initSo()
+//    {
+//    	   System.loadLibrary("ffmpegeditor");
+//    	    System.loadLibrary("ijksdl");
+//    	    System.loadLibrary("ijkplayer");
+//    	    
+//           IjkMediaPlayer.native_profileBegin();
+//    }
+//    public static void unInitSo()
+//    {
+//   	 	IjkMediaPlayer.native_profileEnd();
+//    }
+//    public static native void native_profileBegin();
+//    public static native void native_profileEnd();
 }

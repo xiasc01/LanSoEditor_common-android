@@ -73,10 +73,10 @@ public class VideoPlayView extends FrameLayout {
     private int mSurfaceHeight;
     private int mVideoRotationDegree;
     
-    private IMediaPlayer.OnCompletionListener mOnCompletionListener;
-    private IMediaPlayer.OnPreparedListener mOnPreparedListener;
-    private IMediaPlayer.OnErrorListener mOnErrorListener;
-    private IMediaPlayer.OnInfoListener mOnInfoListener;
+    private IMediaPlayer.OnPlayerCompletionListener mOnCompletionListener;
+    private IMediaPlayer.OnPlayerPreparedListener mOnPreparedListener;
+    private IMediaPlayer.OnPlayerErrorListener mOnErrorListener;
+    private IMediaPlayer.OnPlayerInfoListener mOnInfoListener;
     private int mCurrentBufferPercentage;
     
     
@@ -239,8 +239,8 @@ public class VideoPlayView extends FrameLayout {
         }
     }
 
-    IMediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
-            new IMediaPlayer.OnVideoSizeChangedListener() {
+    IMediaPlayer.OnPlayerVideoSizeChangedListener mSizeChangedListener =
+            new IMediaPlayer.OnPlayerVideoSizeChangedListener() {
                 public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sarNum, int sarDen) {
                     mVideoWidth = mp.getVideoWidth();
                     mVideoHeight = mp.getVideoHeight();
@@ -256,7 +256,7 @@ public class VideoPlayView extends FrameLayout {
                 }
             };
 
-    IMediaPlayer.OnPreparedListener mPreparedListener = new IMediaPlayer.OnPreparedListener() {
+    IMediaPlayer.OnPlayerPreparedListener mPreparedListener = new IMediaPlayer.OnPlayerPreparedListener() {
         public void onPrepared(IMediaPlayer mp) {
             mCurrentState = STATE_PREPARED;
 
@@ -280,8 +280,8 @@ public class VideoPlayView extends FrameLayout {
         }
     };
 
-    private IMediaPlayer.OnCompletionListener mCompletionListener =
-            new IMediaPlayer.OnCompletionListener() {
+    private IMediaPlayer.OnPlayerCompletionListener mCompletionListener =
+            new IMediaPlayer.OnPlayerCompletionListener() {
                 public void onCompletion(IMediaPlayer mp) {
                     mCurrentState = STATE_PLAYBACK_COMPLETED;
                     if (mOnCompletionListener != null) {
@@ -290,8 +290,8 @@ public class VideoPlayView extends FrameLayout {
                 }
    };
 
-    private IMediaPlayer.OnInfoListener mInfoListener =
-            new IMediaPlayer.OnInfoListener() {
+    private IMediaPlayer.OnPlayerInfoListener mInfoListener =
+            new IMediaPlayer.OnPlayerInfoListener() {
                 public boolean onInfo(IMediaPlayer mp, int arg1, int arg2) {
                     if (mOnInfoListener != null) {
                         mOnInfoListener.onInfo(mp, arg1, arg2);
@@ -301,8 +301,8 @@ public class VideoPlayView extends FrameLayout {
                 }
             };
 
-    private IMediaPlayer.OnErrorListener mErrorListener =
-            new IMediaPlayer.OnErrorListener() {
+    private IMediaPlayer.OnPlayerErrorListener mErrorListener =
+            new IMediaPlayer.OnPlayerErrorListener() {
                 public boolean onError(IMediaPlayer mp, int framework_err, int impl_err) {
                     Log.d(TAG, "Error: " + framework_err + "," + impl_err);
                     mCurrentState = STATE_ERROR;
@@ -315,15 +315,15 @@ public class VideoPlayView extends FrameLayout {
                 }
             };
 
-    private IMediaPlayer.OnBufferingUpdateListener mBufferingUpdateListener =
-            new IMediaPlayer.OnBufferingUpdateListener() {
+    private IMediaPlayer.OnPlayerBufferingUpdateListener mBufferingUpdateListener =
+            new IMediaPlayer.OnPlayerBufferingUpdateListener() {
                 public void onBufferingUpdate(IMediaPlayer mp, int percent) {
                     mCurrentBufferPercentage = percent;
                 }
             };
 
   
-    public void setOnPreparedListener(IMediaPlayer.OnPreparedListener l) {
+    public void setOnPreparedListener(IMediaPlayer.OnPlayerPreparedListener l) {
         mOnPreparedListener = l;
     }
 
@@ -333,11 +333,11 @@ public class VideoPlayView extends FrameLayout {
      *
      * @param l The callback that will be run
      */
-    public void setOnCompletionListener(IMediaPlayer.OnCompletionListener l) {
+    public void setOnCompletionListener(IMediaPlayer.OnPlayerCompletionListener l) {
         mOnCompletionListener = l;
     }
 
-    public void setOnErrorListener(IMediaPlayer.OnErrorListener l) {
+    public void setOnErrorListener(IMediaPlayer.OnPlayerErrorListener l) {
         mOnErrorListener = l;
     }
 
@@ -347,7 +347,7 @@ public class VideoPlayView extends FrameLayout {
      *
      * @param l The callback that will be run
      */
-    public void setOnInfoListener(IMediaPlayer.OnInfoListener l) {
+    public void setOnInfoListener(IMediaPlayer.OnPlayerInfoListener l) {
         mOnInfoListener = l;
     }
     public void release() {
@@ -487,19 +487,38 @@ public class VideoPlayView extends FrameLayout {
 
     private VideoPlayer createPlayer() {
 
-    	VideoPlayer mediaPlayer = null;
+    	VideoPlayer ijkMediaPlayer = null;
                 if (mUri != null) {
-                    mediaPlayer = new VideoPlayer();
-                        mediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-                            mediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
-                        mediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
-                        mediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "overlay-format", VideoPlayer.SDL_FCC_RV32);
-                    mediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
-                    mediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
-                    mediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
-                    mediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+                    ijkMediaPlayer = new VideoPlayer();
+                  //  if (mSettings.getUsingMediaCodec()) {
+                        ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+                      //  if (mSettings.getUsingMediaCodecAutoRotate()) {
+                            ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+                       // } else {
+                       //     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 0);
+                       // }
+                    //} else {
+                   //     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
+                   // }
+
+                  //  if (mSettings.getUsingOpenSLES()) {
+                  //      ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
+                   // } else {
+                        ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
+                    //}
+
+                   // String pixelFormat = mSettings.getPixelFormat();
+                   // if (TextUtils.isEmpty(pixelFormat)) {
+                        ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "overlay-format", VideoPlayer.SDL_FCC_RV32);
+                   // } else {
+                   //     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", pixelFormat);
+                   // }
+                    ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
+                    ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+                    ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
+                    ijkMediaPlayer.setOption(VideoPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
                 }
-        return mediaPlayer;
+        return ijkMediaPlayer;
     }
     public IMediaPlayer getMediaPlayer()
     {
