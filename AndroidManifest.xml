@@ -26,11 +26,7 @@
             
          <activity android:name="com.lansosdk.editorDemo.StartActivity"
             android:label="@string/app_name" >
-                <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             
          </activity>
          
         
@@ -38,7 +34,11 @@
             android:name="com.lansosdk.editorDemo.MainActivity">
           
            
-            
+               <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
                
         </activity>
         
@@ -49,6 +49,23 @@
          <activity android:name="com.lansosdk.editorDemo.VideoPlayerActivity"></activity>
          <activity android:name="com.lansosdk.editorDemo.FileExplorerActivity"></activity>
          <activity android:name="com.lansosdk.editorDemo.MediaInfoActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.AudioMixActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.CropVideoAudioActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.ExtractVideoAudioActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.ExtractVideoImagesActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.MergeVideoAudioActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.PictureFadeVideoActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.PicturesToVideoActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.SpliceAudioActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.SpliceVideoActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.TwoVideoOverlayActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.VideoAddWaterMarkActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.VideoAdjustSpeedActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.VideoCompressActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.VideoReverseActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.VideoRotateActivity"></activity>
+         
+         
         
         
     </application>

@@ -13,10 +13,11 @@ public class VideoCompressActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		
 		setContentView(R.layout.video_edit_demo_layout);
-        
 		 videoPath=getIntent().getStringExtra("videopath");
 		
+		 
+		 
+		 
 	}
 }

@@ -110,7 +110,7 @@ public class MainActivity extends Activity implements OnClickListener{
 //			//	startVideoPlayDemo();
 //			}
 //		}, 1000);
-        showHintDialog();
+//        showHintDialog();
     }
 	private final static int SELECT_FILE_REQUEST_CODE=10;
   	private void startSelectVideoActivity()
