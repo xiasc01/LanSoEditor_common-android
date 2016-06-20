@@ -165,6 +165,9 @@ public class VideoEditDemoActivity extends Activity{
 //	mEditor.executeGetAllFrames("/sdcard/2x.mp4","/sdcard/","getpng");
       	    	 isRunning=true;
       	    	mEditor.executeVideoFrameCrop(videoPath, 240, 240, 0, 0, dstPath,mMediaInfo.vCodecName,mMediaInfo.vBitRate);
+      	    	 
+      	    	 
+      	    	 
       	    	
       	    	
 //      	    	mEditor.executeConvertMp4toTs("/sdcard/2x.mp4","/sdcard/2x0.ts");
@@ -187,6 +190,14 @@ public class VideoEditDemoActivity extends Activity{
 //     		   	String dstPath
       	    	//demoVideoGray();
       	    	//demodeleteMisuc();
+      	    	 
+      	    	
+//      	    	 mEditor.audioPcmCut("/sdcard/j1.pcm", 44100, 2, 2, 1000, 5000, "/sdcard/p2.pcm");
+      	    	 
+//      	    	mEditor.audioPcmMute("/sdcard/j1.pcm", 44100, 2, 2, 8000, 25000, "/sdcard/p3.pcm");
+      	    	
+//      	    	mEditor.audioPcmReplace("/sdcard/j1.pcm", "/sdcard/p2.pcm",44100, 2, 2, 8000,"/sdcard/p4.pcm");
+      	    	
       	    	return null;
       	    }
     	@Override

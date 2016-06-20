@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        
+      <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_module_item1"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+                 android:text="音视频分离/合成/截取/剪切/混合"/>
+        </RelativeLayout>
+            
+         <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_module_select_video"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+                 android:text="视频叠加/转码/缩放/裁剪"/>
+        </RelativeLayout>
+    </LinearLayout>
+    
+    
+      <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_module_video_crop"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+                 android:text="图片水印/合成/提取/转换"/>
+        </RelativeLayout>
+            
+         <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_module_video_picture2video"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+                 android:text="搞笑类/旋转/倒放/加减速"/>
+        </RelativeLayout>
+    </LinearLayout>
+    
+      <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_module_video_more"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+                 android:text="扩展功能自定义"/>
+        </RelativeLayout>
+            
+         <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_module_video_connect_us"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+                 android:text="合作事宜"
+                 android:textColor="@color/red"/>
+        </RelativeLayout>
+    </LinearLayout>
+    
+
+</LinearLayout>

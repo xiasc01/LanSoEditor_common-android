@@ -41,7 +41,7 @@
 	       android:layout_below="@id/id_playbox_hint_3"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="@string/adv_hint4"
+		    android:text="@string/no_free"
 			    android:textColor="@color/blue"
 			    android:layout_centerHorizontal="true"
 			    android:layout_margin="10dip"

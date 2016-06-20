@@ -6,11 +6,19 @@
     <string name="adv_hint1">"说明\n  此SDK是lansoEditor的基本版本. \n\n主要使用在音视频的: 裁剪,剪切,分离,合并,转换,拼接,水印,叠加,混合,转码等场合;\n\n 我们是针对android平台对ffmpeg做了硬件加速优化,经过多款手机的测试,优化性能大概提升4倍左右"</string>
     <string name="adv_hint2">"demo仅仅举例演示一两个功能,我们在 项目中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求"</string>
     <string name="adv_hint3">"我们另外提供了扩展接口,您完全可以根据强大的ffmpeg命令来扩展您需要的功能"</string>
-    <string name="adv_hint4">"此SDK采用低价收费授权,公司性质的合作,为了您项目更好的进行,欢迎和我们联系,询价.谢谢!"</string>
     
 	<string name="video_editor_demo_hint">此演示功能是:解码==>画面裁剪(比如1280x720的画面裁剪成240x240, 从视频画面的左上角开始裁剪,裁剪240x240的像素点)==>编码输出,保存在/sdcard/video_demo_framecrop.mp4中.\n\n</string>
     
-	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求\n 欢迎联系我们:\n 手机:18006716739 \n QQ:1852600324 \n email:support@lansongtech.com"</string>
+	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求\n</string>
 	<string name="file_not_exist">文件不存在</string>
 	<string name="videoplay_hint">视频小知识:\n当前是等比例的显示到屏幕上, 目的是保持视频的宽高比一致,视频不变形;\n\n 或许会导致分辨率小的画面被放大了,画面质量下降,这是正常情况,只是播放的界面事情,不影响视频本身</string>
+	
+	
+	<string name="custom_ffmpeg_cmd">如果您熟悉ffmpeg的命令,您可以如下自定义命令:(在VideoEditor.java中很多的类似举例,以供参考)</string>
+	
+	<string name="libs_codecs">本SDK的编解码器有:\n\n软解码器H264\n硬件加速解码器lansoh264_dec\n软编码器libx264\n硬件加速编码器lansoh264_enc\n音频mp3解码器mp3\n音频mp3编码器libmp3lame\n音频aac解码器aac\n音频aac编码器 faac\n音频pcm编解码器 pcm_s16le</string>
+	<string name="advance_version_hint">我们有高级版本,可以实现视频的任意实时处理,涂鸦,标记,写字甚至可以把一个View增加到视频上, 欢迎向我们索取demo</string>
+	<string name="no_free">此SDK为收费版本, 费用为7000元, 单一APP使用,永久授权,提供一年合作事宜内的技术支持.</string>
+	<string name="connect_us">联系我们:\n 手机:18006716739 \n QQ:\t 1852600324 \n email:\tsupport@lansongtech.com \n 地址:\t杭州市余杭区运通网城软件园6栋428室.</string>
+	
 </resources>

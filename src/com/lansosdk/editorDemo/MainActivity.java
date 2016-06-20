@@ -38,7 +38,10 @@ public class MainActivity extends Activity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		 Thread.setDefaultUncaughtExceptionHandler(new snoCrashHandler());
-        setContentView(R.layout.activity_main);
+       
+//		 setContentView(R.layout.functions_layout);
+		 
+		 setContentView(R.layout.activity_main);
         
         LanSoEditor.initSo(getApplicationContext());
         
@@ -68,6 +71,10 @@ public class MainActivity extends Activity implements OnClickListener{
         	Log.i("sno","当前有读写权限");
         	isPermissionOk=true;
         }
+        
+        
+        
+        
     }
     @Override
     public void onClick(View v) {

@@ -253,6 +253,54 @@ public class VideoEditor {
 	 * @return
 	 */
 	public native int avReverse( String srcPath1,String decoder,String dstPath);
+	
+	
+	/**
+	 * 截取一段pcm数据.
+	 * 
+	 * 截取一段音频,,精度是100ms
+	 * @param srcPath    原音频裸数据, pcm格式
+	 * @param sampleRate   pcm的采样率
+	 * @param channel    通道数
+	 * @param pcmBytes  每个采样点是几个字节,
+	 * @param startTimeMs   截取开始时间,单位毫秒
+	 * @param endTimeMs  静音的结束时间, 单位毫秒
+	 * @param dstPath    截取处理后的保存路径.
+	 * @return
+	 */
+	public native int audioPcmCut(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
+	/**
+	 * 合并两个音频数据,精度是100ms
+	 *  
+	 *  一般是一小段的声音合并到主声音中的场景.
+	 *  
+	 * 注意:需要两个pcm的 bitrate等参数需要一直,保持一致.
+	 * 
+	 * @param srcMainPath  源pcm的音频, 主音频
+	 * @param srcSubPath   合并的pcm音频, 
+	 * @param sampleRate   两个pcm相同的采样率
+	 * @param channel    相同的通道数
+	 * @param pcmBytes  相同的采样点字节数
+	 * @param startTimeMs  srcSubPath的pcm数据 开始合并的时间, 默认是把srcSubPath全部的数据合并到srcMainPath中.
+	 * @param dstPath  合并后保存的路径.
+	 * @return
+	 */
+	public native int audioPcmReplace(String srcMainPath,String srcSubPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,String dstPath);
+	/**
+	 * 把音频中的一种一段声音静音.精度是100ms
+	 * 
+	 * @param srcPath  原音频裸数据, pcm格式
+	 * @param sampleRate  pcm的采样率
+	 * @param channel  通道数
+	 * @param pcmBytes  每个采样点是几个字节,
+	 * @param startTimeMs  静音开始时间,单位毫秒
+	 * @param endTimeMs    静音的结束时间, 单位毫秒
+	 * @param dstPath   静音处理后的保存路径.
+	 * @return
+	 */
+	public native int audioPcmMute(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
+	
+	
 	    //--------------------------------------------------------------------------
 	/**
 	 * 通过调整视频的bitrate来对视频文件大小的压缩,降低视频文件的大小, 注意:压缩可能导致视频画质下降.
