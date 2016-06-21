@@ -316,33 +316,32 @@ public class VideoEditor {
 			if(fileExist(srcPath)){
 				
 				MediaInfo info=new MediaInfo(srcPath);
-				info.prepare();
-				if(info.vBitRate>0 && info.vCodecName.isEmpty()==false)
+				if(info.prepare())
 				{
-					List<String> cmdList=new ArrayList<String>();
-			    	cmdList.add("-i");
-					cmdList.add(srcPath);
-					cmdList.add("-acodec");
-					cmdList.add("copy");
-					
-					cmdList.add("-vcodec");
-					cmdList.add(info.vCodecName);
-					
-					cmdList.add("-b:v");
-					float bitrate=info.vBitRate*percent;
-					int nbitrate=(int)bitrate;
-					cmdList.add(String.valueOf(nbitrate));
-					
-					cmdList.add("-pix_fmt");  //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
-					cmdList.add("yuv420p");
-					
-					cmdList.add("-y");
-					cmdList.add(dstPath);
-					String[] command=new String[cmdList.size()];  
-				     for(int i=0;i<cmdList.size();i++){  
-				    	 command[i]=(String)cmdList.get(i);  
-				     }  
-				     return executeVideoEditor(command);
+						List<String> cmdList=new ArrayList<String>();
+				    	cmdList.add("-i");
+						cmdList.add(srcPath);
+						cmdList.add("-acodec");
+						cmdList.add("copy");
+						
+						cmdList.add("-vcodec");
+						cmdList.add(info.vCodecName);
+						
+						cmdList.add("-b:v");
+						float bitrate=info.vBitRate*percent;
+						int nbitrate=(int)bitrate;
+						cmdList.add(String.valueOf(nbitrate));
+						
+						cmdList.add("-pix_fmt");  //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+						cmdList.add("yuv420p");
+						
+						cmdList.add("-y");
+						cmdList.add(dstPath);
+						String[] command=new String[cmdList.size()];  
+					     for(int i=0;i<cmdList.size();i++){  
+					    	 command[i]=(String)cmdList.get(i);  
+					     }  
+					     return executeVideoEditor(command);
 				}
 		  	}
 			return VIDEO_EDITOR_EXECUTE_FAILED;
@@ -355,26 +354,27 @@ public class VideoEditor {
 		 * @param newMp4   通过压缩或mediapool后的新文件,里面只有视频部分或h264裸码流
 		 * @param dstMp4
 		 */
-	public static void encoderAddAudio(String oldMp4,String newMp4,String dstMp4)
+	public static boolean encoderAddAudio(String oldMp4,String newMp4,String dstMp4)
 	{
 		//
-		MediaInfo  info=new MediaInfo(oldMp4);
-		info.prepare();
-		
-		Log.i(TAG,"encoderAddAudio=====>");
-		
-		String audioPath=null;
-		if(info.aCodecName.equalsIgnoreCase("aac")){
-			audioPath=createFile("/sdcard/", ".aac");
-		}else if(info.aCodecName.equalsIgnoreCase("mp4"))
-			audioPath=createFile("/sdcard/", ".mp3");
-		
-		if(audioPath!=null){
-			VideoEditor veditor=new VideoEditor();
-			veditor.executeDeleteVideo(oldMp4, audioPath);
-			veditor.executeVideoBindAudio(newMp4, audioPath, dstMp4);
-			deleteFile(audioPath);
+		MediaInfo  info=new MediaInfo(oldMp4,false);
+		if(info.prepare())
+		{
+			String audioPath=null;
+			if(info.aCodecName.equalsIgnoreCase("aac")){
+				audioPath=createFile("/sdcard/", ".aac");
+			}else if(info.aCodecName.equalsIgnoreCase("mp4"))
+				audioPath=createFile("/sdcard/", ".mp3");
+			
+			if(audioPath!=null){
+				VideoEditor veditor=new VideoEditor();
+				veditor.executeDeleteVideo(oldMp4, audioPath);
+				veditor.executeVideoMergeAudio(newMp4, audioPath, dstMp4);
+				deleteFile(audioPath);
+				return true;
+			}
 		}
+			return false;
 	}
 	private static String createFile(String dir,String suffix){
     	Calendar c = Calendar.getInstance();
@@ -513,7 +513,7 @@ public class VideoEditor {
 		   * 
 		   * 注意:如果合并的音频是aac格式,ffmpeg -i test.mp4 -i test.aac -vcodec copy -acodec copy -absf aac_adtstoasc shanchu4.mp4
 		   */
-		  public int executeVideoBindAudio(String videoFile,String audioFile,String dstFile)
+		  public int executeVideoMergeAudio(String videoFile,String audioFile,String dstFile)
 		  {
 			  boolean isAAC=false;
 			  if(dstFile.endsWith(".mp4")==false){
@@ -565,7 +565,7 @@ public class VideoEditor {
 			  if(dstFile.endsWith(".mp4")==false){
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
-			  if(fileExist(videoFile) && fileExist(audioFile)){
+			  if(fileExist(videoFile) && fileExist(audioFile)){	
 				  
 				  if(audioFile.endsWith(".aac")){
 					  isAAC=true;

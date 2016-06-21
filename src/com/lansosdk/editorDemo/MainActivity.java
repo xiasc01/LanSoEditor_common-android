@@ -47,6 +47,10 @@ public class MainActivity extends Activity implements OnClickListener{
         
         tvVideoPath=(TextView)findViewById(R.id.id_main_tv_videopath);
         tvVideoPath.setText("/sdcard/2x.mp4");
+//        tvVideoPath.setText("/sdcard/e51.mp4");
+//        tvVideoPath.setText("/sdcard/hongdou.mp3");
+//        tvVideoPath.setText("/sdcard/h264pcm.mov");
+//        tvVideoPath.setText("/sdcard/videoedit_demo.aac");
         
         findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
 			
@@ -61,9 +65,7 @@ public class MainActivity extends Activity implements OnClickListener{
         findViewById(R.id.id_main_demoplay).setOnClickListener(this);
         findViewById(R.id.id_main_demoedit).setOnClickListener(this);
         findViewById(R.id.id_main_mediainfo).setOnClickListener(this);
-        
        
-        
         if(LanSoEditor.selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
         	showHintDialog("当前没有读写权限");
         	isPermissionOk=false;
@@ -71,9 +73,6 @@ public class MainActivity extends Activity implements OnClickListener{
         	Log.i("sno","当前有读写权限");
         	isPermissionOk=true;
         }
-        
-        
-        
         
     }
     @Override
@@ -103,20 +102,19 @@ public class MainActivity extends Activity implements OnClickListener{
     	// TODO Auto-generated method stub
     	super.onResume();
     	
-//    	if(isstarted)
-//    		return;
-//    	
-//    	new Handler().postDelayed(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				isstarted=true;
-//				
+    	if(isstarted)
+    		return;
+    	new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				isstarted=true;
+				gotoActivity(MediaInfoActivity.class);
 //				startVideoEditDemo();
-//			//	startVideoPlayDemo();
-//			}
-//		}, 1000);
+			//	startVideoPlayDemo();
+			}
+		}, 100);
 //        showHintDialog();
     }
 	private final static int SELECT_FILE_REQUEST_CODE=10;
@@ -181,6 +179,7 @@ public class MainActivity extends Activity implements OnClickListener{
     }
     
     private boolean checkPath(){
+    	boolean ret;
     	if(tvVideoPath.getText()!=null && tvVideoPath.getText().toString().isEmpty()){
     		Toast.makeText(MainActivity.this, "请输入视频地址", Toast.LENGTH_SHORT).show();
     		return false;
@@ -192,9 +191,9 @@ public class MainActivity extends Activity implements OnClickListener{
     			return false;
     		}else{
     			MediaInfo info=new MediaInfo(path);
-    	        info.prepare();
+    	        ret=info.prepare();
     	        Log.i(TAG,"info:"+info.toString());
-    			return true;
+    			return ret;
     		}
     	}
     }

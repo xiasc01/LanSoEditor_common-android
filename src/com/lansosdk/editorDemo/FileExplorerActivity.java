@@ -23,8 +23,8 @@ public class FileExplorerActivity extends ListActivity {
 	private String 			mRoot = "/sdcard";
 	private TextView 		mTextViewLocation;
 	private File[]			mFiles;
-	private static final String[] exts = new String[] 	{   
-		".mp4",".flv",".h264"
+	private static final String[] videoExts = new String[] 	{   
+		".mp4",".flv","mov"
 		};
 	
 	@Override
@@ -45,8 +45,8 @@ public class FileExplorerActivity extends ListActivity {
 		 super.onBackPressed();
 	}
 	protected static boolean checkExtension(File file) {
-		for(int i=0;i<exts.length;i++) {
-			if(file.getName().indexOf(exts[i]) > 0) {
+		for(int i=0;i<videoExts.length;i++) {
+			if(file.getName().indexOf(videoExts[i]) > 0) {
 				return true;
 			}
 		}

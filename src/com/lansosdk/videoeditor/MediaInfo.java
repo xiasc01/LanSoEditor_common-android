@@ -71,25 +71,54 @@ public class MediaInfo {
      
      private boolean getSuccess=false;
      
+     /**
+      * 是否检测 硬件解码器,不检测会执行的快一些,默认为检测(如果您不是很明白,建议使用默认值,毕竟也只是慢30ms一下的事情.).
+      * 
+      *  一般在不需要解码的场合,可以设置为false,比如文件浏览器选择音视频文件, 音视频分离剪切的场合.
+      */
+     private boolean isCheckCodec=true;  //是否检测 
+     
      public MediaInfo(String path)
      {
     	 filePath=path;
     	 fileName=getFileNameFromPath(path);
     	 fileSuffix=getFileSuffix(path);
+    	 isCheckCodec=true;
      }
-     
-     public int prepare()
+     /**
+      * 
+      * @param path
+      * @param checkCodec  默认是true,即检测解码器. 如不想检测解码器,则设置为false;这样执行prepare会快一些.
+      */
+     public MediaInfo(String path,boolean checkCodec)
+     {
+    	 filePath=path;
+    	 fileName=getFileNameFromPath(path);
+    	 fileSuffix=getFileSuffix(path);
+    	 isCheckCodec=checkCodec;
+     }
+     /**
+      * 准备当前媒体的信息
+      * 
+      * 去底层运行相关方法, 得到媒体信息.
+      * @return  如获得当前媒体信息并支持格式,则返回true, 否则返回false;
+      */
+     public boolean prepare()
      {
     	int ret=0;
     	 if(fileExist(filePath)){ //这里检测下mfilePath是否是多媒体后缀.
-    		 ret= nativePrepare(filePath);	 
-    		 if(ret>=0)
+    		 ret= nativePrepare(filePath,isCheckCodec);	 
+    		 if(ret>=0){
     			 getSuccess=true;
+    			 return isSupport();
+    		 }else{
+    			 Log.e(TAG,"mediainfo prepare media is failed:"+filePath);
+    			 return false;
+    		 }
     	 }else{
     		 Log.e(TAG,"mediainfo file is may be not exist!");
-    		 ret=-1;
+    		 return false;
     	 } 
-    	 return ret;
      }
      public void release()
      {
@@ -168,7 +197,7 @@ public class MediaInfo {
     	else
     	 return "MediaInfo is not ready.or call failed";
     }
-     public native int nativePrepare(String filepath);
+     public native int nativePrepare(String filepath,boolean checkCodec);
      
      //used by JNI
      private void setVideoCodecName(String name)
@@ -189,7 +218,7 @@ public class MediaInfo {
      {
     	 if(fileExist(videoPath))
     	 {
-    		 MediaInfo  info=new MediaInfo(videoPath);
+    		 MediaInfo  info=new MediaInfo(videoPath,false);
         	 info.prepare();
         	 if(VERBOSE){
         		 Log.i(TAG,"video:"+videoPath+" "+info.isSupport());

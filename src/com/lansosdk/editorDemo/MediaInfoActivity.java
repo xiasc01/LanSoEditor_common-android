@@ -5,6 +5,7 @@ import com.lansosdk.videoeditor.MediaInfo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.TextureView;
 import android.widget.TextView;
 
@@ -30,7 +31,8 @@ public class MediaInfoActivity extends Activity{
 	{
 		String retStr="";
 		MediaInfo  info=new MediaInfo(videoPath);
-		if(info.prepare()>=0)
+	
+		if(info.prepare())
 		{
 			retStr+="文件路径: " 	+	info.filePath	+	" \n";
 			retStr+="文件名字: " 	+	info.fileName	+	" \n";
