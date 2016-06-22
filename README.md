@@ -12,7 +12,7 @@
 *  此SDK采用低价收费授权,公司性质的合作,为了您项目更好的进行,欢迎和我们联系.谢谢!
 
 ###举例功能的界面展示
-![](https://github.com/LanSoSdk/LanSoEditor_common/uimain.jpeg)
+![](https://github.com/LanSoSdk/LanSoEditor_common/blob/master/uimain.jpeg)
 
 ###下载地址: 
 *  https://github.com/LanSoSdk/LanSoEditor_common
