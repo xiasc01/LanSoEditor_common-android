@@ -66,7 +66,6 @@ public class VideoPlayerActivity extends Activity {
 					int height) {
 				// TODO Auto-generated method stub
 				play(new Surface(surface));
-//				startPlayVideo(new Surface(surface));
 			}
 		});
         

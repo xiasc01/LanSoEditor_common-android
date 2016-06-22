@@ -34,8 +34,7 @@ public class VideoCutWrapper extends CmdWrapper{
 	
 	public boolean prepare()
 	{
-		//这里额外检查是否同时有音频和视频轨道.
-		if(super.prepare()&& mInfo.vDuration>10)
+		if(super.prepare())
 		{
 			return true;
 		}

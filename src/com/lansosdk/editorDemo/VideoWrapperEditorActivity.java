@@ -65,16 +65,6 @@ public class VideoWrapperEditorActivity extends Activity implements OnClickListe
 		int cmdID=getIntent().getIntExtra("CMD_ID", 0);
 		getCmdWrapper(cmdID);
 		
-//		mCmdWrapper=new AVSplitWrapper();
-	//	mCmdWrapper =new VideoCutWrapper();
-//		mCmdWrapper =new AudioCutWrapper();
-//		mCmdWrapper=new VideoConnectWrapper();   //TODO 暂时没有做.
-//		mCmdWrapper=new AVComposeWrapper(); //TODO 暂时没有做
-//		mCmdWrapper=new VideoScaleWrapper(); 
-//		mCmdWrapper= new VideoCropWrapper();
-//		mCmdWrapper=new VideoCompressWrapper();
-//		mCmdWrapper= new VideoImageWrapper(mContext);  //
-//		mCmdWrapper=new ExtractImageWrapper();
 		
 		
 		
@@ -139,7 +129,7 @@ public class VideoWrapperEditorActivity extends Activity implements OnClickListe
 						else
 							Log.i("sno","mDoFunction==null");
 						
-						Log.i("sno","SELECT_VIDEO is:"+srcPath);
+						Log.i("sno","SELECT_PATH is:"+srcPath);
 						
 						if(tvSelectFile!=null)
 							tvSelectFile.setText(srcPath);

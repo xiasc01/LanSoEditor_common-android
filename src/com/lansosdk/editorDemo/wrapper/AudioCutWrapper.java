@@ -33,8 +33,8 @@ public class AudioCutWrapper extends CmdWrapper{
 	}
 	public boolean prepare()
 	{
-		//这里额外检查是否同时有音频和视频轨道.
-		if(super.prepare() && mInfo.aBitRate>0)
+		//这里额外检查是否同时有音频轨道.
+		if(super.prepare() && mInfo.aBitRate>0 && mInfo.aDuration>5)
 		{
 			return true;
 		}

@@ -26,22 +26,30 @@
             
          <activity android:name="com.lansosdk.editorDemo.StartActivity"
             android:label="@string/app_name" >
+             
+         </activity>
+         
+        
+        <activity
+            android:name="com.lansosdk.editorDemo.MainActivity">
               <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-         </activity>
-         
-        
-        <activity
-            android:name="com.lansosdk.editorDemo.MainActivity"/>
+            </activity>
         
          <activity android:name="com.lansosdk.editorDemo.VideoEditDemoActivity"></activity>
      
          <activity android:name="com.lansosdk.editorDemo.SdkHintActivity"></activity>
          
-         <activity android:name="com.lansosdk.editorDemo.VideoPlayerActivity"></activity>
+         <activity android:name="com.lansosdk.editorDemo.VideoPlayerActivity">
+            
+            
+         </activity>
+         
+         
+         
          <activity android:name="com.lansosdk.editorDemo.FileExplorerActivity"></activity>
          <activity android:name="com.lansosdk.editorDemo.MediaInfoActivity"></activity>
          

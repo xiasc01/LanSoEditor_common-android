@@ -116,6 +116,11 @@ public class CmdWrapper {
 	}
 	public void release()
 	{
+		if(FileUtils.fileExist(dstAudio))
+			FileUtils.deleteFile(dstAudio);
+		
+		if(FileUtils.fileExist(dstVideo))
+			FileUtils.deleteFile(dstVideo);
 		srcPath=null;
 		isPrepareSuccess=false;
 		dstVideo=DST_VIDEO;
