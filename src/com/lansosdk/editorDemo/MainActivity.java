@@ -33,68 +33,59 @@ public class MainActivity extends Activity implements OnClickListener{
 	 private static final String TAG="MainActivity";
 	 private boolean isPermissionOk=false;
 	 
-		TextView tvVideoPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		 Thread.setDefaultUncaughtExceptionHandler(new snoCrashHandler());
-       
-//		 setContentView(R.layout.functions_layout);
+		 LanSoEditor.initSo(getApplicationContext());
 		 
-		 setContentView(R.layout.activity_main);
-        
-        LanSoEditor.initSo(getApplicationContext());
-        
-        tvVideoPath=(TextView)findViewById(R.id.id_main_tv_videopath);
-        tvVideoPath.setText("/sdcard/2x.mp4");
-//        tvVideoPath.setText("/sdcard/e51.mp4");
-//        tvVideoPath.setText("/sdcard/hongdou.mp3");
-//        tvVideoPath.setText("/sdcard/h264pcm.mov");
-//        tvVideoPath.setText("/sdcard/videoedit_demo.aac");
-        
-        findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				startSelectVideoActivity();
-			}
-		});
- 
-        
-        findViewById(R.id.id_main_demoplay).setOnClickListener(this);
-        findViewById(R.id.id_main_demoedit).setOnClickListener(this);
-        findViewById(R.id.id_main_mediainfo).setOnClickListener(this);
-       
-        if(LanSoEditor.selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
-        	showHintDialog("当前没有读写权限");
-        	isPermissionOk=false;
-        }else{
-        	Log.i("sno","当前有读写权限");
-        	isPermissionOk=true;
-        }
-        
+			 
+		 setContentView(R.layout.functions_layout);
+		 
+		 findViewById(R.id.id_module_item1).setOnClickListener(this);
+		 findViewById(R.id.id_module_item2).setOnClickListener(this);
+		 findViewById(R.id.id_module_item3).setOnClickListener(this);
+		 findViewById(R.id.id_module_item4).setOnClickListener(this);
+		 findViewById(R.id.id_module_item5).setOnClickListener(this);
+		 findViewById(R.id.id_module_item6).setOnClickListener(this);
+		 
+		 if(LanSoEditor.selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
+	        	showHintDialog("当前没有读写权限");
+	        	isPermissionOk=false;
+	        }else{
+	        	Log.i("sno","当前有读写权限");
+	        	isPermissionOk=true;
+	        }
+		  showHintDialog();
     }
     @Override
     public void onClick(View v) {
     	// TODO Auto-generated method stub
-    	
-    	if(checkPath()==false || isPermissionOk==false)
-			return;
-    	
-		switch (v.getId()) {
-			case R.id.id_main_mediainfo:
-				gotoActivity(MediaInfoActivity.class);
-				break;
-			case R.id.id_main_demoplay:
-				gotoActivity(VideoPlayerActivity.class);
-				break;
-			case R.id.id_main_demoedit:
-				gotoActivity(VideoEditDemoActivity.class);
-				break;
-			default:
-				break;
-		}
+    	if(isPermissionOk)
+    	{
+    		switch (v.getId()) {
+				case R.id.id_module_item1:
+					gotoActivity(FunctionItem1Activity.class);
+					break;
+				case R.id.id_module_item2:
+					gotoActivity(FunctionItem2Activity.class);
+					break;
+				case R.id.id_module_item3:
+					gotoActivity(FunctionItem3Activity.class);
+					break;
+				case R.id.id_module_item4:
+					break;
+				case R.id.id_module_item5:
+					gotoCustomFunction();
+					break;
+				case R.id.id_module_item6:
+					gotoBussnessActivity();
+					break;
+						
+				default:
+					break;
+    		}
+    	}
     }
     private boolean isstarted=false;
     @Override
@@ -102,45 +93,19 @@ public class MainActivity extends Activity implements OnClickListener{
     	// TODO Auto-generated method stub
     	super.onResume();
     	
-    	if(isstarted)
-    		return;
-    	new Handler().postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				isstarted=true;
-				gotoActivity(MediaInfoActivity.class);
-//				startVideoEditDemo();
-			//	startVideoPlayDemo();
-			}
-		}, 100);
-//        showHintDialog();
-    }
-	private final static int SELECT_FILE_REQUEST_CODE=10;
-  	private void startSelectVideoActivity()
-    {
-    	Intent i = new Intent(this, FileExplorerActivity.class);
-	    startActivityForResult(i,SELECT_FILE_REQUEST_CODE);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	// TODO Auto-generated method stub
-    	super.onActivityResult(requestCode, resultCode, data);
-    	switch (resultCode) {
-		case RESULT_OK:
-				if(requestCode==SELECT_FILE_REQUEST_CODE){
-					Bundle b = data.getExtras();   
-		    		String string = b.getString("SELECT_VIDEO");   
-					Log.i("sno","SELECT_VIDEO is:"+string);
-					if(tvVideoPath!=null)
-						tvVideoPath.setText(string);
-				}
-			break;
-
-		default:
-			break;
-		}
+//    	if(isstarted)
+//    		return;
+//    	new Handler().postDelayed(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				isstarted=true;
+//				gotoActivity(VideoEditDemoActivity.class);
+//			//	startVideoPlayDemo();
+//			}
+//		}, 100);
+      
     }
     private void showHintDialog(String hint){
     	new AlertDialog.Builder(this)
@@ -160,12 +125,14 @@ public class MainActivity extends Activity implements OnClickListener{
 	{
 		new AlertDialog.Builder(this)
 		.setTitle("提示")
-		.setMessage("SDK版本号是V1.4 [商用版本]\n\n,SDK底层做了授权限制,仅可在此demo中运行,并有效时间到2016年7月15号,请注意.)")
+		.setMessage("SDK版本号是V1.5 [商用版本]\n\nSDK底层做了授权限制,仅可在此demo中运行,并有效时间到2016年6月31号,请注意.)")
         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
+				
+				showHintDialog("注意:底层ffmpeg完整可靠运行,已是发行商用版本.\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
 			}
 		})
         .show();
@@ -177,31 +144,17 @@ public class MainActivity extends Activity implements OnClickListener{
     	super.onDestroy();
     	LanSoEditor.unInitSo();
     }
-    
-    private boolean checkPath(){
-    	boolean ret;
-    	if(tvVideoPath.getText()!=null && tvVideoPath.getText().toString().isEmpty()){
-    		Toast.makeText(MainActivity.this, "请输入视频地址", Toast.LENGTH_SHORT).show();
-    		return false;
-    	}	
-    	else{
-    		String path=tvVideoPath.getText().toString();
-    		if((new File(path)).exists()==false){
-    			Toast.makeText(MainActivity.this, "文件不存在", Toast.LENGTH_SHORT).show();
-    			return false;
-    		}else{
-    			MediaInfo info=new MediaInfo(path);
-    	        ret=info.prepare();
-    	        Log.i(TAG,"info:"+info.toString());
-    			return ret;
-    		}
-    	}
-    }
     private void gotoActivity(Class<?> cls)
     {
-    	String path=tvVideoPath.getText().toString();
     	Intent intent=new Intent(MainActivity.this,cls);
-    	intent.putExtra("videopath", path);
     	startActivity(intent);
+    }
+    private void gotoCustomFunction()
+    {
+    	startActivity(new Intent(MainActivity.this,CustomFunctionActivity.class));
+    }
+    private void gotoBussnessActivity()
+    {
+    	startActivity(new Intent(MainActivity.this,BusynessActivity.class));
     }
 }

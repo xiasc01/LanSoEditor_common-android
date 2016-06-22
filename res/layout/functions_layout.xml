@@ -22,7 +22,7 @@
                  android:layout_centerInParent="true"
                  android:padding="10dip"
          	   android:background="@drawable/circel_button_bg"
-                 android:text="音视频分离/合成/截取/剪切/混合"/>
+                 android:text="音视频分离/合成/剪切/拼接"/>
         </RelativeLayout>
             
          <RelativeLayout
@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
              <Button 
-                 android:id="@+id/id_module_select_video"
+                 android:id="@+id/id_module_item2"
                  android:layout_width="@dimen/module_size"
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
              <Button 
-                 android:id="@+id/id_module_video_crop"
+                 android:id="@+id/id_module_item3"
                  android:layout_width="@dimen/module_size"
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
@@ -66,13 +66,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
              <Button 
-                 android:id="@+id/id_module_video_picture2video"
+                 android:id="@+id/id_module_item4"
                  android:layout_width="@dimen/module_size"
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
                  android:padding="10dip"
          	   android:background="@drawable/circel_button_bg"
-                 android:text="搞笑类/旋转/倒放/加减速"/>
+                 android:text="其他类/旋转/倒放/加减速/矫正"/>
         </RelativeLayout>
     </LinearLayout>
     
@@ -87,7 +87,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
              <Button 
-                 android:id="@+id/id_module_video_more"
+                 android:id="@+id/id_module_item5"
                  android:layout_width="@dimen/module_size"
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
@@ -101,7 +101,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
              <Button 
-                 android:id="@+id/id_module_video_connect_us"
+                 android:id="@+id/id_module_item6"
                  android:layout_width="@dimen/module_size"
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"

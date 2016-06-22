@@ -59,7 +59,9 @@ public class LanSoEditor {
 		    }
 	    public static void unInitSo()
 	    {
-	    	nativeUninit();
+	    	if(isLoaded){
+	    		nativeUninit();
+	    	}
 	    }
 	    public static native void nativeInit(Context ctx);
 	    public static native void nativeUninit();

@@ -34,7 +34,7 @@ public class VideoEditDemoActivity extends Activity{
 	private final static  boolean VERBOSE = false;   
 	
 	
-	String videoPath=null;
+	String videoPath="/sdcard/VIDEO_90du.mp4";
 	VideoEditor mEditor = new VideoEditor();
 	ProgressDialog  mProgressDialog;
 	int videoDuration;
@@ -42,7 +42,7 @@ public class VideoEditDemoActivity extends Activity{
 	private String dstPath="/sdcard/video_demo_framecrop.mp4";
 	
 
-	private boolean isRunning=false;  //当前视频处理不支持 处理过程中中止.
+	private boolean isRunning=false; 
 	
 	  @Override
 	    protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,6 @@ public class VideoEditDemoActivity extends Activity{
 	        
 			 setContentView(R.layout.video_edit_demo_layout);
 	        
-			 videoPath=getIntent().getStringExtra("videopath");
 				
 			 mMediaInfo=new MediaInfo(videoPath);
 				
@@ -83,13 +82,18 @@ public class VideoEditDemoActivity extends Activity{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					if(FileUtils.fileExist(dstPath)){
-				    	Intent intent=new Intent(VideoEditDemoActivity.this,VideoPlayerActivity.class);
-				    	intent.putExtra("videopath", dstPath);
-				    	startActivity(intent);
-					}else{
-						Toast.makeText(VideoEditDemoActivity.this, R.string.file_not_exist,Toast.LENGTH_SHORT).show();
-					}
+					Intent intent=new Intent(VideoEditDemoActivity.this,VideoPlayerActivity.class);
+			    	intent.putExtra("videopath", videoPath);
+			    	startActivity(intent);
+					
+					
+//					if(FileUtils.fileExist(dstPath)){
+//				    	Intent intent=new Intent(VideoEditDemoActivity.this,VideoPlayerActivity.class);
+//				    	intent.putExtra("videopath", dstPath);
+//				    	startActivity(intent);
+//					}else{
+//						Toast.makeText(VideoEditDemoActivity.this, R.string.file_not_exist,Toast.LENGTH_SHORT).show();
+//					}
 				}
 			});
 	        
@@ -112,7 +116,7 @@ public class VideoEditDemoActivity extends Activity{
         if(FileUtils.fileExist(dstPath)){
         	FileUtils.deleteFile(dstPath);
         }
-        findViewById(R.id.id_video_play_btn).setEnabled(false);
+//        findViewById(R.id.id_video_play_btn).setEnabled(false);
 	}
 		private void showHintDialog()
 		{
@@ -167,9 +171,6 @@ public class VideoEditDemoActivity extends Activity{
       	    	mEditor.executeVideoFrameCrop(videoPath, 240, 240, 0, 0, dstPath,mMediaInfo.vCodecName,mMediaInfo.vBitRate);
       	    	 
       	    	 
-      	    	 
-      	    	
-      	    	
 //      	    	mEditor.executeConvertMp4toTs("/sdcard/2x.mp4","/sdcard/2x0.ts");
       	    	//因为静态码率
 //      	    	mEditor.executeAddWaterMark("/sdcard/test_720p.mp4","/sdcard/watermark.png",0,0,"/sdcard/A1.mp4",(int)(mMediaInfo.vBitRate*1.5f));

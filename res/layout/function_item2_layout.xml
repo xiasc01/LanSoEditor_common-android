@@ -1,0 +1,27 @@
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            
+            <Button 
+                android:id="@+id/id_function_item2_videooverlay"  
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="多个视频叠加" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+              <Button 
+                android:id="@+id/id_function_item2_videocompress"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="视频转码/视频压缩" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             <Button 
+                android:id="@+id/id_function_item2_videoscale"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="视频缩放" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             <Button 
+                android:id="@+id/id_function_item2_videocrop"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="视频画面裁剪" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+        </LinearLayout>
+</ScrollView>
+

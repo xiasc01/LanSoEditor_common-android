@@ -307,7 +307,7 @@ public class VideoEditor {
 	 * 
 	 * @param srcPath 源视频
 	 * @param dstPath 目的视频
-	 * @param percent 压缩百分比.
+	 * @param percent 压缩百分比.值从0--1
 	 * @return
 	 */
 		public int executeVideoCompress(String srcPath,String dstPath,float percent)
@@ -319,13 +319,17 @@ public class VideoEditor {
 				if(info.prepare())
 				{
 						List<String> cmdList=new ArrayList<String>();
+						
+						cmdList.add("-vcodec");
+						cmdList.add(info.vCodecName);
+						
 				    	cmdList.add("-i");
 						cmdList.add(srcPath);
 						cmdList.add("-acodec");
 						cmdList.add("copy");
-						
+
 						cmdList.add("-vcodec");
-						cmdList.add(info.vCodecName);
+						cmdList.add("lansoh264_enc");
 						
 						cmdList.add("-b:v");
 						float bitrate=info.vBitRate*percent;
@@ -484,10 +488,6 @@ public class VideoEditor {
 			  	if(fileExist(srcFile)==false)
 			  		return VIDEO_EDITOR_EXECUTE_FAILED;
 			  	
-			    if(srcFile.endsWith(".mp4")==false){
-			    	return VIDEO_EDITOR_EXECUTE_FAILED;
-			    }
-			    
 			  	List<String> cmdList=new ArrayList<String>();
 		    	cmdList.add("-i");
 				cmdList.add(srcFile);
@@ -516,9 +516,6 @@ public class VideoEditor {
 		  public int executeVideoMergeAudio(String videoFile,String audioFile,String dstFile)
 		  {
 			  boolean isAAC=false;
-			  if(dstFile.endsWith(".mp4")==false){
-				  return VIDEO_EDITOR_EXECUTE_FAILED;
-			  }
 			  
 			  if(fileExist(videoFile) && fileExist(audioFile)){
 				  
@@ -562,9 +559,6 @@ public class VideoEditor {
 		  public int executeVideoMergeAudio(String videoFile,String audioFile,String dstFile,float audiostartS)
 		  {
 			  boolean isAAC=false;
-			  if(dstFile.endsWith(".mp4")==false){
-				  return VIDEO_EDITOR_EXECUTE_FAILED;
-			  }
 			  if(fileExist(videoFile) && fileExist(audioFile)){	
 				  
 				  if(audioFile.endsWith(".aac")){
@@ -612,11 +606,6 @@ public class VideoEditor {
 		  public int executeVideoMergeAudio(String videoFile,String audioFile,String dstFile,float audiostartS,float audiodurationS)
 		  {
 			  boolean isAAC=false;
-			  if(dstFile.endsWith(".mp4")==false){
-				  return VIDEO_EDITOR_EXECUTE_FAILED;
-			  }
-			  
-			  
 			  if(fileExist(videoFile) && fileExist(audioFile)){
 				
 				  if(audioFile.endsWith(".aac")){
@@ -705,10 +694,6 @@ public class VideoEditor {
 		   */
 		  public int executeVideoCutOut(String videoFile,String dstFile,float startS,float durationS)
 		  {
-			  if(dstFile.endsWith(".mp4")==false){
-				  return VIDEO_EDITOR_EXECUTE_FAILED;
-			  }
-			  
 			  if(fileExist(videoFile)){
 				
 					List<String> cmdList=new ArrayList<String>();
@@ -751,10 +736,6 @@ public class VideoEditor {
 		   */
 		  public int executeGetAllFrames(String videoFile,String dstDir,String jpgPrefix)
 		  {
-			  if(videoFile.endsWith(".mp4")==false){
-				  return VIDEO_EDITOR_EXECUTE_FAILED;
-			  }
-			  
 			  String dstPath=dstDir+jpgPrefix+"_%3d.jpeg";
 			  if(fileExist(videoFile)){
 				
@@ -796,10 +777,6 @@ public class VideoEditor {
 		   */
 		  public int executeGetSomeFrames(String videoFile,String dstDir,String jpgPrefix,float sampeRate)
 		  {
-			  if(videoFile.endsWith(".mp4")==false){
-				  return VIDEO_EDITOR_EXECUTE_FAILED;
-			  }
-			  
 			  String dstPath=dstDir+jpgPrefix+"_%3d.jpeg";
 			  if(fileExist(videoFile)){
 				
@@ -855,9 +832,6 @@ public class VideoEditor {
 //		  ./ffmpeg -i 3.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts3.ts
 //		  ./ffmpeg -i "concat:ts0.ts|ts1.ts|ts2.ts|ts3.ts" -c copy -bsf:a aac_adtstoasc out2.mp4
 
-			  if(mp4Path.endsWith(".mp4")==false){
-				  return VIDEO_EDITOR_EXECUTE_FAILED;
-			  }
 			  if(fileExist(mp4Path)){
 				
 					List<String> cmdList=new ArrayList<String>();
@@ -973,8 +947,8 @@ public class VideoEditor {
 					cmdList.add("copy");
 					
 					cmdList.add("-vcodec");
-					cmdList.add("libx264");
-//					cmdList.add("lansoh264_enc"); 
+//					cmdList.add("libx264");
+					cmdList.add("lansoh264_enc"); 
 					
 					cmdList.add("-b:v");
 					cmdList.add(String.valueOf(bitrate)); 
@@ -1111,7 +1085,7 @@ public class VideoEditor {
 		   * @param x　　叠加图片相对于视频的Ｘ坐标，视频的左上角为坐标原点0.0
 		   * @param y　　叠加图片相对于视频的Ｙ坐标
 		   * @param dstFile　　处理后保存的路径，后缀需要是.mp4格式
-		   * @param bitrate  <============注意:这里的bitrate在设置的时候, 因为是设置编码器的恒定码率, 推荐设置为 预设值的1.5倍为准, 比如视频原有的码率是1M,则裁剪一半,预设值可能是500k, 
+		   * @param bitrate  <============注意:这里的bitrate在设置的时候, 因为是设置编码器的恒定码率, 推荐设置为 预设值的1.2倍为准, 比如视频原有的码率是1M,则裁剪一半,预设值可能是500k, 
 		   * 这里推荐是为500k的1.5,因为原有的视频大部分是动态码率VBR,可以认为通过{@link MediaInfo} 得到的 {@link MediaInfo#vBitRate}是平均码率,这里要设置,推荐是1.5倍为好.
 		   * @return
 		   */
@@ -1271,7 +1245,98 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
-		  
+//		  public int executeAngle(String srcPath,String decoder,float angle,String dstPath,int bitrate)
+//		  {
+//			  ////ffmpeg -i miaopai.mp4 -vf "rotate=45*(PI/180),format=yuv420p" -metadata:s:v rotate=0 -codec:v libx264 -codec:a copy output.mp4
+//			  if(fileExist(srcPath)){
+//					
+//				  String filter=String.format(Locale.getDefault(),"rotate=%f*(PI/180),format=yuv420p",angle);
+//				  
+//					List<String> cmdList=new ArrayList<String>();
+//					
+//					cmdList.add("-vcodec");
+//					cmdList.add(decoder);
+//					
+//					
+//					cmdList.add("-i");
+//					cmdList.add(srcPath);
+//					
+//					cmdList.add("-vf");
+//					cmdList.add(filter);
+//					
+//					
+//					cmdList.add("-metadata:s:v");
+//					cmdList.add("rotate=0");
+//					cmdList.add("-acodec");
+//					cmdList.add("copy");
+//					cmdList.add("-y");
+//					cmdList.add("-vcodec");
+//					cmdList.add("libx264");
+//					
+////					cmdList.add("-b:v");
+////					cmdList.add(String.valueOf(bitrate)); 
+////					
+////					cmdList.add("-pix_fmt");
+////					cmdList.add("yuv420p");
+//					
+//					cmdList.add(dstPath);
+//					 
+//					String[] command=new String[cmdList.size()];  
+//				     for(int i=0;i<cmdList.size();i++){  
+//				    	 command[i]=(String)cmdList.get(i);  
+//				     }  
+//				    return  executeVideoEditor(command);
+//				  
+//			  }else{
+//				  return VIDEO_EDITOR_EXECUTE_FAILED;
+//			  }
+//		  }
+//		  
+//		  /**
+//		   * 调整录制的视频角度.
+//		   * @param srcPath
+//		   * @param decoder
+//		   * @param dstPath
+//		   * @param bitrate
+//		   * @return
+//		   */
+//		  
+//		  public int executeAdjustRecoderVideo(String srcPath,String decoder,String dstPath,int bitrate)
+//		  {
+//			  if(fileExist(srcPath)){
+//					
+//				  
+//					List<String> cmdList=new ArrayList<String>();
+//					
+//					cmdList.add("-vcodec");
+//					cmdList.add(decoder);
+//					
+//					cmdList.add("-i");
+//					cmdList.add(srcPath);
+//					
+//					cmdList.add("-acodec");
+//					cmdList.add("copy");
+//					cmdList.add("-y");
+//					cmdList.add("-vcodec");
+//					cmdList.add("lansoh264_enc");
+//					
+//					cmdList.add("-b:v");
+//					cmdList.add(String.valueOf(bitrate)); 
+//					
+//					cmdList.add("-pix_fmt");
+//					cmdList.add("yuv420p");
+//					
+//					cmdList.add(dstPath);
+//					 
+//					String[] command=new String[cmdList.size()];  
+//				     for(int i=0;i<cmdList.size();i++){  
+//				    	 command[i]=(String)cmdList.get(i);  
+//				     }  
+//				    return  executeVideoEditor(command);
+//			  }else{
+//				  return VIDEO_EDITOR_EXECUTE_FAILED;
+//			  }
+//		  }
 //		  public 压缩. 调整视频横竖屏.
 		  
 		  /**

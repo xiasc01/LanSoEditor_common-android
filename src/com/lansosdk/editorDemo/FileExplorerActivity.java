@@ -23,16 +23,32 @@ public class FileExplorerActivity extends ListActivity {
 	private String 			mRoot = "/sdcard";
 	private TextView 		mTextViewLocation;
 	private File[]			mFiles;
-	private static final String[] videoExts = new String[] 	{   
+	private static final String[] VIDEO_EXTS=new String[] {   
 		".mp4",".flv","mov"
 		};
+	private static final String[] AUDIO_EXTS=new String[] {   
+		".mp3",".aac","wav"
+		};
 	
+	private static boolean isSelectVideo=true;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.file_explore_layout);
 		mTextViewLocation = (TextView) findViewById(R.id.textview_path);
+		
+		String mode=getIntent().getStringExtra("SELECT_MODE");
+		if(mode.equals("video")){
+			setTitle("选择视频文件");
+			isSelectVideo=true;
+		}else{
+			setTitle("选择音频文件");
+			isSelectVideo=false;
+		}
 		getDirectory(mRoot);
+		
+		
+		
 	}
 	 @Override
 	public void onBackPressed() {
@@ -45,9 +61,17 @@ public class FileExplorerActivity extends ListActivity {
 		 super.onBackPressed();
 	}
 	protected static boolean checkExtension(File file) {
-		for(int i=0;i<videoExts.length;i++) {
-			if(file.getName().indexOf(videoExts[i]) > 0) {
-				return true;
+		if(isSelectVideo){
+			for(int i=0;i<VIDEO_EXTS.length;i++) {
+				if(file.getName().indexOf(VIDEO_EXTS[i]) > 0) {
+					return true;
+				}
+			}
+		}else{
+			for(int i=0;i<AUDIO_EXTS.length;i++) {
+				if(file.getName().indexOf(AUDIO_EXTS[i]) > 0) {
+					return true;
+				}
 			}
 		}
 		return false;

@@ -18,7 +18,25 @@
 	
 	<string name="libs_codecs">本SDK的编解码器有:\n\n软解码器H264\n硬件加速解码器lansoh264_dec\n软编码器libx264\n硬件加速编码器lansoh264_enc\n音频mp3解码器mp3\n音频mp3编码器libmp3lame\n音频aac解码器aac\n音频aac编码器 faac\n音频pcm编解码器 pcm_s16le</string>
 	<string name="advance_version_hint">我们有高级版本,可以实现视频的任意实时处理,涂鸦,标记,写字甚至可以把一个View增加到视频上, 欢迎向我们索取demo</string>
-	<string name="no_free">此SDK为收费版本, 费用为7000元, 单一APP使用,永久授权,提供一年合作事宜内的技术支持.</string>
+	<string name="no_free">此SDK为收费版本, 费用为7000元, 单一APP使用,永久授权,提供一年技术支持.</string>
 	<string name="connect_us">联系我们:\n 手机:18006716739 \n QQ:\t 1852600324 \n email:\tsupport@lansongtech.com \n 地址:\t杭州市余杭区运通网城软件园6栋428室.</string>
+	
+	<!-- =========场景======== -->
+	<string name="used_context">使用场景:</string>
+	<string name="cmdwrapper_hint">当前功能已经测试完毕,但还没有编写UI界面,请在VideoEditor.java文件中查看相关的实现方法.如有问题,请联系我们,谢谢!\n\n</string>
+	
+	
+	<string name="avsplite_hint">音视频分离:\n把多媒体文件如mp4,flv等中的的音频和视频分离开,形成独立的音频文件和视频文件 \n\n</string>
+	<string name="videocut_hint">视频剪切:\n剪切视频的长度,可以指定开始位置,指定结束位置.\n这里演示把原来的视频时长剪切一半.</string>
+	<string name="audiocut_hint">音频剪切:\n剪切音频的长度,可以指定开始位置,指定结束位置.\n这里演示把原来的音频时长剪切一半.</string>
+	<string name="videoscale_hint">视频缩放:缩小视频的宽度和高度\n 这里演示把宽度和高度都缩小一半.\n 注意:这里是采用软缩放的形式来做,耗时比较长,我们在增强版SDK有opengl加速缩放版本,欢迎索取demo</string>
+	<string name="videocrop_hint">视频画面裁剪:裁剪视频的宽度和高度\n 这里演示从左上角裁剪视频高度为原来的一半保存为新的视频.\n[使用我们的核心技术:视频编码和解码均 硬件加速]</string>
+	<string name="videocompress_hint">视频压缩转码:\n调整视频的码率,让视频文件大小变小一些,方便传输.注意:如调整的小太多,则会导致画面下降.这里演示把码率降低为70%\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>
+	
+	<string name="adjustcamearvideo_hint">调整录制视频的角度:\n因为录制的视频\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>
+	
+	<string name="videowatermark_hint">视频上增加图片:\n在视频上增加图片,可以指定开始时间和结束时间,指定在画面中的坐标处增加.\n这里演示增加app的图标.我们高级版本有动态实时增加图片,箭头标记涂鸦等,欢迎索取demo\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>
+	
+	<string name="extractimage_hint">视频提取图片:\n把视频中的画面转换为图片, 可以全部指定图片,也可以每秒钟提取一帧,可以设置开始和结束时间;这里演示,从视频中提取10帧图片保存到/sdcard下面,名字依次是img_001---010.jpeg.\n[使用我们的核心技术:视频编码和解码硬件加速]\n</string>
 	
 </resources>

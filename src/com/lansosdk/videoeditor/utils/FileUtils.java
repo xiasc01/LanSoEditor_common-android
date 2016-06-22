@@ -97,6 +97,15 @@ public class FileUtils {
 	            parentPath = "/";
 	        return parentPath;
 	    }
+	    public static   String getFileSuffix(String path){
+	        if (path == null)
+	            return "";
+	        int index = path.lastIndexOf('.');
+	        if (index> -1)
+	            return path.substring(index+1);
+	        else
+	            return "";
+	    }
 	     public static boolean fileExist(String absolutePath)
 		 {
 			 if(absolutePath==null)

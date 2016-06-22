@@ -16,7 +16,7 @@ public class MediaInfo {
 //
 
 	 private static final String TAG="MediaInfo";
-	 private static final boolean VERBOSE = false; 
+	 private static final boolean VERBOSE = true; 
 	 
 	 /***************video track info(total 12)*************** */
 	 /**
@@ -219,16 +219,10 @@ public class MediaInfo {
     	 if(fileExist(videoPath))
     	 {
     		 MediaInfo  info=new MediaInfo(videoPath,false);
-        	 info.prepare();
-        	 if(VERBOSE){
-        		 Log.i(TAG,"video:"+videoPath+" "+info.isSupport());
-        		 Log.i(TAG,"video:"+info.toString());
-        	 }
-        	 return info.isSupport();
+        	 return  info.prepare();
     	 }else{
     		 if(VERBOSE)
     			 Log.i(TAG,"video:"+videoPath+" not support");
-    		 
     		 return false;
     	 }
      }
