@@ -7,6 +7,7 @@ import com.lansoeditor.demo.R;
 
 public class VideoScaleWrapper extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	public VideoScaleWrapper()
 	{
 		super();
@@ -39,6 +40,7 @@ public class VideoScaleWrapper extends CmdWrapper{
 		//这里额外检查是否同时有音频和视频轨道.
 		if(super.prepare() && mInfo.vBitRate>0 && mInfo.vWidth>0 && mInfo.vHeight>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

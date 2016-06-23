@@ -27,8 +27,8 @@
 	
 	
 	<string name="avsplite_hint">音视频分离:\n把多媒体文件如mp4,flv等中的的音频和视频分离开,形成独立的音频文件和视频文件 \n\n</string>
-	<string name="videocut_hint">视频剪切:\n剪切视频的长度,可以指定开始位置,指定结束位置.\n这里演示把原来的视频时长剪切一半.</string>
-	<string name="audiocut_hint">音频剪切:\n剪切音频的长度,可以指定开始位置,指定结束位置.\n这里演示把原来的音频时长剪切一半.</string>
+	<string name="videocut_hint">视频剪切:\n剪切视频的长度,可以指定开始位置,指定结束位置.\n这里演示截取视频的前20秒形成新的视频文件.</string>
+	<string name="audiocut_hint">音频剪切:\n剪切音频的长度,可以指定开始位置,指定结束位置.\n这里演示截取音频的前20秒形成新的音频文件.</string>
 	<string name="videoscale_hint">视频缩放:缩小视频的宽度和高度\n 这里演示把宽度和高度都缩小一半.\n 注意:这里是采用软缩放的形式来做,耗时比较长,我们在增强版SDK有opengl加速缩放版本,欢迎索取demo</string>
 	<string name="videocrop_hint">视频画面裁剪:裁剪视频的宽度和高度\n 这里演示从左上角裁剪视频高度为原来的一半保存为新的视频.\n[使用我们的核心技术:视频编码和解码均 硬件加速]</string>
 	<string name="videocompress_hint">视频压缩转码:\n调整视频的码率,让视频文件大小变小一些,方便传输.注意:如调整的小太多,则会导致画面下降.这里演示把码率降低为70%\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>

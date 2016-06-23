@@ -7,10 +7,11 @@ import com.lansoeditor.demo.R;
 
 public class ExtractImageWrapper  extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	public ExtractImageWrapper()
 	{
 		super();
-		VideoPlayVisibility=View.GONE;
+		VideoPlayVisibility=View.VISIBLE;
 		AudioPlayVisibility=View.GONE;
 	}
 	@Override
@@ -36,6 +37,7 @@ public class ExtractImageWrapper  extends CmdWrapper{
 		//这里额外检查是否有视频轨道.
 		if(super.prepare() && mInfo.vBitRate>0 && mInfo.vWidth>0 && mInfo.vHeight>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

@@ -7,6 +7,7 @@ import com.lansoeditor.demo.R;
 
 public class VideoCompressWrapper extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	public VideoCompressWrapper()
 	{
 		super();
@@ -36,6 +37,7 @@ public class VideoCompressWrapper extends CmdWrapper{
 		//这里额外检查是否有视频轨道.
 		if(super.prepare() && mInfo.vBitRate>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

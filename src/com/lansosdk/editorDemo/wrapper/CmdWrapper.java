@@ -24,8 +24,6 @@ public class CmdWrapper {
 	public int VideoPlayVisibility=View.VISIBLE;
 	public int AudioPlayVisibility=View.INVISIBLE;
 	
-	protected  boolean isPrepareSuccess=false;
-	
 	
 	public CmdWrapper()
 	{
@@ -70,7 +68,6 @@ public class CmdWrapper {
 	public boolean prepare()
 	{
 		if(srcPath ==null){
-			isPrepareSuccess=false;
 			return false;
 		}
 		
@@ -95,10 +92,8 @@ public class CmdWrapper {
     		if(FileUtils.fileExist(dstVideo))
     			FileUtils.deleteFile(dstVideo);
     		
-    		isPrepareSuccess=true;
     		return true;
     	}else{
-    		isPrepareSuccess=false;
     		return false;
     	}
     		
@@ -110,7 +105,6 @@ public class CmdWrapper {
 	public void reset()
 	{
 		srcPath=null;
-		isPrepareSuccess=false;
 		dstVideo=DST_VIDEO;
 		dstAudio=DST_AUDIO;
 	}
@@ -122,7 +116,6 @@ public class CmdWrapper {
 		if(FileUtils.fileExist(dstVideo))
 			FileUtils.deleteFile(dstVideo);
 		srcPath=null;
-		isPrepareSuccess=false;
 		dstVideo=DST_VIDEO;
 		dstAudio=DST_AUDIO;
 	}

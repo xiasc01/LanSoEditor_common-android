@@ -17,6 +17,7 @@ import android.view.View;
  */
 public class AVSplitWrapper extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	public AVSplitWrapper()
 	{
 		super();
@@ -48,6 +49,7 @@ public class AVSplitWrapper extends CmdWrapper{
 		//这里额外检查是否同时有音频和视频轨道.
 		if(super.prepare() && mInfo.vBitRate>0 && mInfo.aBitRate>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

@@ -8,7 +8,7 @@ import com.lansoeditor.demo.R;
 public class VideoConnectWrapper extends CmdWrapper{
 
 	//需要设置两个video....
-	
+	private boolean isPrepareSuccess=false;
 	public VideoConnectWrapper()
 	{
 		super();
@@ -34,6 +34,7 @@ public class VideoConnectWrapper extends CmdWrapper{
 		//这里额外检查是否同时有音频和视频轨道.
 		if(super.prepare() && mInfo.vBitRate>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

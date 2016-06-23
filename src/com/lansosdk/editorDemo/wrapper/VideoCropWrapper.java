@@ -7,6 +7,7 @@ import com.lansoeditor.demo.R;
 
 public class VideoCropWrapper extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	public VideoCropWrapper()
 	{
 		super();
@@ -39,6 +40,7 @@ public class VideoCropWrapper extends CmdWrapper{
 		//这里额外检查有视频轨道.
 		if(super.prepare() && mInfo.vBitRate>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

@@ -8,6 +8,7 @@ import com.lansoeditor.demo.R;
 
 public class VideoAddImageWrapper extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	private Context mContext;
 	public VideoAddImageWrapper(Context ctx)
 	{
@@ -41,6 +42,7 @@ public class VideoAddImageWrapper extends CmdWrapper{
 		//这里额外检查是否有视频轨道.
 		if(super.prepare() && mInfo.vBitRate>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

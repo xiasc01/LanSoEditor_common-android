@@ -7,6 +7,7 @@ import com.lansoeditor.demo.R;
 
 public class AVComposeWrapper extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	private String audioSource=null;
 	public AVComposeWrapper()
 	{
@@ -37,6 +38,7 @@ public class AVComposeWrapper extends CmdWrapper{
 		//这里额外检查是否同时有音频和视频轨道.
 		if(super.prepare())
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

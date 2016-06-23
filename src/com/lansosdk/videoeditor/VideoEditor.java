@@ -268,7 +268,7 @@ public class VideoEditor {
 	 * @param dstPath    截取处理后的保存路径.
 	 * @return
 	 */
-	public native int audioPcmCut(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
+	public static native int audioPcmCut(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
 	/**
 	 * 合并两个音频数据,精度是100ms
 	 *  
@@ -285,7 +285,7 @@ public class VideoEditor {
 	 * @param dstPath  合并后保存的路径.
 	 * @return
 	 */
-	public native int audioPcmReplace(String srcMainPath,String srcSubPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,String dstPath);
+	public static native int audioPcmReplace(String srcMainPath,String srcSubPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,String dstPath);
 	/**
 	 * 把音频中的一种一段声音静音.精度是100ms
 	 * 
@@ -298,7 +298,7 @@ public class VideoEditor {
 	 * @param dstPath   静音处理后的保存路径.
 	 * @return
 	 */
-	public native int audioPcmMute(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
+	public static native int audioPcmMute(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
 	
 	
 	    //--------------------------------------------------------------------------
@@ -350,7 +350,30 @@ public class VideoEditor {
 		  	}
 			return VIDEO_EDITOR_EXECUTE_FAILED;
 		}
-	
+		/**
+		 * 暂时不检查别的线程是否执行.
+		 * 分离mp4文件中的音频,并返回音频的路径.
+		 * 
+		 * @param srcMp4Path
+		 * @return
+		 */
+			public static String spliteAudioFile(String srcMp4Path)
+			{
+				MediaInfo  info=new MediaInfo(srcMp4Path,false);
+				info.prepare();
+				
+				String audioPath=null;
+				if(info.aCodecName.equalsIgnoreCase("aac")){
+					audioPath=createFile(SDKDir.TMP_DIR, ".aac");
+				}else if(info.aCodecName.equalsIgnoreCase("mp4"))
+					audioPath=createFile(SDKDir.TMP_DIR, ".mp3");
+				
+				if(audioPath!=null){
+					VideoEditor veditor=new VideoEditor();
+					veditor.executeDeleteVideo(srcMp4Path, audioPath);
+				}
+				return audioPath;
+			}
 	
 		/**
 		 * 暂时不检查别的线程是否有执行.

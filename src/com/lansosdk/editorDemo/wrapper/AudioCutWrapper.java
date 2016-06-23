@@ -7,6 +7,7 @@ import com.lansoeditor.demo.R;
 
 public class AudioCutWrapper extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	public AudioCutWrapper()
 	{
 		super();
@@ -28,14 +29,18 @@ public class AudioCutWrapper extends CmdWrapper{
 	{
 		Log.i("sno","isPrepareSuccess:"+isPrepareSuccess);
 		if(isPrepareSuccess){
-			mEditor.executeAudioCutOut(srcPath,dstAudio,0,mInfo.aDuration/2);
+			if(mInfo.aDuration>20)
+				mEditor.executeAudioCutOut(srcPath,dstAudio,0,20);
+			else
+				mEditor.executeAudioCutOut(srcPath,dstAudio,0,mInfo.aDuration/2);
 		}
 	}
 	public boolean prepare()
 	{
 		//这里额外检查是否同时有音频轨道.
-		if(super.prepare() && mInfo.aBitRate>0 && mInfo.aDuration>5)
+		if(super.prepare() && mInfo.aBitRate>0 && mInfo.aDuration>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else

@@ -7,6 +7,7 @@ import com.lansoeditor.demo.R;
 
 public class VideoCutWrapper extends CmdWrapper{
 
+	private boolean isPrepareSuccess=false;
 	public VideoCutWrapper()
 	{
 		super();
@@ -28,14 +29,18 @@ public class VideoCutWrapper extends CmdWrapper{
 	{
 		Log.i("sno","isPrepareSuccess:"+isPrepareSuccess);
 		if(isPrepareSuccess){
-			mEditor.executeVideoCutOut(srcPath,dstVideo,0,mInfo.vDuration/2);
+			if(mInfo.vDuration>20)
+				mEditor.executeVideoCutOut(srcPath,dstVideo,0,20);
+			else
+				mEditor.executeVideoCutOut(srcPath,dstVideo,0,mInfo.vDuration/2);
 		}
 	}
 	
 	public boolean prepare()
 	{
-		if(super.prepare())
+		if(super.prepare() && mInfo.vBitRate>0 && mInfo.vDuration>0)
 		{
+			isPrepareSuccess=true;
 			return true;
 		}
 		else
