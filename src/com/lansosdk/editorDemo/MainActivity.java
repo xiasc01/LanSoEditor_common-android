@@ -56,10 +56,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	        	Log.i("sno","当前有读写权限");
 	        	isPermissionOk=true;
 	        }
-//		  showHintDialog();
-//		 Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
-//		 intent.putExtra("videopath", "/sdcard/test_720p.mp4");
-//		 startActivity(intent);
+		  showHintDialog();
     }
     @Override
     public void onClick(View v) {
