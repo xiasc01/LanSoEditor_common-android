@@ -3,8 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    
+      <Button
+             android:id="@+id/id_main_use_default_videobtn"
+             android:layout_width="match_parent"
+             android:layout_height="60dip"
+             android:background="@drawable/rect_button_bg"
+             android:text="拷贝演示视频样片"
+             />
+     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:id="@+id/id_main_tvvideo"/>
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -21,7 +31,7 @@
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
                  android:padding="10dip"
-         	   android:background="@drawable/circel_button_bg"
+         	   android:background="@drawable/circle_button_blue_bg"
                  android:text="音视频分离/合成/剪切/拼接"/>
         </RelativeLayout>
             
@@ -35,7 +45,7 @@
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
                  android:padding="10dip"
-         	   android:background="@drawable/circel_button_bg"
+         	   android:background="@drawable/circle_button_blue_bg"
                  android:text="视频叠加/转码/缩放/裁剪"/>
         </RelativeLayout>
     </LinearLayout>
@@ -57,7 +67,7 @@
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
                  android:padding="10dip"
-         	   android:background="@drawable/circel_button_bg"
+         	   android:background="@drawable/circle_button_blue_bg"
                  android:text="图片水印/合成/提取/转换"/>
         </RelativeLayout>
             
@@ -71,7 +81,7 @@
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
                  android:padding="10dip"
-         	   android:background="@drawable/circel_button_bg"
+         	   android:background="@drawable/circle_button_blue_bg"
                  android:text="其他类/旋转/倒放/加减速/矫正"/>
         </RelativeLayout>
     </LinearLayout>
@@ -92,7 +102,7 @@
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
                  android:padding="10dip"
-         	   android:background="@drawable/circel_button_bg"
+         	   android:background="@drawable/circle_button_blue_bg"
                  android:text="扩展功能自定义"/>
         </RelativeLayout>
             
@@ -106,7 +116,7 @@
                  android:layout_height="@dimen/module_size"
                  android:layout_centerInParent="true"
                  android:padding="10dip"
-         	   android:background="@drawable/circel_button_bg"
+         	   android:background="@drawable/circle_button_blue_bg"
                  android:text="合作事宜"
                  android:textColor="@color/red"/>
         </RelativeLayout>

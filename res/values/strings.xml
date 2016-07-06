@@ -2,6 +2,10 @@
 <resources>
 
     <string name="app_name">LanSongEditor</string>
+         <string name="message_granted">All permissions have been granted.</string>
+    <string name="message_denied">Permission \"%1$s\" has been denied.</string>
+    
+    
     <string name="lansong_hint">杭州蓝松科技有限公司\n   专业的视频处理SDK开发团队.</string>
     <string name="adv_hint1">"说明\n  此SDK是lansoEditor的基本版本. \n\n主要使用在音视频的: 裁剪,剪切,分离,合并,转换,拼接,水印,叠加,混合,转码等场合;\n\n 我们是针对android平台对ffmpeg做了硬件加速优化,经过多款手机的测试,优化性能大概提升4倍左右"</string>
     <string name="adv_hint2">"demo仅仅举例演示一两个功能,我们在 项目中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求"</string>
@@ -9,7 +13,8 @@
     
 	<string name="video_editor_demo_hint">此演示功能是:解码==>画面裁剪(比如1280x720的画面裁剪成240x240, 从视频画面的左上角开始裁剪,裁剪240x240的像素点)==>编码输出,保存在/sdcard/video_demo_framecrop.mp4中.\n\n</string>
     
-	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求\n</string>
+	<string name="sdk_limit">SDK版本号是V1.6 [商用版本]\n\nSDK底层做了授权限制,仅可在此demo中运行,并有效时间到2016年8月1号之前,请注意.</string>
+	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求, 这里仅仅是部分功能的举例,您完全可以根据我们的举例自定义完整的ffmpeg命令\n</string>
 	<string name="file_not_exist">文件不存在</string>
 	<string name="videoplay_hint">视频小知识:\n当前是等比例的显示到屏幕上, 目的是保持视频的宽高比一致,视频不变形;\n\n 或许会导致分辨率小的画面被放大了,画面质量下降,这是正常情况,只是播放的界面事情,不影响视频本身</string>
 	
@@ -38,5 +43,14 @@
 	<string name="videowatermark_hint">视频上增加图片:\n在视频上增加图片,可以指定开始时间和结束时间,指定在画面中的坐标处增加.\n这里演示增加app的图标.我们高级版本有动态实时增加图片,箭头标记涂鸦等,欢迎索取demo\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>
 	
 	<string name="extractimage_hint">视频提取图片:\n把视频中的画面转换为图片, 可以全部指定图片,也可以每秒钟提取一帧,可以设置开始和结束时间;这里演示,从视频中提取10帧图片保存到/sdcard下面,名字依次是img_001---010.jpeg.\n[使用我们的核心技术:视频编码和解码硬件加速]\n</string>
+	
+	
+	<string name="oneimage2video_hint">一张图片转视频:\n把一张图片转换为视频,图片可以是app里自带的图片,也可以是通过Bitmap由代码生成的图片.这里演示assert里带的一张图片生成视频.\n</string>
+	
+	<string name="filter_layout_hint">\n实时滤镜:\n在视频播放中,切换滤镜,调整某个滤镜的参数等操作,都会实时的成为视频的一部分.适合实时需要视频处理的场合.\n\n 后台滤镜:\n在不需要UI操作,一次性对视频进行滤镜处理的场景中使用.比如定义了一些样式,想让用户在预览确认后再处理保存的场合.</string>
+	<string name="filter_overlay_hint">\n实时叠加:\n在视频叠加过程中,您做的任何的操作都会实时的成为视频的一部分.适合实时需要视频处理的场合.\n\n 后台叠加:\n在不需要UI操作,一次性对视频进行叠加处理的场景中使用.比如定义了一些样式,想让用户在预览确认后再处理保存的场合.</string>
+	
+	<string name="filter_mark_hint">\n实时标记:\n在视频播放中,点击视频画面, 您点击的地方会出现一个叠加图片,并图片会随您的触屏移动而移动,起到标记的效果.\n\n 后台标记:\n这个功能等同于 视频+图片的后台处理功能,请参看(视频+图片的后台处理),这里不再重复.</string>
+	
 	
 </resources>

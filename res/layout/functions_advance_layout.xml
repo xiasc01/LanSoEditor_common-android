@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        
+      <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_advance_filter"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+         	   android:textStyle="bold"
+                 android:text="滤镜"/>
+        </RelativeLayout>
+            
+         <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_advance_overlay"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+         	   android:textStyle="bold"
+                 android:text="叠加"/>
+        </RelativeLayout>
+        
+    </LinearLayout>
+    
+      <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_advance_mark"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+         	   android:textStyle="bold"
+                 android:text="视频标记"/>
+        </RelativeLayout>
+            
+         <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_advance_picture"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+         	   android:textStyle="bold"
+                 android:text="照片影集"/>
+        </RelativeLayout>
+    </LinearLayout>
+    
+     <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_advance_more"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+         	   android:textStyle="bold"
+                 android:text="更多"/>
+        </RelativeLayout>
+            
+         <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+             <Button 
+                 android:id="@+id/id_advance_busyness"
+                 android:layout_width="@dimen/module_size"
+                 android:layout_height="@dimen/module_size"
+                 android:layout_centerInParent="true"
+                 android:padding="10dip"
+         	   android:background="@drawable/circel_button_bg"
+         	   android:textStyle="bold"
+                 android:text="合作"
+                 android:textColor="@color/red"/>
+        </RelativeLayout>
+    </LinearLayout>
+    
+     
+</LinearLayout>

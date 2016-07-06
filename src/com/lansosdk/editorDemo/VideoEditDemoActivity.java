@@ -34,7 +34,7 @@ public class VideoEditDemoActivity extends Activity{
 	private final static  boolean VERBOSE = false;   
 	
 	
-	String videoPath="/sdcard/VIDEO_90du.mp4";
+	String videoPath="/sdcard/2x.mp4";
 	VideoEditor mEditor = new VideoEditor();
 	ProgressDialog  mProgressDialog;
 	int videoDuration;
@@ -83,7 +83,7 @@ public class VideoEditDemoActivity extends Activity{
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Intent intent=new Intent(VideoEditDemoActivity.this,VideoPlayerActivity.class);
-			    	intent.putExtra("videopath", videoPath);
+			    	intent.putExtra("videopath", dstPath);
 			    	startActivity(intent);
 					
 					
@@ -113,9 +113,9 @@ public class VideoEditDemoActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onResume();
 
-        if(FileUtils.fileExist(dstPath)){
-        	FileUtils.deleteFile(dstPath);
-        }
+//        if(FileUtils.fileExist(dstPath)){
+//        	FileUtils.deleteFile(dstPath);
+//        }
 //        findViewById(R.id.id_video_play_btn).setEnabled(false);
 	}
 		private void showHintDialog()
@@ -175,11 +175,14 @@ public class VideoEditDemoActivity extends Activity{
       	    	//因为静态码率
 //      	    	mEditor.executeAddWaterMark("/sdcard/test_720p.mp4","/sdcard/watermark.png",0,0,"/sdcard/A1.mp4",(int)(mMediaInfo.vBitRate*1.5f));
       	    	
-      	    //	mEditor.pictureFadeInOut("/sdcard/testfade.png",3,0,40,50,75,"/sdcard/testfade.mp4");
+//      	    	mEditor.pictureFadeInOut("/sdcard/threeword.png",5,0,40,50,75,dstPath);
       	    //	mEditor.pictureFadeIn("/sdcard/testfade.png",3,0,60,"/sdcard/testfade2.mp4");
       	//  	mEditor.pictureFadeOut("/sdcard/testfade.png",3,0,60,"/sdcard/testfade3.mp4");
       	    	
-      	    //	mEditor.waterMarkFadeIn("/sdcard/2x.mp4","/sdcard/watermark.png",2,5,0,30,0,0,"/sdcard/2xmarkfade.mp4");
+      	    	
+//      	    	 mEditor.waterMarkFadeIn("/sdcard/2x.mp4","/sdcard/watermark.png",2,5,0,30,0,0,dstPath);
+      	    	
+      	    	
 //      	    	mEditor.executeRotateAngle("/sdcard/2x.mp4", mMediaInfo.vCodecName, 90, "/sdcard/F1.mp4",1000000);
       	    	
       	    	//这里检测mp3的时长,

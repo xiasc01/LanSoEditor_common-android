@@ -24,6 +24,7 @@ import com.lansosdk.editorDemo.wrapper.AudioCutWrapper;
 import com.lansosdk.editorDemo.wrapper.CmdId;
 import com.lansosdk.editorDemo.wrapper.CmdWrapper;
 import com.lansosdk.editorDemo.wrapper.ExtractImageWrapper;
+import com.lansosdk.editorDemo.wrapper.OneImageFadeWrapper;
 import com.lansosdk.editorDemo.wrapper.VideoCompressWrapper;
 import com.lansosdk.editorDemo.wrapper.VideoCropWrapper;
 import com.lansosdk.editorDemo.wrapper.VideoCutWrapper;
@@ -185,6 +186,9 @@ public class VideoWrapperEditorActivity extends Activity implements OnClickListe
 				break;
 			case CmdId.EXTRACT_IMAGE_WRAPPER:
 				mCmdWrapper=new ExtractImageWrapper();
+				break;
+			case CmdId.ONE_IMAGE_FADE_WRAPPER:
+				mCmdWrapper=new OneImageFadeWrapper(mContext);
 				break;
 		default:
 			mCmdWrapper=new CmdWrapper();

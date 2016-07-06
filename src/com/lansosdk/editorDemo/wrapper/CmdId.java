@@ -13,5 +13,7 @@ public class CmdId {
 	public static final int VIDEO_COMPRESS_WRAPPER=808;
 	public static final int VIDEO_ADDIMAGE_WRAPPER=809;
 	public static final int EXTRACT_IMAGE_WRAPPER=810;
+	
+	public static final int ONE_IMAGE_FADE_WRAPPER=811;
 		
 }

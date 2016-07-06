@@ -82,7 +82,7 @@ public class SdkHintActivity extends Activity{
 	private void showActivity()
 	{
 		Log.i("tag","shoActivity "+activityName);
-		Intent intent=new Intent(SdkHintActivity.this,MainActivity.class);
+		Intent intent=new Intent(SdkHintActivity.this,MainActivity2.class);
 		startActivity(intent);
 	}
 }

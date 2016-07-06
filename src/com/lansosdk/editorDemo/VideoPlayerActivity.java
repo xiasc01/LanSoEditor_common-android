@@ -3,6 +3,7 @@ package com.lansosdk.editorDemo;
 import java.io.IOException;
 
 import com.lansoeditor.demo.R;
+import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.player.IMediaPlayer;
 import com.lansosdk.videoeditor.player.VPlayer;
 import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerPreparedListener;
@@ -12,10 +13,12 @@ import android.app.Activity;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView.SurfaceTextureListener;
+import android.widget.Toast;
 
 
 
@@ -39,6 +42,12 @@ public class VideoPlayerActivity extends Activity {
     	
         videoPath=getIntent().getStringExtra("videopath");
 
+        MediaInfo info=new MediaInfo(videoPath);
+        info.prepare();
+        Log.i(TAG,"info:"+info.toString());
+        
+        
+        
         textureView=(TextureRenderView)findViewById(R.id.surface1);
         textureView.setSurfaceTextureListener(new SurfaceTextureListener() {
 			
@@ -66,6 +75,7 @@ public class VideoPlayerActivity extends Activity {
 					int height) {
 				// TODO Auto-generated method stub
 				play(new Surface(surface));
+//				startPlayVideo(new Surface(surface));
 			}
 		});
         
@@ -105,6 +115,14 @@ public class VideoPlayerActivity extends Activity {
     		return ;
         mediaPlayer = new MediaPlayer();  
         mediaPlayer.reset();  
+        mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+			
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "视频播放完毕",Toast.LENGTH_LONG).show();
+			}
+		});
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);  
         try {
 			mediaPlayer.setDataSource(videoPath);
@@ -129,6 +147,7 @@ public class VideoPlayerActivity extends Activity {
           if (videoPath != null){
         	  mVPlayer=new VPlayer(this);
         	  mVPlayer.setVideoPath(videoPath);
+        	  
               mVPlayer.setOnPreparedListener(new OnPlayerPreparedListener() {
     			
     			@Override

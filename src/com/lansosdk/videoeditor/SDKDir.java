@@ -1,5 +1,5 @@
 package com.lansosdk.videoeditor;
 
 public class SDKDir {
-	public static final String TMP_DIR="/sdcard/lansoBox";
+	public static final String TMP_DIR="/sdcard/lansongBox/";
 }

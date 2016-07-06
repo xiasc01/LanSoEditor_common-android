@@ -1,0 +1,88 @@
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            
+            <TextView 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sdk_limit"
+                android:layout_margin="10dip"/>
+            <TextView 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sdk_hnit"
+                android:layout_margin="10dip"/>
+            
+               <Button
+             android:id="@+id/id_demo_list_use_default_videobtn"
+             android:layout_width="match_parent"
+             android:layout_height="60dip"
+             android:background="@drawable/rect_button_bg"
+             android:text="拷贝演示视频样片"
+             />
+     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:id="@+id/id_demo_list_tvvideo"/>
+     
+            
+            <Button 
+                android:id="@+id/id_demo_list_avsplit"  
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例1]\t\t\t音视频分离" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             <Button 
+                android:id="@+id/id_demo_list_audiocut"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例2]\t\t\t音频剪切" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             <Button 
+                android:id="@+id/id_demo_list_videocut"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例3]\t\t\t视频剪切" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+              <Button 
+                android:id="@+id/id_demo_list_videocompress"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例4]\t\t\t视频压缩" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+            <!-- 
+              <Button 
+                android:id="@+id/id_demo_list_videoscale"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例5]\t\t\t视频缩放" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+                 -->
+             <Button 
+                android:id="@+id/id_demo_list_videocrop"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例5]\t\t\t视频画面裁剪" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             
+              <Button 
+                android:id="@+id/id_demo_list_videoaddimg"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例6]\t\t\t在视频上增加图片" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             
+             
+            <Button 
+                android:id="@+id/id_demo_list_video2img"  
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例7]\t\t\t视频转化为图片" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             <Button 
+                android:id="@+id/id_demo_list_oneimage2video"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="[举例8]\t\t\t单一图片转视频" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             
+              <Button 
+                android:id="@+id/id_demo_list_kuozhan"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip" android:textColor="@color/blue"
+                android:text="自定义扩展功能" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+             
+               <Button 
+                android:id="@+id/id_demo_list_connectus"    
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip" android:textColor="@color/red"
+                android:text="联系我们" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent" android:layout_marginBottom="50dip"/>
+             
+               
+        </LinearLayout>
+</ScrollView>

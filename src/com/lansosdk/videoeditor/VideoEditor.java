@@ -156,7 +156,13 @@ public class VideoEditor {
 	 * @param dstPath
 	 * @return
 	 */
-	public native int  waterMarkFadeIn( String srcVideoPath,String srcPngPath,int totalTime,int offsetTime,int fadeinStart,int fadeoutCnt,int x,int y,String dstPath);
+//	public native int  waterMarkFadeIn( String srcVideoPath,String srcPngPath,int totalTime,int offsetTime,int fadeinStart,int fadeoutCnt,int x,int y,String dstPath);
+	
+	
+//	ffmpeg -loop 1 -i test.png -t 1 -pix_fmt argb -vcodec qtrle z.mov
+//	2222step2(可以实现png图片的透明叠加)
+//	./ffmpeg -i miaopai.mp4 -itsoffset 10 -vcodec qtrle -i z.mov -filter_complex "[1:v] fade=in:0:50:alpha=1 [a]; [0:v][a] overlay=x=240:y=240" -acodec copy cc2.mp4
+	
 	/**
 	 * 调整视频的播放速度，　可以把视频加快速度，或放慢速度。适用在希望缩短视频中不重要的部分的场景，比如走路等
 	 * @param srcPath　　源视频
@@ -300,6 +306,17 @@ public class VideoEditor {
 	 */
 	public static native int audioPcmMute(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
 	
+	/**
+	 * 拷贝文件, 成功返回0,失败返回-1;
+	 * @param srcPath
+	 * @param dstPath
+	 * @return
+	 */
+	public static native int copyFile(String srcPath,String dstPath);
+	
+	public static native String getVertexShader();
+	public static native String getFragmentShader2D();
+	public static native String getFragmentShaderExt();
 	
 	    //--------------------------------------------------------------------------
 	/**
@@ -364,9 +381,9 @@ public class VideoEditor {
 				
 				String audioPath=null;
 				if(info.aCodecName.equalsIgnoreCase("aac")){
-					audioPath=createFile(SDKDir.TMP_DIR, ".aac");
+					audioPath=SDKFileUtils.createFile(SDKDir.TMP_DIR, ".aac");
 				}else if(info.aCodecName.equalsIgnoreCase("mp4"))
-					audioPath=createFile(SDKDir.TMP_DIR, ".mp3");
+					audioPath=SDKFileUtils.createFile(SDKDir.TMP_DIR, ".mp3");
 				
 				if(audioPath!=null){
 					VideoEditor veditor=new VideoEditor();
@@ -389,71 +406,21 @@ public class VideoEditor {
 		{
 			String audioPath=null;
 			if(info.aCodecName.equalsIgnoreCase("aac")){
-				audioPath=createFile("/sdcard/", ".aac");
+				audioPath=SDKFileUtils.createFile("/sdcard/", ".aac");
 			}else if(info.aCodecName.equalsIgnoreCase("mp4"))
-				audioPath=createFile("/sdcard/", ".mp3");
+				audioPath=SDKFileUtils.createFile("/sdcard/", ".mp3");
 			
 			if(audioPath!=null){
 				VideoEditor veditor=new VideoEditor();
 				veditor.executeDeleteVideo(oldMp4, audioPath);
 				veditor.executeVideoMergeAudio(newMp4, audioPath, dstMp4);
-				deleteFile(audioPath);
+				SDKFileUtils.deleteFile(audioPath);
 				return true;
 			}
 		}
 			return false;
 	}
-	private static String createFile(String dir,String suffix){
-    	Calendar c = Calendar.getInstance();
-		int  hour = c.get(Calendar.HOUR_OF_DAY);
-	    int minute = c.get(Calendar.MINUTE);
-		int year=c.get(Calendar.YEAR);
-		int month=c.get(Calendar.MONTH)+1;
-		int day=c.get(Calendar.DAY_OF_MONTH);
-		int second=c.get(Calendar.SECOND);
-		int millisecond=c.get(Calendar.MILLISECOND);
-		year=year-2000;
-		String name=dir;
-		name+=String.valueOf(year);
-		name+=String.valueOf(month);
-		name+=String.valueOf(day);
-		name+=String.valueOf(hour);
-		name+=String.valueOf(minute);
-		name+=String.valueOf(second);
-		name+=String.valueOf(millisecond);
-		name+=suffix;
-		
-		try {
-			Thread.sleep(1);  //保持文件名的唯一性.
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		File file=new File(name);
-		if(file.exists()==false)
-		{
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return name;
-    }
-	/**
-	 * 删除指定的文件.
-	 * @param path
-	 */
-    private static void deleteFile(String path)
-    {
-    	File file=new File(path);
-		if(file.exists())
-		{
-			file.delete();
-		}
-    }
+
 	 private static boolean fileExist(String absolutePath)
 	 {
 		 if(absolutePath==null)

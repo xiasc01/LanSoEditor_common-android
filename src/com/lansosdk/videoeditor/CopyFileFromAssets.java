@@ -1,4 +1,4 @@
-package com.lansosdk.editorDemo.wrapper;
+package com.lansosdk.videoeditor;
 
 import java.io.File;
 import java.io.FileOutputStream;

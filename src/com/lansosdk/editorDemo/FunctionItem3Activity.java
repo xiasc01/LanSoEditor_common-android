@@ -44,7 +44,7 @@ public class FunctionItem3Activity extends Activity implements OnClickListener{
 					gotoActivity(CmdId.NONE);
 					break;
 				case R.id.id_function_item3_oneimage2video:
-					gotoActivity(CmdId.NONE);
+					gotoActivity(CmdId.ONE_IMAGE_FADE_WRAPPER);
 					break;
 				default:
 					break;

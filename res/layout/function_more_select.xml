@@ -1,0 +1,19 @@
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+             <Button 
+                android:id="@+id/id_function_videoscale"  
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="视频缩放" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+              <Button 
+                android:id="@+id/id_function_audiomix"  
+                android:layout_height="60dip"  android:textSize="20sp" android:textStyle="bold"  android:layout_marginTop="30dip"
+                android:text="音频混合" android:background="@drawable/function_item_btn_bg" android:layout_width="match_parent"/>
+        </LinearLayout>
+        
+        
+</ScrollView>

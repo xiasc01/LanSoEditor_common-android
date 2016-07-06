@@ -13,9 +13,12 @@ import java.io.OutputStream;
 import java.util.Calendar;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 public class SDKFileUtils {
 
+	public static final String TAG="SDKFileUtils";
+	public static final boolean VERBOSE = false;  
 	 /**
     * 在指定的文件夹里创建一个文件名字, 名字是当前时间,指定后缀.
     * @param dir   "/sdcard/"
@@ -68,19 +71,117 @@ public class SDKFileUtils {
 			}
 			return name;
    }
+	 /**
+	    * 在指定的文件夹里 定义一个文件名字, 名字是当前时间,指定后缀.
+	    * 注意: 和 {@link #createFile(String, String)}的区别是,这里不生成文件,只是生成这个路径的字符串.
+	    * @param dir   "/sdcard/"
+	    * @param suffix  ".mp4"
+	    * @return
+	    */
+		public static String newFilePath(String dir,String suffix){
+		    	Calendar c = Calendar.getInstance();
+				int  hour = c.get(Calendar.HOUR_OF_DAY);
+			    int minute = c.get(Calendar.MINUTE);
+				int year=c.get(Calendar.YEAR);
+				int month=c.get(Calendar.MONTH)+1;
+				int day=c.get(Calendar.DAY_OF_MONTH);
+				int second=c.get(Calendar.SECOND);
+				int millisecond=c.get(Calendar.MILLISECOND);
+				year=year-2000;
+				String name=dir;
+				File d = new File(name);
+				
+				// 如果目录不中存在，创建这个目录
+				if (!d.exists())
+					d.mkdir();
+				name+="/";
+				
+				name+=String.valueOf(year);
+				name+=String.valueOf(month);
+				name+=String.valueOf(day);
+				name+=String.valueOf(hour);
+				name+=String.valueOf(minute);
+				name+=String.valueOf(second);
+				name+=String.valueOf(millisecond);
+				name+=suffix;
+				
+				try {
+					Thread.sleep(1);  //保持文件名的唯一性.
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+//				File file=new File(name);
+//				if(file.exists()==false)
+//				{
+//					try {
+//						file.createNewFile();
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+				return name;
+	   }
+	/**
+	 * 使用终端的cp命令拷贝文件,拷贝成功,返回目标字符串,失败返回null;
+	 * 
+	 * 拷贝大文件,则有耗时,可以放到new Thread中进行.
+	 * @param srcPath
+	 * @param suffix  后缀名,如".pcm"
+	 * @return
+	 */
+	public static String copyFile(String srcPath,String suffix)
+	{
+			 	String dstPath=SDKFileUtils.createFile(SDKDir.TMP_DIR, suffix);
+			 	
+//			 	String cmd="/system/bin/cp ";
+//			 	cmd+=srcPath;
+//			 	cmd+=" ";
+//			 	cmd+=dstPath;
+//				Runtime.getRuntime().exec(cmd).waitFor();
+				
+				File srcF=new File(srcPath);
+				File dstF=new File(dstPath);
+				
+				copyFile(srcF,dstF);
+				
+				if(srcF.length()==dstF.length())
+					return dstPath;
+				else{
+					Log.e(TAG,"fileCopy is failed! "+srcPath+" src size:"+srcF.length()+" dst size:"+dstF.length());
+					SDKFileUtils.deleteFile(dstPath);
+					return null;
+				}
+	}
 	/**
 	 * 删除指定的文件.
 	 * @param path
 	 */
    public static void deleteFile(String path)
    {
-   	File file=new File(path);
+   		File file=new File(path);
 		if(file.exists())
 		{
 			file.delete();
 		}
    }
-   
+   /**
+    * 判断 两个文件大小相等.
+    * @param path1
+    * @param path2
+    * @return
+    */
+   public static boolean equalSize(String path1,String path2)
+   {
+	   File srcF=new File(path1);
+	   File srcF2=new File(path2);
+	   if(srcF.length()== srcF2.length())
+		   return true;
+	   else
+		   return false;
+   }
 	 public static String getFileNameFromPath(String path){
 	        if (path == null)
 	            return "";
@@ -108,8 +209,12 @@ public class SDKFileUtils {
 		 {
 			 if(absolutePath==null)
 				 return false;
-			 else 
-				 return (new File(absolutePath)).exists();
+			 else{
+				 File file=new File(absolutePath);
+				 if(file.exists() && file.length()>0)  //并且文件大小大于0;
+					 return true;
+			 }
+			 return false;
 		 }
 	     public static boolean filesExist(String[] fileArray)
 		 {
@@ -168,4 +273,52 @@ public class SDKFileUtils {
 	             } catch (IOException e) {}
 	         return false;
 	     }
+	     
+	     
+	     //---------------------------------
+	     /** 删除空目录
+	     * @param dir 将要删除的目录路径
+	     */
+	     public static void deleteEmptyDir(String dir) {
+	        boolean success = (new File(dir)).delete();
+	        if (success) {
+	            System.out.println("Successfully deleted empty directory: " + dir);
+	        } else {
+	            System.out.println("Failed to delete empty directory: " + dir);
+	        }
+	    }
+
+	    /**
+	     * 递归删除目录下的所有文件及子目录下所有文件
+	     * @param dir 将要删除的文件目录
+	     * @return boolean Returns "true" if all deletions were successful.
+	     *                 If a deletion fails, the method stops attempting to
+	     *                 delete and returns "false".
+	     */
+	    public static boolean deleteDir(File dir) {
+	        if (dir.isDirectory()) {
+	            String[] children = dir.list();
+	            for (int i=0; i<children.length; i++) {
+	                boolean success = deleteDir(new File(dir, children[i]));
+	                if (!success) {
+	                    return false;
+	                }
+	            }
+	        }
+	        // 目录此时为空，可以删除
+	        return dir.delete();
+	    }
+	    /**
+	     *测试
+	    
+	    public static void main(String[] args) {
+	        doDeleteEmptyDir("new_dir1");
+	        String newDir2 = "new_dir2";
+	        boolean success = deleteDir(new File(newDir2));
+	        if (success) {
+	            System.out.println("Successfully deleted populated directory: " + newDir2);
+	        } else {
+	            System.out.println("Failed to delete populated directory: " + newDir2);
+	        }     
+	    } */
 }

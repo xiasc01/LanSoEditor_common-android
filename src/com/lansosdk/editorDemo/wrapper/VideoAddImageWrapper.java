@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.lansoeditor.demo.R;
+import com.lansosdk.videoeditor.CopyFileFromAssets;
 
 public class VideoAddImageWrapper extends CmdWrapper{
 
