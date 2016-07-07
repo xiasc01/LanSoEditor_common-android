@@ -2,6 +2,7 @@ package com.lansosdk.editorDemo;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Locale;
 
 
@@ -87,7 +88,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	        	Log.i("sno","当前有读写权限");
 	        	isPermissionOk=true;
 	        }
-//		  showHintDialog();
+		  showHintDialog();
 		 
 		 
 			new Handler().postDelayed(new Runnable() {
@@ -164,9 +165,20 @@ public class MainActivity extends Activity implements OnClickListener{
     		
     private void showHintDialog()
 	{
+   	 	Calendar c = Calendar.getInstance();
+		int year=c.get(Calendar.YEAR);
+		int month=c.get(Calendar.MONTH)+1;
+		
+		int lyear=VideoEditor.getLimitYear();
+		int lmonth=VideoEditor.getLimitMonth();
+		
+		Log.i(TAG,"current year is:"+year+" month is:"+month +" limit year:"+lyear+" limit month:"+lmonth);
+		String timeHint=getResources().getString(R.string.sdk_limit);
+		timeHint=String.format(timeHint, lyear,lmonth);
+		
 		new AlertDialog.Builder(this)
 		.setTitle("提示")
-		.setMessage(R.string.sdk_limit)
+		.setMessage(timeHint)
         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -232,13 +244,13 @@ public class MainActivity extends Activity implements OnClickListener{
 	       		 mProgressDialog.cancel();
 	       		 mProgressDialog=null;
 		}
-		 String str="视频样片路径:"+SDKDir.TMP_DIR+"ping20s.mp4";
+		 String str=SDKDir.TMP_DIR+"ping20s.mp4";
 		 if(FileUtils.fileExist(str)){
-			 Toast.makeText(getApplicationContext(), "默认视频文件拷贝完成."+str, Toast.LENGTH_SHORT).show();
+			 Toast.makeText(getApplicationContext(), "默认视频文件拷贝完成.视频样片路径:"+str, Toast.LENGTH_SHORT).show();
 			 if(tvVideoPath!=null)
 				tvVideoPath.setText(str);
 		 }else{
-			Toast.makeText(getApplicationContext(), "抱歉! 默认视频文件拷贝失败,请联系我们", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "抱歉! 默认视频文件拷贝失败,请联系我们:视频样片路径:"+str, Toast.LENGTH_SHORT).show();
 		 }
 	}
 }

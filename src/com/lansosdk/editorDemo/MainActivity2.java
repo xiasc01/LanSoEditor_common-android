@@ -2,6 +2,7 @@ package com.lansosdk.editorDemo;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Locale;
 
 
@@ -170,21 +171,32 @@ public class MainActivity2 extends Activity implements OnClickListener{
     }
     		
     private void showHintDialog()
-	{
-		new AlertDialog.Builder(this)
-		.setTitle("提示")
-		.setMessage(R.string.sdk_limit)
-        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				
-				showHintDialog("注意:底层ffmpeg完整可靠运行,已是发行商用版本.\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
-			}
-		})
-        .show();
-	}
+   	{
+      	 	Calendar c = Calendar.getInstance();
+   		int year=c.get(Calendar.YEAR);
+   		int month=c.get(Calendar.MONTH)+1;
+   		
+   		int lyear=VideoEditor.getLimitYear();
+   		int lmonth=VideoEditor.getLimitMonth();
+   		
+   		Log.i(TAG,"current year is:"+year+" month is:"+month +" limit year:"+lyear+" limit month:"+lmonth);
+   		String timeHint=getResources().getString(R.string.sdk_limit);
+   		timeHint=String.format(timeHint, lyear,lmonth);
+   		
+   		new AlertDialog.Builder(this)
+   		.setTitle("提示")
+   		.setMessage(timeHint)
+           .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+   			
+   			@Override
+   			public void onClick(DialogInterface dialog, int which) {
+   				// TODO Auto-generated method stub
+   				
+   				showHintDialog("注意:底层ffmpeg完整可靠运行,已是发行商用版本.\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
+   			}
+   		})
+           .show();
+   	}
     
     @Override
     protected void onDestroy() {
@@ -236,13 +248,13 @@ public class MainActivity2 extends Activity implements OnClickListener{
   	       		 mProgressDialog.cancel();
   	       		 mProgressDialog=null;
    		}
-   		 String str="视频样片路径:"+SDKDir.TMP_DIR+"ping20s.mp4";
+   		 String str=SDKDir.TMP_DIR+"ping20s.mp4";
    		 if(FileUtils.fileExist(str)){
-   			 Toast.makeText(getApplicationContext(), "默认视频文件拷贝完成."+str, Toast.LENGTH_SHORT).show();
+   			 Toast.makeText(getApplicationContext(), "默认视频文件拷贝完成.视频样片路径:"+str, Toast.LENGTH_SHORT).show();
    			 if(tvVideoPath!=null)
     				tvVideoPath.setText(str);
    		 }else{
-   			Toast.makeText(getApplicationContext(), "抱歉! 默认视频文件拷贝失败,请联系我们", Toast.LENGTH_SHORT).show();
+   			Toast.makeText(getApplicationContext(), "抱歉! 默认视频文件拷贝失败,请联系我们.视频样片路径:"+str, Toast.LENGTH_SHORT).show();
    		 }
    	}
    }

@@ -11,6 +11,8 @@
 *  
 *  此SDK采用低价收费授权,公司性质的合作,为了您项目更好的进行,欢迎和我们联系.谢谢!
 
+###可给我们发邮件,获取测试机型报告.
+
 ###举例功能的界面展示
 ![](https://github.com/LanSoSdk/LanSoEditor_common/blob/master/uimain.jpeg)
 

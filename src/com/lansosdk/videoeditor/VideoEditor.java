@@ -314,9 +314,23 @@ public class VideoEditor {
 	 */
 	public static native int copyFile(String srcPath,String dstPath);
 	
-	public static native String getVertexShader();
-	public static native String getFragmentShader2D();
-	public static native String getFragmentShaderExt();
+	 /**
+	   * 高级版本使用,获取一个opengl的program
+	   * @param type
+	   * @return  成功返回program的句柄,失败返回-1;
+	   */
+	  public static native int getProgramHandler(int type);
+	  /**
+	   *  高级版本使用, 切换滤镜的shader功能.
+	   * @param shader  要加载的shader描述代码
+	   * @return 成功返回切换后的句柄, 失败返回-1;
+	   */
+	  public static native int switchFilterShader(String shader);
+	  
+	  
+	  public static native int getLimitYear();
+	  public static native int getLimitMonth();
+	  
 	
 	    //--------------------------------------------------------------------------
 	/**
@@ -1235,102 +1249,7 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
-//		  public int executeAngle(String srcPath,String decoder,float angle,String dstPath,int bitrate)
-//		  {
-//			  ////ffmpeg -i miaopai.mp4 -vf "rotate=45*(PI/180),format=yuv420p" -metadata:s:v rotate=0 -codec:v libx264 -codec:a copy output.mp4
-//			  if(fileExist(srcPath)){
-//					
-//				  String filter=String.format(Locale.getDefault(),"rotate=%f*(PI/180),format=yuv420p",angle);
-//				  
-//					List<String> cmdList=new ArrayList<String>();
-//					
-//					cmdList.add("-vcodec");
-//					cmdList.add(decoder);
-//					
-//					
-//					cmdList.add("-i");
-//					cmdList.add(srcPath);
-//					
-//					cmdList.add("-vf");
-//					cmdList.add(filter);
-//					
-//					
-//					cmdList.add("-metadata:s:v");
-//					cmdList.add("rotate=0");
-//					cmdList.add("-acodec");
-//					cmdList.add("copy");
-//					cmdList.add("-y");
-//					cmdList.add("-vcodec");
-//					cmdList.add("libx264");
-//					
-////					cmdList.add("-b:v");
-////					cmdList.add(String.valueOf(bitrate)); 
-////					
-////					cmdList.add("-pix_fmt");
-////					cmdList.add("yuv420p");
-//					
-//					cmdList.add(dstPath);
-//					 
-//					String[] command=new String[cmdList.size()];  
-//				     for(int i=0;i<cmdList.size();i++){  
-//				    	 command[i]=(String)cmdList.get(i);  
-//				     }  
-//				    return  executeVideoEditor(command);
-//				  
-//			  }else{
-//				  return VIDEO_EDITOR_EXECUTE_FAILED;
-//			  }
-//		  }
-//		  
-//		  /**
-//		   * 调整录制的视频角度.
-//		   * @param srcPath
-//		   * @param decoder
-//		   * @param dstPath
-//		   * @param bitrate
-//		   * @return
-//		   */
-//		  
-//		  public int executeAdjustRecoderVideo(String srcPath,String decoder,String dstPath,int bitrate)
-//		  {
-//			  if(fileExist(srcPath)){
-//					
-//				  
-//					List<String> cmdList=new ArrayList<String>();
-//					
-//					cmdList.add("-vcodec");
-//					cmdList.add(decoder);
-//					
-//					cmdList.add("-i");
-//					cmdList.add(srcPath);
-//					
-//					cmdList.add("-acodec");
-//					cmdList.add("copy");
-//					cmdList.add("-y");
-//					cmdList.add("-vcodec");
-//					cmdList.add("lansoh264_enc");
-//					
-//					cmdList.add("-b:v");
-//					cmdList.add(String.valueOf(bitrate)); 
-//					
-//					cmdList.add("-pix_fmt");
-//					cmdList.add("yuv420p");
-//					
-//					cmdList.add(dstPath);
-//					 
-//					String[] command=new String[cmdList.size()];  
-//				     for(int i=0;i<cmdList.size();i++){  
-//				    	 command[i]=(String)cmdList.get(i);  
-//				     }  
-//				    return  executeVideoEditor(command);
-//			  }else{
-//				  return VIDEO_EDITOR_EXECUTE_FAILED;
-//			  }
-//		  }
-//		  public 压缩. 调整视频横竖屏.
-		  
-		  /**
-		   * 
-		   */
+		 
+
 		  
 }
