@@ -13,6 +13,9 @@
 
 ###可给我们发邮件,获取测试机型报告.
 
+###我们的高级版本下载地址：
+*	https://github.com/LanSoSdk/LanSoEditor_advance
+
 ###举例功能的界面展示
 ![](https://github.com/LanSoSdk/LanSoEditor_common/blob/master/uimain.jpeg)
 
