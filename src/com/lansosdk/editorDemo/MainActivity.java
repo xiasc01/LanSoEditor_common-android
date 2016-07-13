@@ -15,6 +15,7 @@ import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.SDKDir;
 import com.lansosdk.videoeditor.SDKFileUtils;
+import com.lansosdk.videoeditor.SpriteShader;
 import com.lansosdk.videoeditor.VideoEditor;
 import com.lansosdk.videoeditor.utils.FileUtils;
 import com.lansosdk.videoeditor.utils.snoCrashHandler;
@@ -108,6 +109,22 @@ public class MainActivity extends Activity implements OnClickListener{
 						new CopyDefaultVideoAsyncTask().execute();
 					}
 				});
+			 
+//			new Thread(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//					int program=SpriteShader.createProgramHandler(0);
+//					if(program>0){
+//						Log.i("sno","get program is ok");
+//						int ret=SpriteShader.getPostion(program);
+//						Log.i("sno","get getPostion is "+ret);
+//						
+//						SpriteShader.releaseProgramHandler(program);
+//					}
+//				}
+//			}).start();
     }
     @Override
     public void onClick(View v) {

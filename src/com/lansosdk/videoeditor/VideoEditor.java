@@ -314,18 +314,7 @@ public class VideoEditor {
 	 */
 	public static native int copyFile(String srcPath,String dstPath);
 	
-	 /**
-	   * 高级版本使用,获取一个opengl的program
-	   * @param type
-	   * @return  成功返回program的句柄,失败返回-1;
-	   */
-	  public static native int getProgramHandler(int type);
-	  /**
-	   *  高级版本使用, 切换滤镜的shader功能.
-	   * @param shader  要加载的shader描述代码
-	   * @return 成功返回切换后的句柄, 失败返回-1;
-	   */
-	  public static native int switchFilterShader(String shader);
+	
 	  
 	  
 	  public static native int getLimitYear();
@@ -361,6 +350,7 @@ public class VideoEditor {
 
 						cmdList.add("-vcodec");
 						cmdList.add("lansoh264_enc");
+//						cmdList.add("libx264");
 						
 						cmdList.add("-b:v");
 						float bitrate=info.vBitRate*percent;
