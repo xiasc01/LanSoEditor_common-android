@@ -50,28 +50,31 @@ public class SdkHintActivity extends Activity{
 				showActivity();
 			}
 		});
+		 mRunnable=new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					if(count-->0){
+						tvCount.setText(String.valueOf(count));
+						mHandler.postDelayed(mRunnable, 1000);
+					}else{
+						findViewById(R.id.id_playbox_hint_btn).setEnabled(true);
+					}
+				}
+			};
+		findViewById(R.id.id_playbox_hint_btn).setEnabled(false);
+		count=COUNT_NUM;
+		mHandler.postDelayed(mRunnable, 1000);
 	}
 	Handler mHandler=new Handler();
-	Runnable mRunnable=new Runnable() {
-		
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			if(count-->0){
-				tvCount.setText(String.valueOf(count));
-				mHandler.postDelayed(mRunnable, 1000);
-			}else{
-				findViewById(R.id.id_playbox_hint_btn).setEnabled(true);
-			}
-		}
-	};
+	Runnable mRunnable=null;
+	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		findViewById(R.id.id_playbox_hint_btn).setEnabled(false);
-		count=COUNT_NUM;
-		mHandler.postDelayed(mRunnable, 1000);
+		
 	}
 	@Override
 	protected void onPause() {

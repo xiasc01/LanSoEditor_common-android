@@ -1,7 +1,7 @@
 package com.lansosdk.videoeditor;
 
 /**
- * 此代码正在高级功能中使用.
+ * 此代码在高级功能中使用.
  *
  */
 public class SpriteShader {

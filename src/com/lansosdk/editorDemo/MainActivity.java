@@ -21,15 +21,21 @@ import com.lansosdk.videoeditor.utils.FileUtils;
 import com.lansosdk.videoeditor.utils.snoCrashHandler;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore.Video;
+import android.support.v4.content.PermissionChecker;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,87 +59,80 @@ public class MainActivity extends Activity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		 Thread.setDefaultUncaughtExceptionHandler(new snoCrashHandler());
-		 LanSoEditor.initSo(getApplicationContext());
+		 LanSoEditor.initSo(getApplicationContext(),null);
 		 
 			 
-		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
-	            @Override
-	            public void onGranted() {
-	            	isPermissionOk=true;
-	                Toast.makeText(MainActivity.this, R.string.message_granted, Toast.LENGTH_SHORT).show();
-	            }
-
-	            @Override
-	            public void onDenied(String permission) {
-	            	isPermissionOk=false;
-	                String message = String.format(Locale.getDefault(), getString(R.string.message_denied), permission);
-	                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-	            }
-	        });
+//		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
+//	            @Override
+//	            public void onGranted() {
+//	            	isPermissionOk=true;
+//	                Toast.makeText(MainActivity.this, R.string.message_granted, Toast.LENGTH_SHORT).show();
+//	            }
+//
+//	            @Override
+//	            public void onDenied(String permission) {
+//	            	isPermissionOk=false;
+//	                String message = String.format(Locale.getDefault(), getString(R.string.message_denied), permission);
+//	                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+//	            }
+//	        });
 		 
 		 setContentView(R.layout.functions_layout);
 		 
-		    tvVideoPath=(TextView)findViewById(R.id.id_main_tvvideo);
-		    
+		 tvVideoPath=(TextView)findViewById(R.id.id_main_tvvideo);
+//		    
 		 findViewById(R.id.id_module_item1).setOnClickListener(this);
 		 findViewById(R.id.id_module_item2).setOnClickListener(this);
 		 findViewById(R.id.id_module_item3).setOnClickListener(this);
 		 findViewById(R.id.id_module_item4).setOnClickListener(this);
 		 findViewById(R.id.id_module_item5).setOnClickListener(this);
 		 findViewById(R.id.id_module_item6).setOnClickListener(this);
-		 
-		 if(isPermissionOk==false && LanSoEditor.selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
+//		 
+		 if(isPermissionOk==false && selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
 	        	showHintDialog("当前没有读写权限");
 	        	isPermissionOk=false;
 	        }else{
 	        	Log.i("sno","当前有读写权限");
 	        	isPermissionOk=true;
 	        }
-		  showHintDialog();
-		 
-		 
-			new Handler().postDelayed(new Runnable() {
+	
+		 //  showHintDialog();
+			
+		 	new Handler().postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-//					gotoActivity(VideoEditDemoActivity.class);
-				}
-			}, 100);
-			
-			 findViewById(R.id.id_main_use_default_videobtn).setOnClickListener(new OnClickListener() {
+					gotoActivity(VideoEditDemoActivity.class);
 					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						new CopyDefaultVideoAsyncTask().execute();
-					}
-				});
-			 
-//			new Thread(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					// TODO Auto-generated method stub
-//					int program=SpriteShader.createProgramHandler(0);
-//					if(program>0){
-//						Log.i("sno","get program is ok");
-//						int ret=SpriteShader.getPostion(program);
-//						Log.i("sno","get getPostion is "+ret);
-//						
-//						SpriteShader.releaseProgramHandler(program);
+//					Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
+//			    	intent.putExtra("videopath", "/sdcard/ping20s.mp4");
+//			    	startActivity(intent);
+				}
+			}, 2000);
+			
+//			 findViewById(R.id.id_main_use_default_videobtn).setOnClickListener(new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						new CopyDefaultVideoAsyncTask().execute();
 //					}
-//				}
-//			}).start();
+//				});
     }
     @Override
     public void onClick(View v) {
     	// TODO Auto-generated method stub
-    	if(isPermissionOk)
+    	//if(isPermissionOk)
     	{
     		switch (v.getId()) {
 				case R.id.id_module_item1:
-					gotoActivity(FunctionItem1Activity.class);
+					Log.i(TAG,"--------------------------module item1");
+					Intent intent=new Intent(getApplicationContext(),VideoPlayerActivity.class);
+			    	intent.putExtra("videopath", "/sdcard/ping20s.mp4");
+			    	startActivity(intent);
+			    	
+//					gotoActivity(FunctionItem1Activity.class);
 					break;
 				case R.id.id_module_item2:
 					gotoActivity(FunctionItem2Activity.class);
@@ -157,9 +156,8 @@ public class MainActivity extends Activity implements OnClickListener{
 					break;
     		}
     	}
-    	
-    	
     }
+    
     @Override
     protected void onResume() {
     	// TODO Auto-generated method stub
@@ -207,7 +205,34 @@ public class MainActivity extends Activity implements OnClickListener{
 		})
         .show();
 	}
-    
+    @SuppressLint("NewApi") 
+	  public static boolean selfPermissionGranted(Context context,String permission) {
+	        // For Android < Android M, self permissions are always granted.
+	        boolean result = true;
+	        int targetSdkVersion = 0;
+	        try {
+	            final PackageInfo info = context.getPackageManager().getPackageInfo(
+	                    context.getPackageName(), 0);
+	            targetSdkVersion = info.applicationInfo.targetSdkVersion;
+	        } catch (PackageManager.NameNotFoundException e) {
+	            e.printStackTrace();
+	        }
+
+	        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+	            if (targetSdkVersion >= Build.VERSION_CODES.M) {
+	                // targetSdkVersion >= Android M, we can
+	                // use Context#checkSelfPermission
+	                result = context.checkSelfPermission(permission)
+	                        == PackageManager.PERMISSION_GRANTED;
+	            } else {
+	                // targetSdkVersion < Android M, we have to use PermissionChecker
+	                result = PermissionChecker.checkSelfPermission(context, permission)
+	                        == PermissionChecker.PERMISSION_GRANTED;
+	            }
+	        }
+	        return result;
+	    }
     @Override
     protected void onDestroy() {
     	// TODO Auto-generated method stub

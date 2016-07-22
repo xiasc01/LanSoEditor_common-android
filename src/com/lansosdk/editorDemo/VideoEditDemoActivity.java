@@ -33,13 +33,12 @@ public class VideoEditDemoActivity extends Activity{
 	private final static String TAG="videoEditDemoActivity";
 	private final static  boolean VERBOSE = false;   
 	
-	
-	String videoPath="/sdcard/2x.mp4";
+	String videoPath="/sdcard/merge.mp4";
 	VideoEditor mEditor = new VideoEditor();
 	ProgressDialog  mProgressDialog;
 	int videoDuration;
-	MediaInfo   mMediaInfo;
-	private String dstPath="/sdcard/video_demo_framecrop.mp4";
+	MediaInfo   mInfo;
+	private String dstPath="/sdcard/01.mp4";
 	
 
 	private boolean isRunning=false; 
@@ -52,7 +51,7 @@ public class VideoEditDemoActivity extends Activity{
 			 setContentView(R.layout.video_edit_demo_layout);
 	        
 				
-			 mMediaInfo=new MediaInfo(videoPath);
+			 mInfo=new MediaInfo(videoPath);
 				
 			 TextView tvHint=(TextView)findViewById(R.id.id_video_editor_demo_hint);
 			 tvHint.setText(R.string.video_editor_demo_hint);
@@ -65,11 +64,12 @@ public class VideoEditDemoActivity extends Activity{
 					if(videoPath==null)
 						return ;
 					
-					mMediaInfo.prepare();
+					mInfo.prepare();
 					
-					Log.i(TAG,mMediaInfo.toString());
+					Log.i(TAG,"info:"+mInfo.toString());
 					
-					if(mMediaInfo.vDuration>60*1000){//大于60秒
+					
+					if(mInfo.vDuration>60*1000){//大于60秒
 						showHintDialog();
 					}else{
 						startVideoEditorTask();
@@ -167,13 +167,36 @@ public class VideoEditDemoActivity extends Activity{
       	    	
 //      	    	mEditor.executeVideoCutOut(videoPath,"/sdcard/2x_cut.mp4",5,5);
 //	mEditor.executeGetAllFrames("/sdcard/2x.mp4","/sdcard/","getpng");
-      	    	 isRunning=true;
-      	    	mEditor.executeVideoFrameCrop(videoPath, 240, 240, 0, 0, dstPath,mMediaInfo.vCodecName,mMediaInfo.vBitRate);
+      	    	
+//      	    	isRunning=true;
+//      	    	int ret=mEditor.executeVideoFrameCrop(videoPath, 672, 384, 0, 0, dstPath,mInfo.vCodecName,1000*1000);
+//      	    	Log.i(TAG,"editor executeVideoFrameCrop return ret====================:"+ret);
+      	    
+      	    	
+      	    	
+      	    	
+      	    	 //演示同时进行裁剪,叠加和压缩.
       	    	 
+//      	    	 int cropW=480;
+//      	    	 int cropH=480;
+//      	    	 int max=Math.max(mInfo.vWidth,mInfo.vHeight);
+//      	    	 
+//      	    	 int cropMax=Math.max(cropW, cropH);
+//      	    	 float dstBr=(float)mInfo.vBitRate;
+//      	    	 
+//      	    	 float ratio=(float)cropMax/(float)max;
+//      	    	 
+//      	    	 dstBr*=ratio;  //得到恒定码率的等比例值.
+//      	    	 dstBr*=0.8f; //再压缩20%.
+//      	    	 
+//      	    	 dstBr/=2;
+//      	    	 
+//      	    	 mEditor.executeCropOverlay(videoPath, mInfo.vCodecName, "/sdcard/watermark.png", 20, 20, cropW, cropH, 0, 0, dstPath, (int)dstBr);
+      	   	
       	    	 
 //      	    	mEditor.executeConvertMp4toTs("/sdcard/2x.mp4","/sdcard/2x0.ts");
       	    	//因为静态码率
-//      	    	mEditor.executeAddWaterMark("/sdcard/test_720p.mp4","/sdcard/watermark.png",0,0,"/sdcard/A1.mp4",(int)(mMediaInfo.vBitRate*1.5f));
+      	    	mEditor.executeAddWaterMark("/sdcard/merge.mp4","/sdcard/watermark.png",0,0,dstPath,(int)(mInfo.vBitRate));
       	    	
 //      	    	mEditor.pictureFadeInOut("/sdcard/threeword.png",5,0,40,50,75,dstPath);
       	    //	mEditor.pictureFadeIn("/sdcard/testfade.png",3,0,60,"/sdcard/testfade2.mp4");
@@ -181,7 +204,6 @@ public class VideoEditDemoActivity extends Activity{
       	    	
       	    	
 //      	    	 mEditor.waterMarkFadeIn("/sdcard/2x.mp4","/sdcard/watermark.png",2,5,0,30,0,0,dstPath);
-      	    	
       	    	
 //      	    	mEditor.executeRotateAngle("/sdcard/2x.mp4", mMediaInfo.vCodecName, 90, "/sdcard/F1.mp4",1000000);
       	    	
@@ -195,7 +217,6 @@ public class VideoEditDemoActivity extends Activity{
       	    	//demoVideoGray();
       	    	//demodeleteMisuc();
       	    	 
-      	    	
 //      	    	 mEditor.audioPcmCut("/sdcard/j1.pcm", 44100, 2, 2, 1000, 5000, "/sdcard/p2.pcm");
       	    	 
 //      	    	mEditor.audioPcmMute("/sdcard/j1.pcm", 44100, 2, 2, 8000, 25000, "/sdcard/p3.pcm");

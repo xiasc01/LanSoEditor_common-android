@@ -22,15 +22,21 @@ import com.lansosdk.videoeditor.utils.FileUtils;
 import com.lansosdk.videoeditor.utils.snoCrashHandler;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore.Video;
+import android.support.v4.content.PermissionChecker;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +59,7 @@ public class MainActivity2 extends Activity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		 Thread.setDefaultUncaughtExceptionHandler(new snoCrashHandler());
-		 LanSoEditor.initSo(getApplicationContext());
+		 LanSoEditor.initSo(getApplicationContext(),null);
 		 
 		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
 	            @Override
@@ -70,7 +76,6 @@ public class MainActivity2 extends Activity implements OnClickListener{
 	            }
 	        });
 		 
-			 
 		 setContentView(R.layout.main_demos_list_layout);
 		 
 		 findViewById(R.id. id_demo_list_avsplit).setOnClickListener(this);
@@ -97,7 +102,7 @@ public class MainActivity2 extends Activity implements OnClickListener{
 		 
 		   tvVideoPath=(TextView)findViewById(R.id.id_demo_list_tvvideo);
 		   
-		 if(isPermissionOk==false && LanSoEditor.selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
+		 if(isPermissionOk==false && selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
 	        	showHintDialog("当前没有读写权限");
 	        	isPermissionOk=false;
 	        }else{
@@ -169,7 +174,34 @@ public class MainActivity2 extends Activity implements OnClickListener{
 		})
         .show();
     }
-    		
+    @SuppressLint("NewApi") 
+	  public static boolean selfPermissionGranted(Context context,String permission) {
+	        // For Android < Android M, self permissions are always granted.
+	        boolean result = true;
+	        int targetSdkVersion = 0;
+	        try {
+	            final PackageInfo info = context.getPackageManager().getPackageInfo(
+	                    context.getPackageName(), 0);
+	            targetSdkVersion = info.applicationInfo.targetSdkVersion;
+	        } catch (PackageManager.NameNotFoundException e) {
+	            e.printStackTrace();
+	        }
+
+	        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+	            if (targetSdkVersion >= Build.VERSION_CODES.M) {
+	                // targetSdkVersion >= Android M, we can
+	                // use Context#checkSelfPermission
+	                result = context.checkSelfPermission(permission)
+	                        == PackageManager.PERMISSION_GRANTED;
+	            } else {
+	                // targetSdkVersion < Android M, we have to use PermissionChecker
+	                result = PermissionChecker.checkSelfPermission(context, permission)
+	                        == PermissionChecker.PERMISSION_GRANTED;
+	            }
+	        }
+	        return result;
+	    }	
     private void showHintDialog()
    	{
       	 	Calendar c = Calendar.getInstance();

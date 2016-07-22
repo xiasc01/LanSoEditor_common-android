@@ -67,6 +67,11 @@ public class VideoWrapperEditorActivity extends Activity implements OnClickListe
 		getCmdWrapper(cmdID);
 		
 		
+		//测试使用.
+//		String srcPath="/data/local/tmp/res/ping20s.mp4";
+//		if(mCmdWrapper!=null)
+//			mCmdWrapper.setSourcePath(srcPath);
+//		tvSelectFile.setText(srcPath);
 		
 		
 		setTitle(mCmdWrapper.getTitle());

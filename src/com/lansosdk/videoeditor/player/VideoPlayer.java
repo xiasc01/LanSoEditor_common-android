@@ -64,7 +64,8 @@ public class VideoPlayer implements IMediaPlayer{
 
     private static final int MEDIA_NOP = 0; // interface test message
     private static final int MEDIA_PREPARED = 1;
-    private static final int MEDIA_PLAYBACK_COMPLETE = 2;
+    private static final int MEDIA_PLAYBACK_COMPLETE = 2;  //播放完毕.
+    
     private static final int MEDIA_BUFFERING_UPDATE = 3;
     private static final int MEDIA_SEEK_COMPLETE = 4;
     private static final int MEDIA_SET_VIDEO_SIZE = 5;
@@ -652,6 +653,11 @@ public class VideoPlayer implements IMediaPlayer{
                 return;
             }
 
+            Log.i("sno","msg.what===============>"+msg.what+" arg:"+msg.arg1);
+            
+            if(msg.what==MEDIA_PLAYBACK_COMPLETE){
+            	Log.i("sno","收到播放完毕的命令");
+            }
             switch (msg.what) {
             case MEDIA_PREPARED:
                 player.notifyOnPrepared();
@@ -661,8 +667,11 @@ public class VideoPlayer implements IMediaPlayer{
                 player.notifyOnCompletion();
                 player.stayAwake(false);
                 return;
+                
             case VIDEOEDIT_EVENT_COMPLETE:
             	return ;
+            	
+            	
             case MEDIA_BUFFERING_UPDATE:
                 long bufferPosition = msg.arg1;
                 if (bufferPosition < 0) {

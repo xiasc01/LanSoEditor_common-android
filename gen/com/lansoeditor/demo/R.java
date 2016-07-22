@@ -675,17 +675,17 @@ R35 B50,G71
         public static final int cmdwrapper_hint=0x7f060012;
         public static final int connect_us=0x7f060010;
         public static final int custom_ffmpeg_cmd=0x7f06000c;
-        public static final int extractimage_hint=0x7f06001b;
+        public static final int extractimage_hint=0x7f06001c;
         public static final int file_not_exist=0x7f06000a;
-        public static final int filter_layout_hint=0x7f06001d;
-        public static final int filter_mark_hint=0x7f06001f;
-        public static final int filter_overlay_hint=0x7f06001e;
+        public static final int filter_layout_hint=0x7f06001e;
+        public static final int filter_mark_hint=0x7f060020;
+        public static final int filter_overlay_hint=0x7f06001f;
         public static final int lansong_hint=0x7f060003;
         public static final int libs_codecs=0x7f06000d;
         public static final int message_denied=0x7f060002;
         public static final int message_granted=0x7f060001;
         public static final int no_free=0x7f06000f;
-        public static final int oneimage2video_hint=0x7f06001c;
+        public static final int oneimage2video_hint=0x7f06001d;
         public static final int sdk_hnit=0x7f060009;
         public static final int sdk_limit=0x7f060008;
         /**  =========场景======== 
@@ -695,6 +695,7 @@ R35 B50,G71
         public static final int videocompress_hint=0x7f060018;
         public static final int videocrop_hint=0x7f060017;
         public static final int videocut_hint=0x7f060014;
+        public static final int videocutcropimage_hint=0x7f06001b;
         public static final int videoplay_hint=0x7f06000b;
         public static final int videoscale_hint=0x7f060016;
         public static final int videowatermark_hint=0x7f06001a;

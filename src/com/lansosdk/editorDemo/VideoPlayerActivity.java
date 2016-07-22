@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.lansoeditor.demo.R;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.player.IMediaPlayer;
+import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerCompletionListener;
 import com.lansosdk.videoeditor.player.VPlayer;
 import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerPreparedListener;
 import com.lansosdk.videoeditor.utils.TextureRenderView;
@@ -15,6 +16,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView.SurfaceTextureListener;
@@ -74,40 +76,10 @@ public class VideoPlayerActivity extends Activity {
 			public void onSurfaceTextureAvailable(SurfaceTexture surface, int width,
 					int height) {
 				// TODO Auto-generated method stub
-				play(new Surface(surface));
-//				startPlayVideo(new Surface(surface));
+//				play(new Surface(surface));
+				VPlayVideo(new Surface(surface));
 			}
 		});
-        
-//        textureView2=(TextureRenderView)findViewById(R.id.surface2);
-//        textureView2.setSurfaceTextureListener(new SurfaceTextureListener() {
-//			
-//			@Override
-//			public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width,
-//					int height) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//			
-//			@Override
-//			public void onSurfaceTextureAvailable(SurfaceTexture surface, int width,
-//					int height) {
-//				// TODO Auto-generated method stub
-//				startPlayVideo2(new Surface(surface));
-//			}
-//		});
     }  
     public void play(Surface surface)  {  
 
@@ -133,21 +105,33 @@ public class VideoPlayerActivity extends Activity {
 		        textureView.requestLayout();
 		        
 		        mediaPlayer.start();  
+		        
 		}  catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }  
-  
+    private Handler getTimeHandler=new  Handler();
+    private Runnable  getTimeRunnable=new Runnable() {
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			if(mVPlayer!=null){
+				
+				Log.i(TAG,"mVPlayer.getCurrentPosition()===>"+mVPlayer.getCurrentPosition());
+				getTimeHandler.postDelayed(getTimeRunnable, 1000);
+			}
+		}
+	};
 
     private VPlayer  mVPlayer=null;
-    private VPlayer  mVPlayer2=null;
-    private void startPlayVideo(final Surface surface)
+    private void VPlayVideo(final Surface surface)
     {
           if (videoPath != null){
         	  mVPlayer=new VPlayer(this);
         	  mVPlayer.setVideoPath(videoPath);
-        	  
+        	  mVPlayer.setLooping(true);
               mVPlayer.setOnPreparedListener(new OnPlayerPreparedListener() {
     			
     			@Override
@@ -156,9 +140,22 @@ public class VideoPlayerActivity extends Activity {
     						mVPlayer.setSurface(surface);
     					    textureView.setVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
     				        textureView.requestLayout();
+    				        mVPlayer.setLooping(true);
+    				        
     				        mVPlayer.start();
+//    				        getTimeHandler.postDelayed(getTimeRunnable, 1000);
     					}
     			});
+              mVPlayer.setOnCompletionListener(new OnPlayerCompletionListener() {
+				
+				@Override
+				public void onCompletion(IMediaPlayer mp) {
+					// TODO Auto-generated method stub
+//					getTimeHandler.removeCallbacks(getTimeRunnable);
+				}
+			});
+              
+              
         	  mVPlayer.prepareAsync();
           }else {
               Log.e("sno", "Null Data Source\n");
@@ -166,25 +163,20 @@ public class VideoPlayerActivity extends Activity {
               return;
           }
     }
-    private void startPlayVideo2(final Surface surface)
-    {
-        	  mVPlayer2=new VPlayer(this);
-        	  mVPlayer2.setVideoPath(videoPath);
-              mVPlayer2.setOnPreparedListener(new OnPlayerPreparedListener() {
-    			
-    			@Override
-    			public void onPrepared(IMediaPlayer mp) {
-    				// TODO Auto-generated method stub
-    						mVPlayer2.setSurface(surface);
-    						
-    						Log.i("sno","=====>width"+mp.getVideoWidth()+" height"+mp.getVideoHeight());
-    						
-    					    textureView2.setVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
-    				        textureView2.requestLayout();
-    				        mVPlayer2.start();
-    					}
-    			});
-        	  mVPlayer2.prepareAsync();
+   
+    private void VplayerSeekTo(int delayMs,final int seekToMS){
+    	   new Handler().postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+						if(mVPlayer!=null){
+							mVPlayer.pause();
+							mVPlayer.seekTo(seekToMS);
+							mVPlayer.start();
+						}
+				}
+			}, delayMs);
     }
     @Override  
     protected void onPause() {  
@@ -197,12 +189,6 @@ public class VideoPlayerActivity extends Activity {
         	mVPlayer.stop();
         	mVPlayer.release();
         	mVPlayer=null;  
-        }
-        
-        if (mVPlayer2!=null) {  
-        	mVPlayer2.stop();
-        	mVPlayer2.release();
-        	mVPlayer2=null;  
         }
         super.onPause();  
     }  

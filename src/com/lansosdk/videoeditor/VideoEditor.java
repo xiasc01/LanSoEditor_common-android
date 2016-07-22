@@ -26,25 +26,39 @@ public class VideoEditor {
 	  public static final int VIDEO_EDITOR_EXECUTE_SUCCESS2 =1;
 	  public static final int VIDEO_EDITOR_EXECUTE_FAILED =-1;
 	  
+	  
+	  
 	  private final int VIDEOEDITOR_HANDLER_PROGRESS=203;
-		private final int VIDEOEDITOR_HANDLER_COMPLETED=204;
-	public VideoEditor() {
+	  private final int VIDEOEDITOR_HANDLER_COMPLETED=204;
+	  
+	  
+//	  #define MEDIACODEC_ERROR_NONE  0
+//
+////   在高通 骁龙616（MSM8939）主要是这个
+//	  #define MEDIACODEC_ERROR_DEQUEUE_OUTPUT_BUFFER  0x6801  
+//	  #define MEDIACODEC_ERROR_GET_OUTPUT_FORMAT 0x6802
+//	  #define MEDIACODEC_ERROR_GET_OUTPUT_BUFFER 0x6803
+//	  #define MEDIACODEC_ERROR_QUEUE_INPUT_BUFFER  0x6804
+//	  #define MEDIACODEC_ERROR_GET_INPUT_BUFFER  0x6805
+//	  #define MEDIACODEC_ERROR_DEQUEUE_INPUT_BUFFER  0x6806
+	  
+	  
+		public VideoEditor() {
 		// TODO Auto-generated constructor stub
-		Looper looper;
-        if ((looper = Looper.myLooper()) != null) {
-            mEventHandler = new EventHandler(this, looper);
-        } else if ((looper = Looper.getMainLooper()) != null) {
-            mEventHandler = new EventHandler(this, looper);
-        } else {
-            mEventHandler = null;
-            Log.w(TAG,"cannot get Looper handler. may be cannot receive video editor progress!!");
-        }
-	}
+			Looper looper;
+	        if ((looper = Looper.myLooper()) != null) {
+	            mEventHandler = new EventHandler(this, looper);
+	        } else if ((looper = Looper.getMainLooper()) != null) {
+	            mEventHandler = new EventHandler(this, looper);
+	        } else {
+	            mEventHandler = null;
+	            Log.w(TAG,"cannot get Looper handler. may be cannot receive video editor progress!!");
+	        }
+		}
 	
 	
 	    public onVideoEditorProgressListener mProgressListener=null;
 	    /**
-	     * 开始执行后,每秒钟更新一次. 
 	     * @param listener
 	     */
 		public void setOnProgessListener(onVideoEditorProgressListener listener)
@@ -143,25 +157,6 @@ public class VideoEditor {
 	 * @return
 	 */
 	public native int  pictureFadeOut( String srcPath,int totalTime,int fadeoutstart,int fadeoutCnt,String dstPath);
-	/**
-	 *  给视频增加一个水印，这个水印有渐渐显示出来的效果,类似秒拍结尾的时候, 在画面的中央有逐渐显示的动画一样的效果.
-	 * @param srcVideoPath　　　需要加水印的视频路径
-	 * @param srcPngPath　　　水印图片的路径，需要是png格式
-	 * @param totalTime　　　水印png的总时间，建议２秒
-	 * @param offsetTime　　　从视频的哪个时间点开始增加，单位是秒，
-	 * @param fadeinStart　　水印图片的开始帧，一般是０；
-	 * @param fadeoutCnt　　　　水印图片的渐渐显示的总帧数，如果渐渐显示的效果是２秒，则是2x25=50帧，这里填５０
-	 * @param x　　　水印图片相对于视频画面的ｘ坐标，　视频的左上角为０.0
-	 * @param y   水印图片相对于视频画面的ｙ坐标
-	 * @param dstPath
-	 * @return
-	 */
-//	public native int  waterMarkFadeIn( String srcVideoPath,String srcPngPath,int totalTime,int offsetTime,int fadeinStart,int fadeoutCnt,int x,int y,String dstPath);
-	
-	
-//	ffmpeg -loop 1 -i test.png -t 1 -pix_fmt argb -vcodec qtrle z.mov
-//	2222step2(可以实现png图片的透明叠加)
-//	./ffmpeg -i miaopai.mp4 -itsoffset 10 -vcodec qtrle -i z.mov -filter_complex "[1:v] fade=in:0:50:alpha=1 [a]; [0:v][a] overlay=x=240:y=240" -acodec copy cc2.mp4
 	
 	/**
 	 * 调整视频的播放速度，　可以把视频加快速度，或放慢速度。适用在希望缩短视频中不重要的部分的场景，比如走路等
@@ -314,9 +309,7 @@ public class VideoEditor {
 	 */
 	public static native int copyFile(String srcPath,String dstPath);
 	
-	
-	  
-	  
+	 
 	  public static native int getLimitYear();
 	  public static native int getLimitMonth();
 	  
@@ -335,7 +328,7 @@ public class VideoEditor {
 			//ffmpeg -i 2x.mp4 -acodec copy -vcodec libx264 -b:v 200k 2xpress.mp4
 			if(fileExist(srcPath)){
 				
-				MediaInfo info=new MediaInfo(srcPath);
+				MediaInfo info=new MediaInfo(srcPath,false);
 				if(info.prepare())
 				{
 						List<String> cmdList=new ArrayList<String>();
@@ -350,7 +343,6 @@ public class VideoEditor {
 
 						cmdList.add("-vcodec");
 						cmdList.add("lansoh264_enc");
-//						cmdList.add("libx264");
 						
 						cmdList.add("-b:v");
 						float bitrate=info.vBitRate*percent;
@@ -402,27 +394,34 @@ public class VideoEditor {
 		 * @param newMp4   通过压缩或mediapool后的新文件,里面只有视频部分或h264裸码流
 		 * @param dstMp4
 		 */
-	public static boolean encoderAddAudio(String oldMp4,String newMp4,String dstMp4)
+	public static boolean encoderAddAudio(String oldMp4,String newMp4,String tmpDir,String dstMp4)
 	{
 		//
 		MediaInfo  info=new MediaInfo(oldMp4,false);
 		if(info.prepare())
 		{
 			String audioPath=null;
-			if(info.aCodecName.equalsIgnoreCase("aac")){
-				audioPath=SDKFileUtils.createFile("/sdcard/", ".aac");
-			}else if(info.aCodecName.equalsIgnoreCase("mp4"))
-				audioPath=SDKFileUtils.createFile("/sdcard/", ".mp3");
-			
-			if(audioPath!=null){
-				VideoEditor veditor=new VideoEditor();
-				veditor.executeDeleteVideo(oldMp4, audioPath);
-				veditor.executeVideoMergeAudio(newMp4, audioPath, dstMp4);
-				SDKFileUtils.deleteFile(audioPath);
-				return true;
+			if(info.aCodecName!=null)  //只有在有音频的场合,才增加.
+			{
+				if(info.aCodecName.equalsIgnoreCase("aac")){
+					audioPath=SDKFileUtils.createFile(tmpDir, ".aac");
+				}else if(info.aCodecName.equalsIgnoreCase("mp4"))
+					audioPath=SDKFileUtils.createFile(tmpDir, ".mp3");	
+				
+				if(audioPath!=null){
+					VideoEditor veditor=new VideoEditor();
+					veditor.executeDeleteVideo(oldMp4, audioPath);  //获得音频
+					veditor.executeVideoMergeAudio(newMp4, audioPath, dstMp4);  //合并到新视频文件中.
+					SDKFileUtils.deleteFile(audioPath);
+					return true;
+				}
+			}else{
+				Log.w(TAG,"old mp4 file no audio . do not add audio");
 			}
+		}else{
+			Log.w(TAG,"old mp4 file prepare error!!,do not add audio");
 		}
-			return false;
+		return false;
 	}
 
 	 private static boolean fileExist(String absolutePath)
@@ -670,7 +669,7 @@ public class VideoEditor {
 					String[] command=new String[cmdList.size()];  
 				     for(int i=0;i<cmdList.size();i++){  
 				    	 command[i]=(String)cmdList.get(i);  
-				     }  
+				     }
 				    return  executeVideoEditor(command);
 				  
 			  }else{
@@ -925,42 +924,52 @@ public class VideoEditor {
 		  {
 			  if( fileExist(videoFile)){
 					
-					List<String> cmdList=new ArrayList<String>();
 					String cropcmd=String.format(Locale.getDefault(),"crop=%d:%d:%d:%d",cropWidth,cropHeight,x,y);
-					
-					cmdList.add("-vcodec");
-					cmdList.add(codecname);
-					
-					cmdList.add("-i");
-					cmdList.add(videoFile);
-
-					cmdList.add("-vf");
-					cmdList.add(cropcmd);
-					
-					cmdList.add("-acodec");
-					cmdList.add("copy");
-					
-					cmdList.add("-vcodec");
-//					cmdList.add("libx264");
-					cmdList.add("lansoh264_enc"); 
-					
-					cmdList.add("-b:v");
-					cmdList.add(String.valueOf(bitrate)); 
-					
-					cmdList.add("-pix_fmt");  //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
-					cmdList.add("yuv420p");
-					
-					cmdList.add("-y");
-					
-					cmdList.add(dstFile);
-					String[] command=new String[cmdList.size()];  
-				     for(int i=0;i<cmdList.size();i++){  
-				    	 command[i]=(String)cmdList.get(i);  
-				     }  
-				    return  executeVideoEditor(command);
+//					
+					int ret=executeFrameCrop(videoFile,codecname,cropcmd,dstFile,bitrate);
+					if(ret!=0){  //执行失败
+						Log.w(TAG,"video editor execute video frmae crop  error,switch to software decoder...");
+						ret=executeFrameCrop(videoFile,"h264",cropcmd,dstFile,bitrate);  //采用软解
+					}
+					return ret;
 			  }else{
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
+		  }
+		  //内部使用
+		  private int executeFrameCrop(String videoFile,String codecname,String filter,String dstFile,int bitrate)
+		  {
+			  List<String> cmdList=new ArrayList<String>();
+//				
+				cmdList.add("-vcodec");
+				cmdList.add(codecname);
+				
+				cmdList.add("-i");
+				cmdList.add(videoFile);
+
+				cmdList.add("-vf");
+				cmdList.add(filter);
+				
+				cmdList.add("-acodec");
+				cmdList.add("copy");
+				
+				cmdList.add("-vcodec");
+				cmdList.add("lansoh264_enc"); 
+				
+				cmdList.add("-b:v");
+				cmdList.add(String.valueOf(bitrate)); 
+				
+				cmdList.add("-pix_fmt");  //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+				cmdList.add("yuv420p");
+				
+				cmdList.add("-y");
+				
+				cmdList.add(dstFile);
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     } 
+			     return  executeVideoEditor(command);
 		  }
 		  
 		 /**
@@ -972,8 +981,9 @@ public class VideoEditor {
 		  * @return
 		  */
 		  /**
+		   *此视频缩放算法，采用是软缩放来实现，速度特慢, 不建议使用.　我们有更快速的视频缩放方法，请联系我们
 		   * 视频画面缩放, 务必保持视频的缩放后的宽高比,等于原来视频的宽高比.
-		   * 此视频缩放算法，采用是软缩放来实现，速度不是很快，适用在时长短的视频。　我们有更快速的视频缩放方法，请联系我们
+		   * 
 		   * @param videoFile
 		   * @param scaleWidth
 		   * @param scaleHeight
@@ -1021,6 +1031,157 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
+		  
+		  /**
+		   * 
+		   * 对视频画面进行裁剪,裁剪后叠加一个png类型的图片,
+		   * 
+		   * 等于把裁剪,叠加水印,压缩三条命令放在一次执行, 这样只解码一次,和只编码一次,极大的加快了处理速度.
+		   * 
+		   * @param videoFile 原视频
+		   * @param decCodec 解码器, 由{@link MediaInfo#vCodecName}填入
+		   * @param pngPath
+		   * @param cropX   画面裁剪的X坐标, 左上角为0:0
+		   * @param cropY    画面裁剪的Y坐标
+		   * @param cropWidth  画面裁剪宽度. 须小于等于源视频宽度
+		   * @param cropHeight  画面裁剪高度, 须小于等于源视频高度
+		   * @param overX   画面和png图片开始叠加的X坐标.
+		   * @param overY   画面和png图片开始叠加的Y坐标
+		   * @param dstFile  保存路径.
+		   * @param bitrate  在视频编码的过程中,调整视频的码率, 如降低码率, 可以压缩的效果,但如果比源画面过于小,则可能出现马赛克, 建议看我们的例子的计算方法.
+		   * @return
+		   */
+		  public int executeCropOverlay(String videoFile,String decCodec, String pngPath,int cropX,int cropY,int cropWidth,int cropHeight,int overX,int overY,String dstFile,int bitrate)
+		  {
+			  ////ffmpeg -i test_720p.mp4 -i watermark.png -filter_complex "[0:v]crop=640:640:0:40 [crop];[crop][1:v] overlay=0:0" -acodec copy -y xx.mp4
+			  if(fileExist(videoFile))
+			  {
+					String filter=String.format(Locale.getDefault(),"[0:v]crop=%d:%d:%d:%d [crop];[crop][1:v] overlay=%d:%d",cropWidth,cropHeight,cropX,cropY,overX,overY);
+					int ret=framecropoverlay(videoFile, decCodec, pngPath, filter, dstFile, bitrate);
+					if(ret!=0){
+						ret=framecropoverlay(videoFile, "h264", pngPath, filter, dstFile, bitrate);
+					}
+					return ret;
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		  //内部使用
+		  private int framecropoverlay(String videoFile,String decCodec, String pngPath,String filter,String dstFile,int bitrate)
+		  {
+			  List<String> cmdList=new ArrayList<String>();
+				
+				cmdList.add("-vcodec");
+				cmdList.add(decCodec);
+				
+				cmdList.add("-i");
+				cmdList.add(videoFile);
+
+				cmdList.add("-i");
+				cmdList.add(pngPath);
+				
+				cmdList.add("-filter_complex");
+				cmdList.add(filter);
+				
+				cmdList.add("-acodec");
+				cmdList.add("copy");
+				
+				cmdList.add("-vcodec");
+				cmdList.add("lansoh264_enc"); 
+				
+				cmdList.add("-b:v");
+				cmdList.add(String.valueOf(bitrate)); 
+									
+				cmdList.add("-pix_fmt");  
+				cmdList.add("yuv420p");
+				
+				cmdList.add("-y");
+				
+				cmdList.add(dstFile);
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     }  
+			    return  executeVideoEditor(command);
+			  
+		  }
+		  
+		  /**
+		   * 同时执行 视频时长剪切, 画面裁剪和增加水印的功能.
+		   * @param videoFile
+		   * @param decCodec
+		   * @param pngPath
+		   * @param startTimeS
+		   * @param duationS
+		   * @param cropX
+		   * @param cropY
+		   * @param cropWidth
+		   * @param cropHeight
+		   * @param overX
+		   * @param overY
+		   * @param dstFile
+		   * @param bitrate
+		   * @return
+		   */
+		  public int executeVideoCutCropOverlay(String videoFile,String decCodec, String pngPath,float startTimeS,float duationS,int cropX,int cropY,int cropWidth,int cropHeight,int overX,int overY,String dstFile,int bitrate)
+		  {
+			  ////ffmpeg -i test_720p.mp4 -i watermark.png -filter_complex "[0:v]crop=640:640:0:40 [crop];[crop][1:v] overlay=0:0" -acodec copy -y xx.mp4
+			  if(fileExist(videoFile))
+			  {
+					String filter=String.format(Locale.getDefault(),"[0:v]crop=%d:%d:%d:%d [crop];[crop][1:v] overlay=%d:%d",cropWidth,cropHeight,cropX,cropY,overX,overY);
+					int ret=videoCutCropOverlay(videoFile, decCodec, pngPath, startTimeS, duationS, filter, dstFile, bitrate);
+					if(ret!=0){
+						ret= videoCutCropOverlay(videoFile, "h264", pngPath, startTimeS, duationS, filter, dstFile, bitrate);
+					}
+					return ret;
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		  private int videoCutCropOverlay(String videoFile,String decCodec, String pngPath,float startTimeS,float duationS,String filter,String dstFile,int bitrate)
+		  {
+			  	List<String> cmdList=new ArrayList<String>();
+				cmdList.add("-vcodec");
+				cmdList.add(decCodec);
+				
+				cmdList.add("-ss");
+				cmdList.add(String.valueOf(startTimeS));
+				
+				cmdList.add("-t");
+				cmdList.add(String.valueOf(duationS));
+				
+				cmdList.add("-i");
+				cmdList.add(videoFile);
+
+				cmdList.add("-i");
+				cmdList.add(pngPath);
+				
+				cmdList.add("-filter_complex");
+				cmdList.add(filter);
+				
+				cmdList.add("-acodec");
+				cmdList.add("copy");
+				
+				cmdList.add("-vcodec");
+				cmdList.add("lansoh264_enc"); 
+				
+				cmdList.add("-b:v");
+				cmdList.add(String.valueOf(bitrate)); 
+									
+				cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+				cmdList.add("yuv420p");
+				
+				cmdList.add("-y");
+				
+				cmdList.add(dstFile);
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     }  
+			    return  executeVideoEditor(command);
+		  }
+		  
+		  
 		  /**
 		   * 把多张图片转换为视频
 		   * 注意：　这里的多张图片必须在同一个文件夹下，并且命名需要有规律,比如名字是 r5r_001.jpeg r5r_002.jpeg, r5r_003.jpeg等
@@ -1081,51 +1242,24 @@ public class VideoEditor {
 		   * @param dstFile　　处理后保存的路径，后缀需要是.mp4格式
 		   * @param bitrate  <============注意:这里的bitrate在设置的时候, 因为是设置编码器的恒定码率, 推荐设置为 预设值的1.2倍为准, 比如视频原有的码率是1M,则裁剪一半,预设值可能是500k, 
 		   * 这里推荐是为500k的1.5,因为原有的视频大部分是动态码率VBR,可以认为通过{@link MediaInfo} 得到的 {@link MediaInfo#vBitRate}是平均码率,这里要设置,推荐是1.5倍为好.
+		   * 
+		   * bitrate如果设置低一些, 可以起到压缩视频的效果.
 		   * @return
 		   */
 		  public int executeAddWaterMark(String videoFile,String imagePngPath,int x,int y,String dstFile,int bitrate){
 			  //./ffmpeg -i miaopai.mp4 -i watermark.png -filter_complex "overlay=0:0" -acodec copy out2.mp4  
 			  
 			  if(fileExist(videoFile)){
-					List<String> cmdList=new ArrayList<String>();
-					String overlayXY=String.format(Locale.getDefault(),"overlay=%d:%d",x,y);
-					
-					cmdList.add("-vcodec");
-					cmdList.add("lansoh264_dec");
-					
-					cmdList.add("-i");
-					cmdList.add(videoFile);
-
-					cmdList.add("-i");
-					cmdList.add(imagePngPath);
-
-					cmdList.add("-filter_complex");
-					cmdList.add(overlayXY);
-					
-					cmdList.add("-acodec");
-					cmdList.add("copy");
-					
-					cmdList.add("-vcodec");
-					cmdList.add("lansoh264_enc"); 
-					
-					cmdList.add("-b:v");
-					cmdList.add(String.valueOf(bitrate)); 
-					
-					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
-					cmdList.add("yuv420p");
-					
-					cmdList.add("-y");
-					cmdList.add(dstFile);
-					String[] command=new String[cmdList.size()];  
-				     for(int i=0;i<cmdList.size();i++){  
-				    	 command[i]=(String)cmdList.get(i);  
-				     }  
-				    return  executeVideoEditor(command);
+					String filter=String.format(Locale.getDefault(),"overlay=%d:%d",x,y);
+					int ret=videoAddWatermark(videoFile,"lansoh264_dec",imagePngPath, filter, dstFile, bitrate);
+					if(ret!=0){
+						ret=videoAddWatermark(videoFile,"h264",imagePngPath, filter, dstFile, bitrate);
+					}
+					return ret;
 			  }else{
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
-	
 		 /**
 		  * 为视频增加图片，图片可以是带透明的png类型，也可以是jpg类型;
 		  * 适用在为视频增加logo，或增加一些好玩的图片的场合，
@@ -1147,42 +1281,51 @@ public class VideoEditor {
 			// ./ffmpeg -i miaopai.mp4 -i test.png -filter_complex "[0:v][1:v] overlay=25:25:enable='between(t,0,5)'" -pix_fmt yuv420p -c:a copy output33.mp4
 			  if(fileExist(videoFile)){
 					List<String> cmdList=new ArrayList<String>();
-					String overlayXY=String.format(Locale.getDefault(),"overlay=%d:%d:enable='between(t,%f,%f)",x,y,startTimeS,endTimeS);
-					
-					cmdList.add("-vcodec");
-					cmdList.add("lansoh264_dec");
-					
-					cmdList.add("-i");
-					cmdList.add(videoFile);
-
-					cmdList.add("-i");
-					cmdList.add(imagePngPath);
-
-					cmdList.add("-filter_complex");
-					cmdList.add(overlayXY);
-					
-					cmdList.add("-acodec");
-					cmdList.add("copy");
-					
-					cmdList.add("-vcodec");
-					cmdList.add("lansoh264_enc"); 
-
-					cmdList.add("-b:v");
-					cmdList.add(String.valueOf(bitrate)); 
-					
-					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
-					cmdList.add("yuv420p");
-					
-					cmdList.add("-y");
-					cmdList.add(dstFile);
-					String[] command=new String[cmdList.size()];  
-				     for(int i=0;i<cmdList.size();i++){  
-				    	 command[i]=(String)cmdList.get(i);  
-				     }  
-				    return  executeVideoEditor(command);
+					String filter=String.format(Locale.getDefault(),"overlay=%d:%d:enable='between(t,%f,%f)",x,y,startTimeS,endTimeS);
+					int ret=videoAddWatermark(videoFile,"lansoh264_dec",imagePngPath, filter, dstFile, bitrate);
+					if(ret!=0){
+						ret=videoAddWatermark(videoFile,"h264",imagePngPath, filter, dstFile, bitrate);
+					}
+					return ret;
 			  }else{
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
+		  }
+		  //内部使用, 视频上增加水印.
+		  private int videoAddWatermark(String videoFile,String decName,String imagePngPath,String filter,String dstFile,int bitrate)
+		  {
+			  	List<String> cmdList=new ArrayList<String>();
+				cmdList.add("-vcodec");
+				cmdList.add(decName);
+				
+				cmdList.add("-i");
+				cmdList.add(videoFile);
+
+				cmdList.add("-i");
+				cmdList.add(imagePngPath);
+
+				cmdList.add("-filter_complex");
+				cmdList.add(filter);
+				
+				cmdList.add("-acodec");
+				cmdList.add("copy");
+				
+				cmdList.add("-vcodec");
+				cmdList.add("lansoh264_enc"); 
+				
+				cmdList.add("-b:v");
+				cmdList.add(String.valueOf(bitrate)); 
+				
+				cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+				cmdList.add("yuv420p");
+				
+				cmdList.add("-y");
+				cmdList.add(dstFile);
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     }  
+			    return  executeVideoEditor(command);
 		  }
 		
 			/**
@@ -1205,13 +1348,11 @@ public class VideoEditor {
 					cmdList.add("-vcodec");
 					cmdList.add(decoder);
 					
-					
 					cmdList.add("-i");
 					cmdList.add(srcPath);
 					
 					cmdList.add("-vf");
 					cmdList.add(filter);
-					
 					
 					cmdList.add("-metadata:s:v");
 					cmdList.add("rotate=0");

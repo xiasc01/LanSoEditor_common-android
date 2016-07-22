@@ -43,7 +43,7 @@ public class VPlayer {
     private int mCurrentState = STATE_IDLE;
 
     // All the stuff we need for playing and showing a video
-    private IMediaPlayer mMediaPlayer = null;
+    private VideoPlayer mMediaPlayer = null;
     private int mMainVideoWidth;
     private int mMainVideoHeight;
     
@@ -60,7 +60,7 @@ public class VPlayer {
     private int mCurrentBufferPercentage;
     
     
-    private int mSeekWhenPrepared;  // recording the seek position while preparing
+    private int mSeekWhenPrepared;  // recording the seek position while preparing  
     private boolean mCanPause = true;
     private boolean mCanSeekBack = true;
     private boolean mCanSeekForward = true;
@@ -377,21 +377,21 @@ public class VPlayer {
         return mCurrentAspectRatio;
     }
 
-    private IMediaPlayer createPlayer() {
-        IMediaPlayer mediaPlayer = null;
+    private VideoPlayer createPlayer() {
+    	VideoPlayer mediaPlayer = null;
 
         		VideoPlayer player = null;
                 if (mUri != null) {
                     player = new VideoPlayer();
 
-                        player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+                        player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
                         player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
                         player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
                         player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "overlay-format", VideoPlayer.SDL_FCC_RV32);
-                    player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
-                    player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
-                    player.setOption(VideoPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
-                    player.setOption(VideoPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+                        player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
+                        player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+                        player.setOption(VideoPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
+                        player.setOption(VideoPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
                 }
                 mediaPlayer = player;
         return mediaPlayer;
