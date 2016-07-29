@@ -112,7 +112,11 @@ public class VideoEditor {
                   mEventHandler.sendMessage(msg);	
               }
 	    }
-	    
+	    /**
+	     * 执行成功,返回0, 失败返回错误码.
+	     * @param cmdArray  ffmpeg命令的字符串数组, 可参考此文件中的各种方法举例来编写.
+	     * @return  执行成功,返回0, 失败返回错误码. (可当执行失败,联系我们,由我们来帮您解决)
+	     */
 	    private native int execute(Object cmdArray);
 	
 	public int vAdjustSpped(String srcPath,MediaInfo media,String dstPath)
@@ -313,10 +317,223 @@ public class VideoEditor {
 	  public static native int getLimitYear();
 	  public static native int getLimitMonth();
 	  
+	  //-------------------------------------------------------------------------------
+		
+	public int executePcmMix(String srcPach1,int samplerate,int channel,String srcPach2,int samplerate2,int channel2,
+			float value1,float value2,String dstPath)
+	{
+		List<String> cmdList=new ArrayList<String>();
+		
+		String filter=String.format(Locale.getDefault(),"[0:a]volume=volume=%f[a1]; [1:a]volume=volume=%f[a2]; [a1][a2]amix=inputs=2:duration=first:dropout_transition=2",value1,value2);
+		
+		cmdList.add("-f");
+		cmdList.add("s16le");
+		cmdList.add("-ar");
+		cmdList.add(String.valueOf(samplerate));
+		cmdList.add("-ac");
+		cmdList.add(String.valueOf(channel));
+		cmdList.add("-i");
+		cmdList.add(srcPach1);
+		
+		cmdList.add("-f");;
+		cmdList.add("s16le");
+		cmdList.add("-ar");
+		cmdList.add(String.valueOf(samplerate2));
+		cmdList.add("-ac");
+		cmdList.add(String.valueOf(channel2));
+		cmdList.add("-i");
+		cmdList.add(srcPach2);
+
+		cmdList.add("-y");
+		cmdList.add("-filter_complex");
+		cmdList.add(filter);
+		cmdList.add("-f");
+		cmdList.add("s16le");
+		cmdList.add("-acodec");
+		cmdList.add("pcm_s16le");
+		cmdList.add(dstPath);
+		
+		
+		String[] command=new String[cmdList.size()];  
+	     for(int i=0;i<cmdList.size();i++){  
+	    	 command[i]=(String)cmdList.get(i);  
+	     }  
+	     return executeVideoEditor(command);
+	}
+	
+	public int executePcmMix(String srcPach1,String srcPach2,int samplerate,int channel,float value1,float value2,String dstPath)
+	{
+		List<String> cmdList=new ArrayList<String>();
+	
+		cmdList.add("-f");
+		cmdList.add("s16le");
+		cmdList.add("-ar");
+		cmdList.add(String.valueOf(samplerate));
+		cmdList.add("-ac");
+		cmdList.add(String.valueOf(channel));
+		cmdList.add("-i");
+		cmdList.add(srcPach1);
+		
+		cmdList.add("-f");;
+		cmdList.add("s16le");
+		cmdList.add("-ar");
+		cmdList.add(String.valueOf(samplerate));
+		cmdList.add("-ac");
+		cmdList.add(String.valueOf(channel));
+		cmdList.add("-i");
+		cmdList.add(srcPach2);
+
+		cmdList.add("-y");
+		cmdList.add("-filter_complex");
+		cmdList.add("[0:a]volume=volume=0.5[a1]; [1:a]volume=volume=5[a2]; [a1][a2]amix=inputs=2:duration=first:dropout_transition=2");
+		cmdList.add("-f");
+		cmdList.add("s16le");
+		cmdList.add("-acodec");
+		cmdList.add("pcm_s16le");
+		cmdList.add(dstPath);
+		
+		
+		String[] command=new String[cmdList.size()];  
+	     for(int i=0;i<cmdList.size();i++){  
+	    	 command[i]=(String)cmdList.get(i);  
+	     }  
+	     return executeVideoEditor(command);
+	}
+	  public int executeAudioMix(String audioPath1,String audioPath2,int leftDelayMS,int rightDelayMS,String dstPath)
+	  {
+		  List<String> cmdList=new ArrayList<String>();
+			String overlayXY=String.format(Locale.getDefault(),"[1:a]adelay=%d|%d[delaya1]; [0:a][delaya1]amix=inputs=2:duration=first:dropout_transition=2",leftDelayMS,rightDelayMS);
+			
+			
+			cmdList.add("-i");
+			cmdList.add(audioPath1);
+
+			cmdList.add("-i");
+			cmdList.add(audioPath2);
+
+			cmdList.add("-filter_complex");
+			cmdList.add(overlayXY);
+			
+			cmdList.add("-acodec");
+			cmdList.add("libfaac");
+			
+			cmdList.add("-y");
+			cmdList.add(dstPath);
+			String[] command=new String[cmdList.size()];  
+		     for(int i=0;i<cmdList.size();i++){  
+		    	 command[i]=(String)cmdList.get(i);  
+		     } 
+		     return  executeVideoEditor(command);
+	  }
+	  public int executePcmEncodeAac(String srcPach,int samplerate,int channel,String dstPath)
+	  {
+			List<String> cmdList=new ArrayList<String>();
+			
+			cmdList.add("-f");
+			cmdList.add("s16le");
+			cmdList.add("-ar");
+			cmdList.add(String.valueOf(samplerate));
+			cmdList.add("-ac");
+			cmdList.add(String.valueOf(channel));
+			cmdList.add("-i");
+			cmdList.add(srcPach);
+		
+	
+			cmdList.add("-acodec");
+			cmdList.add("libfaac");
+			cmdList.add("-b:a");
+			cmdList.add("64000");
+			cmdList.add("-y");
+		
+			cmdList.add(dstPath);
+			
+			
+			String[] command=new String[cmdList.size()];  
+		     for(int i=0;i<cmdList.size();i++){  
+		    	 command[i]=(String)cmdList.get(i);  
+		     }  
+		     return executeVideoEditor(command);
+	}
+	
+	public int executePcmComposeVideo(String srcPcm,int samplerate,int channel,String srcVideo,String dstPath)
+	{
+		List<String> cmdList=new ArrayList<String>();
+		
+		cmdList.add("-f");
+		cmdList.add("s16le");
+		cmdList.add("-ar");
+		cmdList.add(String.valueOf(samplerate));
+		cmdList.add("-ac");
+		cmdList.add(String.valueOf(channel));
+		cmdList.add("-i");
+		cmdList.add(srcPcm);
+		
+		cmdList.add("-i");
+		cmdList.add(srcVideo);
+		
+		cmdList.add("-acodec");
+		cmdList.add("libfaac");
+		cmdList.add("-b:a");
+		cmdList.add("64000");
+		cmdList.add("-y");
+		
+		cmdList.add("-vcodec");
+		cmdList.add("copy");
+	
+		cmdList.add(dstPath);
+		
+		
+		String[] command=new String[cmdList.size()];  
+	     for(int i=0;i<cmdList.size();i++){  
+	    	 command[i]=(String)cmdList.get(i);  
+	     }  
+	     return executeVideoEditor(command);
+	}
 	
 	    //--------------------------------------------------------------------------
 	/**
+	 * 把h264裸码流数据包装成MP4格式,因为是裸码流,未知帧率, 包装成MP4默认帧率是25帧/秒
+	 * 
+	 * 
+	 * 注意,这里面没有音频数据.,H264裸码流是通过编码得到的数据直接写入文件的数据.
+	 * @param srcPath
+	 * @param dstPath
+	 * @return
+	 */
+	public static int executeH264WrapperMp4(String srcPath,String dstPath)
+	{
+		if(fileExist(srcPath)){
+			
+					List<String> cmdList=new ArrayList<String>();
+					
+			    	cmdList.add("-i");
+					cmdList.add(srcPath);
+
+					cmdList.add("-vcodec");
+					cmdList.add("copy");
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				     VideoEditor veditor=new VideoEditor();
+				     return veditor.executeVideoEditor(command);
+	  	}
+		return VIDEO_EDITOR_EXECUTE_FAILED;
+	}
+	    //--------------------------------------------------------------------------
+	/**
+	 * 视频转码.
 	 * 通过调整视频的bitrate来对视频文件大小的压缩,降低视频文件的大小, 注意:压缩可能导致视频画质下降.
+	 * 
+	 * 此命令为单纯压缩命令, 如需对视频进行裁剪/增加水印/增加文字等需要编解码的场合, 可以在执行的方法中直接压缩,这样节省一倍的时间, 没有必要等其他命令执行完后,再执行此方法. 
+	 * 比如如下方法: 
+	 * {@link #executeCropOverlay(String, String, String, int, int, int, int, int, int, String, int)}
+	 * {@link #executeVideoCutCropOverlay(String, String, String, float, float, int, int, int, int, int, int, String, int)}
+	 * {@link #executeAddWaterMark(String, String, int, int, String, int)}
+	 * {@link #executeAddWaterMark(String, String, float, float, int, int, String, int)}
 	 * 
 	 * @param srcPath 源视频
 	 * @param dstPath 目的视频
@@ -364,8 +581,7 @@ public class VideoEditor {
 			return VIDEO_EDITOR_EXECUTE_FAILED;
 		}
 		/**
-		 * 暂时不检查别的线程是否执行.
-		 * 分离mp4文件中的音频,并返回音频的路径.
+		 * 分离mp4文件中的音频,并返回音频的路径,这个音频路径是放到{@link SDKDir#TMP_DIR}下的以当前时间为文件名的文件路径.
 		 * 
 		 * @param srcMp4Path
 		 * @return
@@ -388,12 +604,15 @@ public class VideoEditor {
 				return audioPath;
 			}
 	
-		/**
-		 * 暂时不检查别的线程是否有执行.
-		 * @param oldMp4
-		 * @param newMp4   通过压缩或mediapool后的新文件,里面只有视频部分或h264裸码流
-		 * @param dstMp4
-		 */
+			/**
+			 * 把原视频文件中的音频部分, 增加到新的视频中,
+			 * 
+			 * @param oldMp4   源视频, 需要内部有音频部分, 如没有音频则则方法无动作.
+			 * @param newMp4   通过视频录制后,保存的新视频.里面只有视频部分或h264裸码流,需确保里面没有音频部分.
+			 * @param tmpDir  此方法处理过程中生成的临时文件存放地, 临时文件夹路径.
+			 * @param dstMp4   方法处理完后, 增加音频后的文件目标路径.
+			 * @return  执行成功,返回true, 失败返回false(一般源视频中没有音频会执行失败)
+			 */
 	public static boolean encoderAddAudio(String oldMp4,String newMp4,String tmpDir,String dstMp4)
 	{
 		//
@@ -499,7 +718,7 @@ public class VideoEditor {
 		   * 音频和视频合成为多媒体文件，等于给视频增加一个音频。
 		    当前版本近测试了，把一个没有音频的mp4文件和 一个音频合成为多媒体格式.
 		   
-		   * @param videoFile 输入的视频文件
+		   * @param videoFile 输入的视频文件,需视频文件中不存储音频部分, 如有音频怎会增加两个声音.
 		   * @param audioFile 输入的音频文件
 		   * @param dstFile  合成后的输出，文件名的后缀是.mp4
 		   * @return 返回执行的结果.
@@ -542,6 +761,7 @@ public class VideoEditor {
 			  }
 		  }
 		  /**
+		   * 
 		   * 给视频MP4增加上音频，audiostartS表示从从音频的哪个时间点开始增加，单位是秒
 		   * @param videoFile  原视频文件
 		   * @param audioFile  需要增加的音频文件
@@ -587,7 +807,7 @@ public class VideoEditor {
 			  }
 		  }
 		  /**
-		   * 给视频文件增加一个音频
+		   * 给视频文件增加一个音频, 注意,这里是因音频的时长为目标视频文件的时长.
 		   * 输出文件后缀是.mp4格式.
 		   * @param videoFile
 		   * @param audioFile
@@ -608,14 +828,14 @@ public class VideoEditor {
 			    	cmdList.add("-i");
 					cmdList.add(videoFile);
 					
+					cmdList.add("-i");
+					cmdList.add(audioFile);
+					
 					cmdList.add("-ss");
 					cmdList.add(String.valueOf(audiostartS));
 					
 					cmdList.add("-t");
 					cmdList.add(String.valueOf(audiodurationS));
-					
-					cmdList.add("-i");
-					cmdList.add(audioFile);
 					
 					cmdList.add("-vcodec");
 					cmdList.add("copy");
@@ -897,16 +1117,6 @@ public class VideoEditor {
 		  }
 		  
 		  /**
-		   * 
-		   * @param videoFile　
-		   * @param cropWidth　
-		   * @param cropHeight　裁剪的高度
-		   * @param x　
-		   * @param y　　
-		   * @param dstFile　　
-		   * @return
-		   */
-		  /**
 		   * 裁剪一个mp4分辨率，把视频画面的某一部分裁剪下来，
 		   * 
 		   * @param videoFile　需要裁剪的视频文件
@@ -972,14 +1182,6 @@ public class VideoEditor {
 			     return  executeVideoEditor(command);
 		  }
 		  
-		 /**
-		  * 
-		  * @param videoFile
-		  * @param scaleWidth
-		  * @param scaleHeight
-		  * @param dstFile
-		  * @return
-		  */
 		  /**
 		   *此视频缩放算法，采用是软缩放来实现，速度特慢, 不建议使用.　我们有更快速的视频缩放方法，请联系我们
 		   * 视频画面缩放, 务必保持视频的缩放后的宽高比,等于原来视频的宽高比.
@@ -1108,19 +1310,19 @@ public class VideoEditor {
 		  
 		  /**
 		   * 同时执行 视频时长剪切, 画面裁剪和增加水印的功能.
-		   * @param videoFile
-		   * @param decCodec
-		   * @param pngPath
-		   * @param startTimeS
-		   * @param duationS
-		   * @param cropX
-		   * @param cropY
-		   * @param cropWidth
-		   * @param cropHeight
-		   * @param overX
-		   * @param overY
-		   * @param dstFile
-		   * @param bitrate
+		   * @param videoFile  源视频文件.
+		   * @param decCodec   源视频解码器
+		   * @param pngPath   增加的水印文件路径
+		   * @param startTimeS   时长剪切的开始时间
+		   * @param duationS   时长剪切的 总长度
+		   * @param cropX   画面裁剪的 X坐标,(最左边坐标是0)
+		   * @param cropY  画面裁剪的Y坐标,(最上面坐标是0)
+		   * @param cropWidth   画面裁剪宽度
+		   * @param cropHeight  画面裁剪高度
+		   * @param overX   增加水印的X坐标
+		   * @param overY   增加水印的Y坐标
+		   * @param dstFile  目标文件路径
+		   * @param bitrate   设置在压缩时采用的bitrate.
 		   * @return
 		   */
 		  public int executeVideoCutCropOverlay(String videoFile,String decCodec, String pngPath,float startTimeS,float duationS,int cropX,int cropY,int cropWidth,int cropHeight,int overX,int overY,String dstFile,int bitrate)
@@ -1138,6 +1340,7 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
+		  //内部使用
 		  private int videoCutCropOverlay(String videoFile,String decCodec, String pngPath,float startTimeS,float duationS,String filter,String dstFile,int bitrate)
 		  {
 			  	List<String> cmdList=new ArrayList<String>();

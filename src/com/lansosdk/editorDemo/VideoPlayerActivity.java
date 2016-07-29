@@ -3,12 +3,12 @@ package com.lansosdk.editorDemo;
 import java.io.IOException;
 
 import com.lansoeditor.demo.R;
+import com.lansosdk.editorDemo.utils.TextureRenderView;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.player.IMediaPlayer;
 import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerCompletionListener;
 import com.lansosdk.videoeditor.player.VPlayer;
 import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerPreparedListener;
-import com.lansosdk.videoeditor.utils.TextureRenderView;
 
 import android.app.Activity;
 import android.graphics.SurfaceTexture;
@@ -19,7 +19,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Surface;
+import android.view.View;
 import android.view.TextureView.SurfaceTextureListener;
+import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 
@@ -80,6 +82,24 @@ public class VideoPlayerActivity extends Activity {
 				VPlayVideo(new Surface(surface));
 			}
 		});
+        
+//        findViewById(R.id.id_player_subspeed).setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				mVPlayer.seekBack();
+//			}
+//		});
+//		findViewById(R.id.id_player_addspeed).setOnClickListener(new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						mVPlayer.seekFront();
+//					}
+//			});
+        
     }  
     public void play(Surface surface)  {  
 
@@ -154,8 +174,6 @@ public class VideoPlayerActivity extends Activity {
 //					getTimeHandler.removeCallbacks(getTimeRunnable);
 				}
 			});
-              
-              
         	  mVPlayer.prepareAsync();
           }else {
               Log.e("sno", "Null Data Source\n");

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lansosdk.videoeditor.player;
+package com.lansosdk.editorDemo.utils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -44,6 +44,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import com.lansosdk.videoeditor.player.IMediaPlayer;
+import com.lansosdk.videoeditor.player.VideoPlayer;
+import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerBufferingUpdateListener;
+import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerCompletionListener;
+import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerErrorListener;
+import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerInfoListener;
+import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerPreparedListener;
+import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerVideoSizeChangedListener;
 
 
 

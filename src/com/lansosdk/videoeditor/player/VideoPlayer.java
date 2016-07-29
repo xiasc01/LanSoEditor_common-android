@@ -50,7 +50,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
-import com.lansosdk.videoeditor.utils.DLog;
 
 
 
@@ -139,7 +138,7 @@ public class VideoPlayer implements IMediaPlayer{
     
     public void setSurface(Surface surface) {
         if (mScreenOnWhilePlaying && surface != null) {
-            DLog.w(TAG, "setScreenOnWhilePlaying(true) is ineffective for Surface");
+            Log.w(TAG, "setScreenOnWhilePlaying(true) is ineffective for Surface");
         }
         _setVideoSurface(surface);
         updateSurfaceScreenOn();
@@ -356,7 +355,6 @@ public class VideoPlayer implements IMediaPlayer{
     
 
     @SuppressLint("Wakelock")
-     
     public void setWakeMode(Context context, int mode) {
         boolean washeld = false;
         if (mWakeLock != null) {
@@ -648,7 +646,7 @@ public class VideoPlayer implements IMediaPlayer{
         public void handleMessage(Message msg) {
             VideoPlayer player = mWeakPlayer.get();
             if (player == null || player.mNativeMediaPlayer == 0) {
-                DLog.w(TAG,
+            	Log.w(TAG,
                         "VideoPlayer went away with unhandled events");
                 return;
             }
@@ -703,7 +701,7 @@ public class VideoPlayer implements IMediaPlayer{
                 return;
 
             case MEDIA_ERROR:
-                DLog.e(TAG, "Error (" + msg.arg1 + "," + msg.arg2 + ")");
+            	Log.e(TAG, "Error (" + msg.arg1 + "," + msg.arg2 + ")");
                 if (!player.notifyOnError(msg.arg1, msg.arg2)) {
                     player.notifyOnCompletion();
                 }
@@ -713,7 +711,7 @@ public class VideoPlayer implements IMediaPlayer{
             case MEDIA_INFO:
                 switch (msg.arg1) {
                     case MEDIA_INFO_VIDEO_RENDERING_START:
-                        DLog.i(TAG, "Info: MEDIA_INFO_VIDEO_RENDERING_START\n");
+                    	Log.i(TAG, "Info: MEDIA_INFO_VIDEO_RENDERING_START\n");
                         break;
                 }
                 player.notifyOnInfo(msg.arg1, msg.arg2);
@@ -734,7 +732,7 @@ public class VideoPlayer implements IMediaPlayer{
                 break;
 
             default:
-                DLog.e(TAG, "Unknown message type " + msg.what);
+            	Log.e(TAG, "Unknown message type " + msg.what);
             }
         }
     }
@@ -802,7 +800,6 @@ public class VideoPlayer implements IMediaPlayer{
     }
     @SuppressWarnings("unused") /* Used from JNI */
     private static boolean onNativeInvoke(Object weakThiz, int what, Bundle args) {
-        DLog.ifmt(TAG, "onNativeInvoke %d", what);
         
         if (weakThiz == null || !(weakThiz instanceof WeakReference<?>))
             throw new IllegalStateException("<null weakThiz>.onNativeInvoke()");

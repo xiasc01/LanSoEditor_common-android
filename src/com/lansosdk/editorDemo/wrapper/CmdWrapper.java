@@ -4,9 +4,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.lansoeditor.demo.R;
+import com.lansosdk.editorDemo.utils.FileUtils;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.VideoEditor;
-import com.lansosdk.videoeditor.utils.FileUtils;
 
 public class CmdWrapper {
 

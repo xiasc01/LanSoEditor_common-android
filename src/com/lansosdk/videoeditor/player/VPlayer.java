@@ -316,6 +316,17 @@ public class VPlayer {
             mSeekWhenPrepared = msec;
         }
     }
+    public void seekBack(){
+    	if (isInPlaybackState()) {
+    		 mMediaPlayer.seekback100();
+        } 
+    }
+    public void seekFront()
+    {
+    	if (isInPlaybackState()) {
+   		 mMediaPlayer.seekfront100();
+       } 
+    }
     public int getVideoWidth()
     {
     	return mMediaPlayer!=null? mMediaPlayer.getVideoWidth():0;

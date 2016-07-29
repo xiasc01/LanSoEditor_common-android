@@ -1,4 +1,4 @@
-package com.lansosdk.videoeditor.utils;
+package com.lansosdk.editorDemo.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

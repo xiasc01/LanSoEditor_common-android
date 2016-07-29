@@ -21,16 +21,13 @@ public class SdkHintActivity extends Activity{
 	private static final int COUNT_NUM=10;
 	/**
 	 * 
-	 * 安卓6.0 不支持这个format!!!!!!
-	 *  do not know color format 0x7fa30c04 = 2141391876
-05-24 06:20:31.339: W/ACodec(14167): do not know color format 0x7f000789 = 2130708361
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.playbox_hint_layout);
+		setContentView(R.layout.sdk_hint_layout);
 		tvCount=(TextView)findViewById(R.id.id_playbox_tv_count);
 		
 		tvCount.setText(String.valueOf(count));

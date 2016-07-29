@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.lansosdk.videoeditor.player;
+package com.lansosdk.editorDemo.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
 import java.lang.ref.WeakReference;
+
 
 
 

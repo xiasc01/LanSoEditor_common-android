@@ -1,4 +1,4 @@
-package com.lansosdk.videoeditor.utils;
+package com.lansosdk.editorDemo.utils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)

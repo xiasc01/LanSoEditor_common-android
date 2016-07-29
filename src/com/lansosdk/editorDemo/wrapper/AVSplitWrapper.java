@@ -1,9 +1,9 @@
 package com.lansosdk.editorDemo.wrapper;
 
 import com.lansoeditor.demo.R;
+import com.lansosdk.editorDemo.utils.FileUtils;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.VideoEditor;
-import com.lansosdk.videoeditor.utils.FileUtils;
 
 import android.app.ProgressDialog;
 import android.content.Context;

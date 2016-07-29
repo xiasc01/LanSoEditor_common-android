@@ -10,6 +10,8 @@ import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
 import com.lansoeditor.demo.R;
 import com.lansosdk.editorDemo.VideoEditDemoActivity.SubAsyncTask;
+import com.lansosdk.editorDemo.utils.FileUtils;
+import com.lansosdk.editorDemo.utils.snoCrashHandler;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.LanSoEditor;
 import com.lansosdk.videoeditor.MediaInfo;
@@ -17,8 +19,6 @@ import com.lansosdk.videoeditor.SDKDir;
 import com.lansosdk.videoeditor.SDKFileUtils;
 import com.lansosdk.videoeditor.SpriteShader;
 import com.lansosdk.videoeditor.VideoEditor;
-import com.lansosdk.videoeditor.utils.FileUtils;
-import com.lansosdk.videoeditor.utils.snoCrashHandler;
 
 
 import android.annotation.SuppressLint;
@@ -62,20 +62,20 @@ public class MainActivity extends Activity implements OnClickListener{
 		 LanSoEditor.initSo(getApplicationContext(),null);
 		 
 			 
-//		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
-//	            @Override
-//	            public void onGranted() {
-//	            	isPermissionOk=true;
-//	                Toast.makeText(MainActivity.this, R.string.message_granted, Toast.LENGTH_SHORT).show();
-//	            }
-//
-//	            @Override
-//	            public void onDenied(String permission) {
-//	            	isPermissionOk=false;
-//	                String message = String.format(Locale.getDefault(), getString(R.string.message_denied), permission);
-//	                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-//	            }
-//	        });
+		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
+	            @Override
+	            public void onGranted() {
+	            	isPermissionOk=true;
+	                Toast.makeText(MainActivity.this, R.string.message_granted, Toast.LENGTH_SHORT).show();
+	            }
+
+	            @Override
+	            public void onDenied(String permission) {
+	            	isPermissionOk=false;
+	                String message = String.format(Locale.getDefault(), getString(R.string.message_denied), permission);
+	                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+	            }
+	        });
 		 
 		 setContentView(R.layout.functions_layout);
 		 
@@ -96,7 +96,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	        	isPermissionOk=true;
 	        }
 	
-		 //  showHintDialog();
+		   showHintDialog();
 			
 		 	new Handler().postDelayed(new Runnable() {
 				
@@ -104,10 +104,6 @@ public class MainActivity extends Activity implements OnClickListener{
 				public void run() {
 					// TODO Auto-generated method stub
 					gotoActivity(VideoEditDemoActivity.class);
-					
-//					Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
-//			    	intent.putExtra("videopath", "/sdcard/ping20s.mp4");
-//			    	startActivity(intent);
 				}
 			}, 2000);
 			
@@ -123,7 +119,7 @@ public class MainActivity extends Activity implements OnClickListener{
     @Override
     public void onClick(View v) {
     	// TODO Auto-generated method stub
-    	//if(isPermissionOk)
+    	if(isPermissionOk)
     	{
     		switch (v.getId()) {
 				case R.id.id_module_item1:

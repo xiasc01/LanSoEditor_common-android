@@ -11,6 +11,8 @@ import com.anthonycr.grant.PermissionsResultAction;
 import com.lansoeditor.demo.R;
 import com.lansosdk.editorDemo.MainActivity.CopyDefaultVideoAsyncTask;
 import com.lansosdk.editorDemo.VideoEditDemoActivity.SubAsyncTask;
+import com.lansosdk.editorDemo.utils.FileUtils;
+import com.lansosdk.editorDemo.utils.snoCrashHandler;
 import com.lansosdk.editorDemo.wrapper.CmdId;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.LanSoEditor;
@@ -18,8 +20,6 @@ import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.SDKDir;
 import com.lansosdk.videoeditor.SDKFileUtils;
 import com.lansosdk.videoeditor.VideoEditor;
-import com.lansosdk.videoeditor.utils.FileUtils;
-import com.lansosdk.videoeditor.utils.snoCrashHandler;
 
 
 import android.annotation.SuppressLint;

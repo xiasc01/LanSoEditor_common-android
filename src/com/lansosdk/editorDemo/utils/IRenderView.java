@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lansosdk.videoeditor.player;
+package com.lansosdk.editorDemo.utils;
 
 
 import android.graphics.SurfaceTexture;
@@ -45,45 +45,4 @@ public interface IRenderView {
 
     void setAspectRatio(int aspectRatio);
 
-//    void addRenderCallback(@NonNull IRenderCallback callback);
-//
-//    void removeRenderCallback(@NonNull IRenderCallback callback);
-
-    interface ISurfaceHolder {
-        void bindToMediaPlayer(IMediaPlayer mp);
-
-        @NonNull
-        IRenderView getRenderView();
-
-        @Nullable
-        SurfaceHolder getSurfaceHolder();
-
-        @Nullable
-        Surface openSurface();
-
-        @Nullable
-        SurfaceTexture getSurfaceTexture();
-    }
-
-    
-//    //这个RenderCallback其实就是对 TextureView 的再次封装, 用mRenderCallbackMap管理多个callback, 因为TextureView.SurfaceTextureListener 只是setCallback.
-//      //这里是addCallback.如果有多个增加进来,则TextureView的callback一次,则所有设置过来的callback都相应.
-//    public interface IRenderCallback {
-//        /**
-//         * @param holder
-//         * @param width  could be 0
-//         * @param height could be 0
-//         */
-//        void onSurfaceCreated(@NonNull ISurfaceHolder holder, int width, int height);
-//
-//        /**
-//         * @param holder
-//         * @param format could be 0
-//         * @param width
-//         * @param height
-//         */
-//        void onSurfaceChanged(@NonNull ISurfaceHolder holder, int format, int width, int height);
-//
-//        void onSurfaceDestroyed(@NonNull ISurfaceHolder holder);
-//    }
 }

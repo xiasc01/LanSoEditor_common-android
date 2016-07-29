@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">视频编辑基本版本</string>
+    <string name="app_name">视频编辑基本版本2</string>
          <string name="message_granted">All permissions have been granted.</string>
     <string name="message_denied">Permission \"%1$s\" has been denied.</string>
     

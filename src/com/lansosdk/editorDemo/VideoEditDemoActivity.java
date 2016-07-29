@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lansoeditor.demo.R;
+import com.lansosdk.editorDemo.utils.FileUtils;
+import com.lansosdk.editorDemo.utils.snoCrashHandler;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.VideoEditor;
 import com.lansosdk.videoeditor.onVideoEditorProgressListener;
-import com.lansosdk.videoeditor.utils.FileUtils;
-import com.lansosdk.videoeditor.utils.snoCrashHandler;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -33,7 +33,7 @@ public class VideoEditDemoActivity extends Activity{
 	private final static String TAG="videoEditDemoActivity";
 	private final static  boolean VERBOSE = false;   
 	
-	String videoPath="/sdcard/merge.mp4";
+	String videoPath="/sdcard/VIDEO_90du.mp4";
 	VideoEditor mEditor = new VideoEditor();
 	ProgressDialog  mProgressDialog;
 	int videoDuration;
@@ -49,8 +49,6 @@ public class VideoEditDemoActivity extends Activity{
 			 Thread.setDefaultUncaughtExceptionHandler(new snoCrashHandler());
 	        
 			 setContentView(R.layout.video_edit_demo_layout);
-	        
-				
 			 mInfo=new MediaInfo(videoPath);
 				
 			 TextView tvHint=(TextView)findViewById(R.id.id_video_editor_demo_hint);
@@ -156,6 +154,11 @@ public class VideoEditDemoActivity extends Activity{
       	    protected synchronized Boolean doInBackground(Object... params) {
       	    	// TODO Auto-generated method stub
       	    	
+      	    	mEditor.executeDeleteAudio("/sdcard/2x.mp4", "/sdcard/2x_noaudio.mp4");
+      	    	
+      	    	mEditor.executeVideoMergeAudio("/sdcard/2x_noaudio.mp4","/sdcard/encoderAA.aac","/sdcard/Add_aac3.mp4",0,5.38f);
+      	    	
+      	    	
 //      	    	if(mMediaInfo!=null){
       	    	//这里是要做音频编码格式的检测,以方便快速的提取,直接拷贝,不用解码后再编码.
 //      	    		if(mMediaInfo.aCodecName.equals("mp3")){
@@ -196,7 +199,7 @@ public class VideoEditDemoActivity extends Activity{
       	    	 
 //      	    	mEditor.executeConvertMp4toTs("/sdcard/2x.mp4","/sdcard/2x0.ts");
       	    	//因为静态码率
-      	    	mEditor.executeAddWaterMark("/sdcard/merge.mp4","/sdcard/watermark.png",0,0,dstPath,(int)(mInfo.vBitRate));
+//      	    	mEditor.executeAddWaterMark(videoPath,"/sdcard/watermark.png",0,0,dstPath,(int)(mInfo.vBitRate));
       	    	
 //      	    	mEditor.pictureFadeInOut("/sdcard/threeword.png",5,0,40,50,75,dstPath);
       	    //	mEditor.pictureFadeIn("/sdcard/testfade.png",3,0,60,"/sdcard/testfade2.mp4");

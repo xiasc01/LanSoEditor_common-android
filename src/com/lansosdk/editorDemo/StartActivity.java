@@ -10,7 +10,7 @@ import java.util.List;
 
 
 import com.lansoeditor.demo.R;
-import com.lansosdk.videoeditor.utils.snoCrashHandler;
+import com.lansosdk.editorDemo.utils.snoCrashHandler;
 
 import android.app.Activity;
 import android.app.AlertDialog;

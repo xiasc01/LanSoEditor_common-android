@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.lansoeditor.demo.R;
 import com.lansosdk.editorDemo.VideoEditDemoActivity.SubAsyncTask;
+import com.lansosdk.editorDemo.utils.FileUtils;
 import com.lansosdk.editorDemo.wrapper.AVSplitWrapper;
 import com.lansosdk.editorDemo.wrapper.AudioCutWrapper;
 import com.lansosdk.editorDemo.wrapper.CmdId;
@@ -33,7 +34,6 @@ import com.lansosdk.editorDemo.wrapper.VideoScaleWrapper;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.VideoEditor;
 import com.lansosdk.videoeditor.onVideoEditorProgressListener;
-import com.lansosdk.videoeditor.utils.FileUtils;
 
 /**
  *  音视频分离  : 直接从多媒体文件中分离出音频和视频.

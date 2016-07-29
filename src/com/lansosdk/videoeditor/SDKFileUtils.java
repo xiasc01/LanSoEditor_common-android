@@ -71,6 +71,22 @@ public class SDKFileUtils {
 			}
 			return name;
    }
+	/**
+	 * 在box目录下生成一个mp4的文件,并返回名字的路径.
+	 * @return
+	 */
+	public static String createMp4FileInBox()
+	{
+		return createFile(SDKDir.TMP_DIR, ".mp4");
+	}
+	/**
+	 * 只是在box目录生成一个路径字符串,但这个文件并不存在.
+	 * @return
+	 */
+	public static String newMp4PathInBox()
+	{
+		return newFilePath(SDKDir.TMP_DIR,".mp4");
+	}
 	 /**
 	    * 在指定的文件夹里 定义一个文件名字, 名字是当前时间,指定后缀.
 	    * 注意: 和 {@link #createFile(String, String)}的区别是,这里不生成文件,只是生成这个路径的字符串.
