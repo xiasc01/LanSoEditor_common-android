@@ -17,6 +17,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,45 +35,57 @@ public class VideoEditDemoActivity extends Activity{
 	private final static String TAG="videoEditDemoActivity";
 	private final static  boolean VERBOSE = false;   
 	
-	String videoPath="/sdcard/VIDEO_90du.mp4";
+	String videoPath=null;
 	VideoEditor mEditor = new VideoEditor();
 	ProgressDialog  mProgressDialog;
 	int videoDuration;
 	MediaInfo   mInfo;
-	private String dstPath="/sdcard/01.mp4";
+	private String dstMP4="/sdcard/01.mp4";
+	private String dstAAC="/sdcard/01.aac";
 	
 
 	private boolean isRunning=false; 
-	
+	private boolean isTestAudio=false;  //是否是测试音频
 	  @Override
 	    protected void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 			 Thread.setDefaultUncaughtExceptionHandler(new snoCrashHandler());
 	        
 			 setContentView(R.layout.video_edit_demo_layout);
-			 mInfo=new MediaInfo(videoPath);
+			
 				
 			 TextView tvHint=(TextView)findViewById(R.id.id_video_editor_demo_hint);
 			 tvHint.setText(R.string.video_editor_demo_hint);
 			 
 			 
+			 findViewById(R.id.id_video_edit_testaudio).setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					isTestAudio=true;
+					
+					CopyDefaultVideoAsyncTask.copyFile(getApplicationContext(), "niusanjin.mp3");
+					
+					CopyDefaultVideoAsyncTask.copyFile(getApplicationContext(),"aac20s.aac");
+					
+					startVideoEditorTask();
+				}
+			});
+			 
 	        findViewById(R.id.id_video_edit_btn).setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					if(videoPath==null)
-						return ;
 					
-					mInfo.prepare();
+					videoPath= CopyDefaultVideoAsyncTask.copyFile(getApplicationContext(),"ping20s.mp4");
+					 mInfo=new MediaInfo(videoPath);
+					 mInfo.prepare();
 					
-					Log.i(TAG,"info:"+mInfo.toString());
-					
-					
-					if(mInfo.vDuration>60*1000){//大于60秒
-						showHintDialog();
-					}else{
-						startVideoEditorTask();
-					}
+					 Log.i(TAG,"info:"+mInfo.toString());
+					 
+					 isTestAudio=false;
+					 startVideoEditorTask();
 				}
 			});
 	        
@@ -80,18 +94,18 @@ public class VideoEditDemoActivity extends Activity{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Intent intent=new Intent(VideoEditDemoActivity.this,VideoPlayerActivity.class);
-			    	intent.putExtra("videopath", dstPath);
-			    	startActivity(intent);
+					if(isTestAudio){
+						playAudio(dstAAC);
+					}else{
+						if(FileUtils.fileExist(dstMP4)){
+					    	Intent intent=new Intent(VideoEditDemoActivity.this,VideoPlayerActivity.class);
+					    	intent.putExtra("videopath", dstMP4);
+					    	startActivity(intent);
+						}else{
+							Toast.makeText(VideoEditDemoActivity.this, R.string.file_not_exist,Toast.LENGTH_SHORT).show();
+						}
+					}
 					
-					
-//					if(FileUtils.fileExist(dstPath)){
-//				    	Intent intent=new Intent(VideoEditDemoActivity.this,VideoPlayerActivity.class);
-//				    	intent.putExtra("videopath", dstPath);
-//				    	startActivity(intent);
-//					}else{
-//						Toast.makeText(VideoEditDemoActivity.this, R.string.file_not_exist,Toast.LENGTH_SHORT).show();
-//					}
 				}
 			});
 	        
@@ -105,6 +119,7 @@ public class VideoEditDemoActivity extends Activity{
 						mProgressDialog.setMessage("正在处理中..."+String.valueOf(percent)+"%");
 				}
 			});
+	        isTestAudio=false;
 	  } 
 	  @Override
 	protected void onResume() {
@@ -136,8 +151,37 @@ public class VideoEditDemoActivity extends Activity{
 		{
 			if(isRunning)
 				return;
+			
 			new SubAsyncTask().execute();
 		}
+		
+		MediaPlayer audioPlayer=null;
+		public void playAudio(String audioFile){
+			
+			if(MediaInfo.isSupport(audioFile) && audioPlayer ==null)
+			{
+				audioPlayer=new MediaPlayer();
+				try {
+					audioPlayer.setDataSource(audioFile);
+					audioPlayer.prepare();
+					audioPlayer.start();
+					
+					audioPlayer.setOnCompletionListener(new OnCompletionListener() {
+						
+						@Override
+						public void onCompletion(MediaPlayer mp) {
+							// TODO Auto-generated method stub
+							audioPlayer.release();
+							audioPlayer=null;
+						}
+					});
+					
+				}catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+	    }
 	  public class SubAsyncTask extends AsyncTask<Object, Object, Boolean>{
 			  @Override
 			protected void onPreExecute() {
@@ -154,10 +198,11 @@ public class VideoEditDemoActivity extends Activity{
       	    protected synchronized Boolean doInBackground(Object... params) {
       	    	// TODO Auto-generated method stub
       	    	
-      	    	mEditor.executeDeleteAudio("/sdcard/2x.mp4", "/sdcard/2x_noaudio.mp4");
+//      	    	mEditor.executeDeleteAudio("/sdcard/2x.mp4", "/sdcard/2x_noaudio.mp4");
+//      	    	
+//      	    	mEditor.executeVideoMergeAudio("/sdcard/2x_noaudio.mp4","/sdcard/encoderAA.aac","/sdcard/Add_aac3.mp4",0,5.38f);
       	    	
-      	    	mEditor.executeVideoMergeAudio("/sdcard/2x_noaudio.mp4","/sdcard/encoderAA.aac","/sdcard/Add_aac3.mp4",0,5.38f);
-      	    	
+//      	    	mEditor.executeVideoSalceAndCrop("/sdcard/test_720p.mp4", "/sdcard/testNNN.mp4", 0, 0, 0, 0, 10, "lansoh264_enc");
       	    	
 //      	    	if(mMediaInfo!=null){
       	    	//这里是要做音频编码格式的检测,以方便快速的提取,直接拷贝,不用解码后再编码.
@@ -172,7 +217,13 @@ public class VideoEditDemoActivity extends Activity{
 //	mEditor.executeGetAllFrames("/sdcard/2x.mp4","/sdcard/","getpng");
       	    	
 //      	    	isRunning=true;
-//      	    	int ret=mEditor.executeVideoFrameCrop(videoPath, 672, 384, 0, 0, dstPath,mInfo.vCodecName,1000*1000);
+      	    	
+      	    	if(isTestAudio){
+      	    		int ret=mEditor.executeAudioMix("/sdcard/lansongBox/niusanjin.mp3", "/sdcard/lansongBox/aac20s.aac", 3000, 3000, dstAAC);
+      	    	}else{
+      	    		int ret=mEditor.executeVideoFrameCrop(videoPath, mInfo.vWidth,mInfo.vHeight/2, 0, 0, dstMP4,mInfo.vCodecName,1000*1000);	
+      	    	}
+      	    	
 //      	    	Log.i(TAG,"editor executeVideoFrameCrop return ret====================:"+ret);
       	    
       	    	
@@ -238,9 +289,13 @@ public class VideoEditDemoActivity extends Activity{
     		}
     		isRunning=false;
     		
-    		if(FileUtils.fileExist(dstPath))
-    			findViewById(R.id.id_video_play_btn).setEnabled(true);
-    		
+    		if(isTestAudio){
+    			if(FileUtils.fileExist(dstAAC))
+        			findViewById(R.id.id_video_play_btn).setEnabled(true);
+    		}else{
+    			if(FileUtils.fileExist(dstMP4))
+        			findViewById(R.id.id_video_play_btn).setEnabled(true);
+    		}
     	}
     }
 	  @Override

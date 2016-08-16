@@ -18,17 +18,24 @@ public class MediaInfo {
 	 private static final String TAG="MediaInfo";
 	 private static final boolean VERBOSE = true; 
 	 
-	 /***************video track info(total 12)*************** */
 	 /**
-	  * 
+	  * 视频的显示高度,即正常视频高度. 如果视频旋转了90度或270度,则这里等于实际视频的宽度!!
 	  */
 	 public  int vHeight;
+	 /**
+	  * 视频的显示宽度, 即正常视频宽度. 如果视频旋转了90度或270度,则这里等于实际视频的高度,请注意!!
+	  */
      public  int vWidth;
+     /**
+      *  视频在编码时的高度, 编码是以宏块为单位,默认是16的倍数;
+      *  MediaCodec在使用中,也需要视频的宽高是16的倍数, 这两个宽高用来使用到MediaCodec中.   如果视频旋转了90度或270度,则这里等于编码高度和宽度调换
+      *  
+      */
      public  int vCodecHeight;
      public  int vCodecWidth;    
      
      /**
-      * 视频的码率,注意,一般的视频编码时采用的是动态码率VBR,故这里得到的是平均值, 建议在使用时,乘以1.5后,使用.
+      * 视频的码率,注意,一般的视频编码时采用的是动态码率VBR,故这里得到的是平均值, 建议在使用时,乘以1.2后使用.
       * 
       */
      public int vBitRate; 
@@ -36,32 +43,61 @@ public class MediaInfo {
       * 视频文件中的视频流总帧数.
       */
      public int vTotalFrames;  
-     
-     public float vDuration;  //单位秒.
+     /**
+      * mp4文件中的视频轨道的总时长, 注意,一个mp4文件可能里面的音频和视频时长不同.//单位秒.
+      */
+     public float vDuration;  
+     /**
+      * 视频帧率,可能有浮点数, 如用到MediaCodec中, 则需要(int)转换一下. 但如果要依此来计算时间戳, 尽量采用float类型计算, 这样可减少误差.
+      */
      public float vFrameRate;
+     /**
+      * 视频旋转角度, 比如android手机拍摄的视频, 后置摄像头270度, 前置摄像头旋转了90度, 这个可以获取到. 如果需要进行画面, 需要测试下,是否需要宽度和高度对换下.
+      * 正常的网上视频, 是没有旋转的. 
+      */
      public float vRotateAngle;
-     
+     /**
+      * 该视频是否有B帧, 即双向预测帧, 如果有的话, 在裁剪时需要注意, 目前大部分的视频不存在B帧.
+      */
      public boolean vHasBFrame;
      /**
-      * 视频可以使用的解码器
+      * 视频可以使用的解码器,用来设置到{@link VideoEditor}中的各种需要编码器的场合使用.
       */
      public String vCodecName;
      /**
-      * 视频的 像素格式.
+      * 视频的 像素格式.目前暂时没有用到.
       */
      public String vPixelFmt;
      
      /********************audio track info******************/
      
+     /**
+      * 音频采样率
+      */
      public int aSampleRate;
+     /**
+      * 音频通道数量
+      */
      public int aChannels;
      /**
       * 视频文件中的音频流 总帧数.
       */
      public int aTotalFrames;
+     /**
+      * 音频的码率,可用来检测视频文件中是否
+      */
      public int aBitRate;
+     /**
+      * 音频的最大码率, 这里暂时没有用到.
+      */
      public int aMaxBitRate;   
+     /**
+      * 多媒体文件中的音频总时长
+      */
      public float aDuration;
+     /**
+      * 音频可以用的 解码器, 由此可以判定音频是mp3格式,还是aac格式,如果是mp3则这里"mp3"; 如果是aac则这里"aac";
+      */
      public String  aCodecName;
     
      
@@ -116,7 +152,7 @@ public class MediaInfo {
     			 return false;
     		 }
     	 }else{
-    		 Log.e(TAG,"mediainfo file is may be not exist!");
+    		 Log.e(TAG,"mediainfo prepare error . file is may be not exist!");
     		 return false;
     	 } 
      }
@@ -147,9 +183,11 @@ public class MediaInfo {
     		 
     		 if(vCodecName==null || vCodecName.isEmpty())
     			 return false;
-    		 
-    		 if(vDuration<3)
-    			 return false;
+    		 /**
+    		  * 这里默认视频小于3秒,则认为不支持, 您的视频有小于3秒的需求, 可以修改这里或屏蔽这里.
+    		  */
+//    		 if(vDuration<3)
+//    			 return false;
     		 
     	 }else if(aBitRate>0)  //有音频
     	 {
@@ -159,8 +197,11 @@ public class MediaInfo {
     		 if(aCodecName==null || aCodecName.isEmpty())
     			 return false;
     		 
-    		 if(aDuration<3)
-    			 return false;
+    		 /**
+    		  * 默认音频小于3秒,则认为不支持, 您的音频有小于3秒的需求, 可以修改这里或屏蔽这里.
+    		  */
+//    		 if(aDuration<3)
+//    			 return false;
     	 }
    
     	 return true;

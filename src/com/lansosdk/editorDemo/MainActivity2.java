@@ -9,7 +9,6 @@ import java.util.Locale;
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
 import com.lansoeditor.demo.R;
-import com.lansosdk.editorDemo.MainActivity.CopyDefaultVideoAsyncTask;
 import com.lansosdk.editorDemo.VideoEditDemoActivity.SubAsyncTask;
 import com.lansosdk.editorDemo.utils.FileUtils;
 import com.lansosdk.editorDemo.utils.snoCrashHandler;
@@ -224,7 +223,7 @@ public class MainActivity2 extends Activity implements OnClickListener{
    			public void onClick(DialogInterface dialog, int which) {
    				// TODO Auto-generated method stub
    				
-   				showHintDialog("注意:底层ffmpeg完整可靠运行,已是发行商用版本.\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
+   				showHintDialog("注意:  native-jni层我们提供了三个ARM架构的so动态库,实际仅用给一个即可.建议用armeabi-v7a .\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
    			}
    		})
            .show();

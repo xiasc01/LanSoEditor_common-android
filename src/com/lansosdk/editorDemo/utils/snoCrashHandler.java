@@ -52,8 +52,8 @@ public class snoCrashHandler implements UncaughtExceptionHandler {
 //        // Save the log on SD card if available
 //        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 //            String sdcardPath = Environment.getExternalStorageDirectory().getPath();
-//            writeLog(stacktrace, sdcardPath + "/wifiplug_crash");
-//            writeLogcat(sdcardPath + "/wifiplug_logcat");
+//            writeLog(stacktrace, sdcardPath + "/vsdk_crash");
+//            writeLogcat(sdcardPath + "/vsdk_logcat");
 //        }
 
         defaultUEH.uncaughtException(thread, ex);

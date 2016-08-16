@@ -399,6 +399,17 @@ public class VideoEditor {
 	     }  
 	     return executeVideoEditor(command);
 	}
+	/**
+	 * 两个音频文件混合, 混合后的编码为aac格式的音频文件.
+	 * 注意,如果两个音频的时长不同, 以第一个音频的音频为准. 如需修改可联系我们或查询ffmpeg命令即可.
+	 * 
+	 * @param audioPath1 
+	 * @param audioPath2
+	 * @param leftDelayMS  第二个音频的左声道 相对 于第一个音频的延迟时间
+	 * @param rightDelayMS 第二个音频的右声道 相对 于第一个音频的延迟时间
+	 * @param dstPath   目标文件, 保存为aac格式.
+	 * @return
+	 */
 	  public int executeAudioMix(String audioPath1,String audioPath2,int leftDelayMS,int rightDelayMS,String dstPath)
 	  {
 		  List<String> cmdList=new ArrayList<String>();
@@ -1571,6 +1582,7 @@ public class VideoEditor {
 					cmdList.add("-pix_fmt");
 					cmdList.add("yuv420p");
 					
+					cmdList.add("-y");
 					cmdList.add(dstPath);
 					 
 					String[] command=new String[cmdList.size()];  
@@ -1583,7 +1595,4 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
-		 
-
-		  
 }

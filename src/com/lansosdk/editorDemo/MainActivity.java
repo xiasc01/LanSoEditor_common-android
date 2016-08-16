@@ -14,6 +14,7 @@ import com.lansosdk.editorDemo.utils.FileUtils;
 import com.lansosdk.editorDemo.utils.snoCrashHandler;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.LanSoEditor;
+import com.lansosdk.videoeditor.LoadLanSongSdk;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.SDKDir;
 import com.lansosdk.videoeditor.SDKFileUtils;
@@ -59,6 +60,9 @@ public class MainActivity extends Activity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		 Thread.setDefaultUncaughtExceptionHandler(new snoCrashHandler());
+		
+		 //单独列出
+		 LoadLanSongSdk.loadLibraries();
 		 LanSoEditor.initSo(getApplicationContext(),null);
 		 
 			 
@@ -81,12 +85,6 @@ public class MainActivity extends Activity implements OnClickListener{
 		 
 		 tvVideoPath=(TextView)findViewById(R.id.id_main_tvvideo);
 //		    
-		 findViewById(R.id.id_module_item1).setOnClickListener(this);
-		 findViewById(R.id.id_module_item2).setOnClickListener(this);
-		 findViewById(R.id.id_module_item3).setOnClickListener(this);
-		 findViewById(R.id.id_module_item4).setOnClickListener(this);
-		 findViewById(R.id.id_module_item5).setOnClickListener(this);
-		 findViewById(R.id.id_module_item6).setOnClickListener(this);
 //		 
 		 if(isPermissionOk==false && selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
 	        	showHintDialog("当前没有读写权限");
@@ -121,36 +119,7 @@ public class MainActivity extends Activity implements OnClickListener{
     	// TODO Auto-generated method stub
     	if(isPermissionOk)
     	{
-    		switch (v.getId()) {
-				case R.id.id_module_item1:
-					Log.i(TAG,"--------------------------module item1");
-					Intent intent=new Intent(getApplicationContext(),VideoPlayerActivity.class);
-			    	intent.putExtra("videopath", "/sdcard/ping20s.mp4");
-			    	startActivity(intent);
-			    	
-//					gotoActivity(FunctionItem1Activity.class);
-					break;
-				case R.id.id_module_item2:
-					gotoActivity(FunctionItem2Activity.class);
-					break;
-				case R.id.id_module_item3:
-					gotoActivity(FunctionItem3Activity.class);
-					break;
-				case R.id.id_module_item4:
-					break;
-				case R.id.id_module_item5:
-					gotoCustomFunction();
-					break;
-				case R.id.id_module_item6:
-					gotoBussnessActivity();
-//					Intent intent=new Intent(getApplicationContext(),VideoPlayerActivity.class);
-////			    	intent.putExtra("videopath", "/sdcard/n90.mp4");
-//					intent.putExtra("videopath", "/sdcard/2x.mp4");
-//			    	startActivity(intent);
-					break;
-				default:
-					break;
-    		}
+
     	}
     }
     
@@ -196,7 +165,7 @@ public class MainActivity extends Activity implements OnClickListener{
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				
-				showHintDialog("注意:底层ffmpeg完整可靠运行,已是发行商用版本.\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
+				showHintDialog("注意: native-jni层我们提供了三个ARM架构的so动态库,实际仅用给一个即可.建议用armeabi-v7a.\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
 			}
 		})
         .show();
@@ -234,62 +203,12 @@ public class MainActivity extends Activity implements OnClickListener{
     	// TODO Auto-generated method stub
     	super.onDestroy();
     	LanSoEditor.unInitSo();
-    	SDKFileUtils.deleteDir(new File(SDKDir.TMP_DIR));
+    	
+    	SDKFileUtils.deleteDir(new File(SDKDir.TMP_DIR));  //删除演示文件夹下的所有文件.
     }
     private void gotoActivity(Class<?> cls)
     {
     	Intent intent=new Intent(MainActivity.this,cls);
     	startActivity(intent);
     }
-    private void gotoCustomFunction()
-    {
-    	startActivity(new Intent(MainActivity.this,CustomFunctionActivity.class));
-    }
-    private void gotoBussnessActivity()
-    {
-    	startActivity(new Intent(MainActivity.this,BusynessActivity.class));
-    }
-    
-    //--------------------------------------------
-  		private ProgressDialog  mProgressDialog;
-  	  public class CopyDefaultVideoAsyncTask extends AsyncTask<Object, Object, Boolean>{
-			  @Override
-			protected void onPreExecute() {
-			// TODO Auto-generated method stub
-				  mProgressDialog = new ProgressDialog(MainActivity.this);
-		          mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		          mProgressDialog.setMessage("正在拷贝...");
-		          mProgressDialog.setCancelable(false);
-		          mProgressDialog.show();
-		          super.onPreExecute();
-			}
- 	    @Override
- 	    protected synchronized Boolean doInBackground(Object... params) {
- 	    	// TODO Auto-generated method stub
- 	    	
- 	    	
-        String str=SDKDir.TMP_DIR+"ping20s.mp4";
-        if(FileUtils.fileExist(str)==false){
-        	CopyFileFromAssets.copy(getApplicationContext(), "ping20s.mp4", SDKDir.TMP_DIR, "ping20s.mp4");
-        }
- 	     return null;
- 	    }
-	@Override
-	protected void onPostExecute(Boolean result) { 
-		// TODO Auto-generated method stub
-		super.onPostExecute(result);
-		if( mProgressDialog!=null){
-	       		 mProgressDialog.cancel();
-	       		 mProgressDialog=null;
-		}
-		 String str=SDKDir.TMP_DIR+"ping20s.mp4";
-		 if(FileUtils.fileExist(str)){
-			 Toast.makeText(getApplicationContext(), "默认视频文件拷贝完成.视频样片路径:"+str, Toast.LENGTH_SHORT).show();
-			 if(tvVideoPath!=null)
-				tvVideoPath.setText(str);
-		 }else{
-			Toast.makeText(getApplicationContext(), "抱歉! 默认视频文件拷贝失败,请联系我们:视频样片路径:"+str, Toast.LENGTH_SHORT).show();
-		 }
-	}
-}
 }
