@@ -15,6 +15,7 @@ import com.lansosdk.editorDemo.utils.snoCrashHandler;
 import com.lansosdk.editorDemo.wrapper.CmdId;
 import com.lansosdk.videoeditor.CopyFileFromAssets;
 import com.lansosdk.videoeditor.LanSoEditor;
+import com.lansosdk.videoeditor.LoadLanSongSdk;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.SDKDir;
 import com.lansosdk.videoeditor.SDKFileUtils;
@@ -58,6 +59,8 @@ public class MainActivity2 extends Activity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		 Thread.setDefaultUncaughtExceptionHandler(new snoCrashHandler());
+		 
+		 LoadLanSongSdk.loadLibraries();
 		 LanSoEditor.initSo(getApplicationContext(),null);
 		 
 		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
