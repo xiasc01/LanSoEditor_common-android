@@ -94,14 +94,15 @@ public class MainActivity extends Activity implements OnClickListener{
 	        	isPermissionOk=true;
 	        }
 	
-		   showHintDialog();
+//		   showHintDialog();
 			
 		 	new Handler().postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					gotoActivity(VideoEditDemoActivity.class);
+//					gotoActivity(VideoEditDemoActivity.class);
+					gotoActivity(VideoPlayerActivity.class);
 				}
 			}, 2000);
 			
@@ -185,7 +186,7 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-	            if (targetSdkVersion >= Build.VERSION_CODES.M) {
+	            if (targetSdkVersion >= Build.VERSION_CODES.M) { 
 	                // targetSdkVersion >= Android M, we can
 	                // use Context#checkSelfPermission
 	                result = context.checkSelfPermission(permission)
@@ -209,6 +210,7 @@ public class MainActivity extends Activity implements OnClickListener{
     private void gotoActivity(Class<?> cls)
     {
     	Intent intent=new Intent(MainActivity.this,cls);
+    	intent.putExtra("videopath", "/sdcard/ping20s.mp4");
     	startActivity(intent);
     }
 }

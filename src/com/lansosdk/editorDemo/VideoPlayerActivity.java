@@ -171,6 +171,7 @@ public class VideoPlayerActivity extends Activity {
 				@Override
 				public void onCompletion(IMediaPlayer mp) {
 					// TODO Auto-generated method stub
+					Log.i(TAG,"播放完毕了------------------->xxx0");
 //					getTimeHandler.removeCallbacks(getTimeRunnable);
 				}
 			});
