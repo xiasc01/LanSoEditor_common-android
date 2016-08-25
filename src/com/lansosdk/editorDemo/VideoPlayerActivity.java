@@ -3,12 +3,12 @@ package com.lansosdk.editorDemo;
 import java.io.IOException;
 
 import com.lansoeditor.demo.R;
-import com.lansosdk.editorDemo.utils.TextureRenderView;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.player.IMediaPlayer;
 import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerCompletionListener;
-import com.lansosdk.videoeditor.player.VPlayer;
 import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerPreparedListener;
+import com.lansosdk.videoeditor.player.TextureRenderView;
+import com.lansosdk.videoeditor.player.VPlayer;
 
 import android.app.Activity;
 import android.graphics.SurfaceTexture;
@@ -83,22 +83,23 @@ public class VideoPlayerActivity extends Activity {
 			}
 		});
         
-//        findViewById(R.id.id_player_subspeed).setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				mVPlayer.seekBack();
-//			}
-//		});
-//		findViewById(R.id.id_player_addspeed).setOnClickListener(new OnClickListener() {
-//					
-//					@Override
-//					public void onClick(View v) {
-//						// TODO Auto-generated method stub
-//						mVPlayer.seekFront();
-//					}
-//			});
+        findViewById(R.id.id_player_pause).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				mVPlayer.pause();
+//				 VplayerSeekTo(2000,7000);  //测试seek;
+			}
+		});
+		findViewById(R.id.id_player_start).setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						mVPlayer.start();
+					}
+			});
         
     }  
     public void play(Surface surface)  {  
@@ -151,7 +152,7 @@ public class VideoPlayerActivity extends Activity {
           if (videoPath != null){
         	  mVPlayer=new VPlayer(this);
         	  mVPlayer.setVideoPath(videoPath);
-        	  mVPlayer.setLooping(true);
+        	  mVPlayer.setLooping(true);  //<-------------
               mVPlayer.setOnPreparedListener(new OnPlayerPreparedListener() {
     			
     			@Override
@@ -162,8 +163,11 @@ public class VideoPlayerActivity extends Activity {
     				        textureView.requestLayout();
     				        mVPlayer.setLooping(true);
     				        
+    				        mVPlayer.setUseSoftDecoder(true);
+    				        
     				        mVPlayer.start();
-//    				        getTimeHandler.postDelayed(getTimeRunnable, 1000);
+    				        
+    				       
     					}
     			});
               mVPlayer.setOnCompletionListener(new OnPlayerCompletionListener() {
@@ -190,7 +194,7 @@ public class VideoPlayerActivity extends Activity {
 				public void run() {
 					// TODO Auto-generated method stub
 						if(mVPlayer!=null){
-							mVPlayer.pause();
+//							mVPlayer.pause();  //当前不支持先pause;
 							mVPlayer.seekTo(seekToMS);
 							mVPlayer.start();
 						}

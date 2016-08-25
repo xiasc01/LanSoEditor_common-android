@@ -18,13 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
-        <com.lansosdk.editorDemo.utils.TextureRenderView
+        <com.lansosdk.videoeditor.player.TextureRenderView
         android:id="@+id/surface1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     </FrameLayout>
     
-    <!-- 
       <LinearLayout 
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -32,21 +31,21 @@
           
           
           <Button 
-              android:id="@+id/id_player_subspeed"
+              android:id="@+id/id_player_pause"
               android:layout_width="0dip"
               android:layout_height="60dip"
               android:layout_margin="10dip"
               android:layout_weight="1"
-              android:text="速度 - -10"/>
+              android:text="暂停"/>
           <Button 
-              android:id="@+id/id_player_addspeed"
+              android:id="@+id/id_player_start"
               android:layout_width="0dip"
               android:layout_height="60dip"
               android:layout_margin="10dip"
               android:layout_weight="1"
-              android:text="速度++10"/>
+              android:text="播放"/>
       </LinearLayout>
-       -->
+      
   <!-- 
       <FrameLayout 
             android:layout_width="match_parent"

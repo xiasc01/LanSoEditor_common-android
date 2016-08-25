@@ -51,20 +51,17 @@ import java.util.Locale;
 import java.util.Map;
 
 
-
-
 /**
  * @author bbcallen
  * 
  *         Java wrapper of ffplay.
  */
-public class VideoPlayer implements IMediaPlayer{
-    private final static String TAG = VideoPlayer.class.getName();
+public class VideoPlayer extends AbstractMediaPlayer {
+    private final static String TAG = "VideoPlayer";
 
     private static final int MEDIA_NOP = 0; // interface test message
     private static final int MEDIA_PREPARED = 1;
-    private static final int MEDIA_PLAYBACK_COMPLETE = 2;  //播放完毕.
-    
+    private static final int MEDIA_PLAYBACK_COMPLETE = 2;
     private static final int MEDIA_BUFFERING_UPDATE = 3;
     private static final int MEDIA_SEEK_COMPLETE = 4;
     private static final int MEDIA_SET_VIDEO_SIZE = 5;
@@ -78,7 +75,18 @@ public class VideoPlayer implements IMediaPlayer{
     protected static final int MEDIA_SET_VIDEO_SAR = 10001;
 
     //----------------------------------------
-  
+    // options
+    public static final int IJK_LOG_UNKNOWN = 0;
+    public static final int IJK_LOG_DEFAULT = 1;
+
+    public static final int IJK_LOG_VERBOSE = 2;
+    public static final int IJK_LOG_DEBUG = 3;
+    public static final int IJK_LOG_INFO = 4;
+    public static final int IJK_LOG_WARN = 5;
+    public static final int IJK_LOG_ERROR = 6;
+    public static final int IJK_LOG_FATAL = 7;
+    public static final int IJK_LOG_SILENT = 8;
+
     public static final int OPT_CATEGORY_FORMAT     = 1;
     public static final int OPT_CATEGORY_CODEC      = 2;
     public static final int OPT_CATEGORY_SWS        = 3;
@@ -89,20 +97,24 @@ public class VideoPlayer implements IMediaPlayer{
     public static final int SDL_FCC_RV32 = 0x32335652; // RGBX8888
     //----------------------------------------
 
+    //----------------------------------------
+    // properties
+    public static final int PROP_FLOAT_VIDEO_DECODE_FRAMES_PER_SECOND = 10001;
+    public static final int PROP_FLOAT_VIDEO_OUTPUT_FRAMES_PER_SECOND = 10002;
+    public static final int FFP_PROP_FLOAT_PLAYBACK_RATE              = 10003;
 
-    @SuppressWarnings("unused") /* Used from JNI */
+    public static final int FFP_PROP_INT64_SELECTED_VIDEO_STREAM      = 20001;
+    public static final int FFP_PROP_INT64_SELECTED_AUDIO_STREAM      = 20002;
+    //----------------------------------------
+
     private long mNativeMediaPlayer;
-    @SuppressWarnings("unused") /* Used from JNI */
     private long mNativeMediaDataSource;
 
-    @SuppressWarnings("unused") /* Used from JNI */
     private int mNativeSurfaceTexture;
 
-    @SuppressWarnings("unused") /* Used from JNI */
     private int mListenerContext;
 
     private SurfaceHolder mSurfaceHolder;
-    private SurfaceTexture mSurfaceTexture=null;
     private EventHandler mEventHandler;
     private PowerManager.WakeLock mWakeLock = null;
     private boolean mScreenOnWhilePlaying;
@@ -116,7 +128,33 @@ public class VideoPlayer implements IMediaPlayer{
     private String mDataSource;
 
    
+    private static volatile boolean mIsNativeInitialized = false;
+    private static void initNativeOnce() {
+        synchronized (VideoPlayer.class) {
+            if (!mIsNativeInitialized) {
+                native_init();
+                mIsNativeInitialized = true;
+            }
+        }
+    }
+
+    /**
+     * Default constructor. Consider using one of the create() methods for
+     * synchronously instantiating a IjkMediaPlayer from a Uri or resource.
+     * <p>
+     * When done with the IjkMediaPlayer, you should call {@link #release()}, to
+     * free the resources. If not released, too many IjkMediaPlayer instances
+     * may result in an exception.
+     * </p>
+     */
     public VideoPlayer() {
+    	initPlayer();
+    }
+
+    
+    private void initPlayer() {
+        initNativeOnce();
+
         Looper looper;
         if ((looper = Looper.myLooper()) != null) {
             mEventHandler = new EventHandler(this, looper);
@@ -133,16 +171,68 @@ public class VideoPlayer implements IMediaPlayer{
         native_setup(new WeakReference<VideoPlayer>(this));
     }
 
+    /*
+     * Update the IjkMediaPlayer SurfaceTexture. Call after setting a new
+     * display surface.
+     */
     private native void _setVideoSurface(Surface surface);
 
-    
-    public void setSurface(Surface surface) {
-        if (mScreenOnWhilePlaying && surface != null) {
-            Log.w(TAG, "setScreenOnWhilePlaying(true) is ineffective for Surface");
+    /**
+     * Sets the {@link SurfaceHolder} to use for displaying the video portion of
+     * the media.
+     * 
+     * Either a surface holder or surface must be set if a display or video sink
+     * is needed. Not calling this method or {@link #setSurface(Surface)} when
+     * playing back a video will result in only the audio track being played. A
+     * null surface holder or surface will result in only the audio track being
+     * played.
+     * 
+     * @param sh
+     *            the SurfaceHolder to use for video display
+     */
+    @Override
+    public void setDisplay(SurfaceHolder sh) {
+        mSurfaceHolder = sh;
+        Surface surface;
+        if (sh != null) {
+            surface = sh.getSurface();
+        } else {
+            surface = null;
         }
         _setVideoSurface(surface);
         updateSurfaceScreenOn();
     }
+
+    /**
+     * Sets the {@link Surface} to be used as the sink for the video portion of
+     * the media. This is similar to {@link #setDisplay(SurfaceHolder)}, but
+     * does not support {@link #setScreenOnWhilePlaying(boolean)}. Setting a
+     * Surface will un-set any Surface or SurfaceHolder that was previously set.
+     * A null surface will result in only the audio track being played.
+     * 
+     * If the Surface sends frames to a {@link SurfaceTexture}, the timestamps
+     * returned from {@link SurfaceTexture#getTimestamp()} will have an
+     * unspecified zero point. These timestamps cannot be directly compared
+     * between different media sources, different instances of the same media
+     * source, or multiple runs of the same program. The timestamp is normally
+     * monotonically increasing and is unaffected by time-of-day adjustments,
+     * but it is reset when the position is set.
+     * 
+     * @param surface
+     *            The {@link Surface} to be used for the video portion of the
+     *            media.
+     */
+    @Override
+    public void setSurface(Surface surface) {
+        if (mScreenOnWhilePlaying && surface != null) {
+            Log.w(TAG,
+                    "setScreenOnWhilePlaying(true) is ineffective for Surface");
+        }
+        mSurfaceHolder = null;
+        _setVideoSurface(surface);
+        updateSurfaceScreenOn();
+    }
+
     /**
      * Sets the data source as a content Uri.
      *
@@ -150,6 +240,7 @@ public class VideoPlayer implements IMediaPlayer{
      * @param uri the Content URI of the data you want to play
      * @throws IllegalStateException if it is called in an invalid state
      */
+    @Override
     public void setDataSource(Context context, Uri uri)
             throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
         setDataSource(context, uri, null);
@@ -168,6 +259,7 @@ public class VideoPlayer implements IMediaPlayer{
      * @throws IllegalStateException if it is called in an invalid state
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @Override
     public void setDataSource(Context context, Uri uri, Map<String, String> headers)
             throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
         final String scheme = uri.getScheme();
@@ -207,9 +299,30 @@ public class VideoPlayer implements IMediaPlayer{
                 fd.close();
             }
         }
+
+        Log.d(TAG, "Couldn't open file on client side, trying server side");
+
         setDataSource(uri.toString(), headers);
     }
 
+    /**
+     * Sets the data source (file-path or http/rtsp URL) to use.
+     * 
+     * @param path
+     *            the path of the file, or the http/rtsp URL of the stream you
+     *            want to play
+     * @throws IllegalStateException
+     *             if it is called in an invalid state
+     * 
+     *             <p>
+     *             When <code>path</code> refers to a local file, the file may
+     *             actually be opened by a process other than the calling
+     *             application. This implies that the pathname should be an
+     *             absolute path (as any other process runs with unspecified
+     *             current working directory), and that the pathname should
+     *             reference a world-readable file.
+     */
+    @Override
     public void setDataSource(String path)
             throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
         mDataSource = path;
@@ -249,7 +362,7 @@ public class VideoPlayer implements IMediaPlayer{
      * @throws IllegalStateException if it is called in an invalid state
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-     
+    @Override
     public void setDataSource(FileDescriptor fd)
             throws IOException, IllegalArgumentException, IllegalStateException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) {
@@ -290,10 +403,10 @@ public class VideoPlayer implements IMediaPlayer{
         setDataSource(fd);
     }
 
-//    public void setDataSource(IMediaDataSource mediaDataSource)
-//            throws IllegalArgumentException, SecurityException, IllegalStateException {
-//        _setDataSource(mediaDataSource);
-//    }
+    public void setDataSource(IMediaDataSource mediaDataSource)
+            throws IllegalArgumentException, SecurityException, IllegalStateException {
+        _setDataSource(mediaDataSource);
+    }
 
     private native void _setDataSource(String path, String[] keys, String[] values)
             throws IOException, IllegalArgumentException, SecurityException, IllegalStateException;
@@ -304,16 +417,29 @@ public class VideoPlayer implements IMediaPlayer{
     private native void _setDataSource(IMediaDataSource mediaDataSource)
             throws IllegalArgumentException, SecurityException, IllegalStateException;
 
+    @Override
     public String getDataSource() {
         return mDataSource;
     }
 
+    @Override
     public void prepareAsync() throws IllegalStateException {
         _prepareAsync();
     }
 
     public native void _prepareAsync() throws IllegalStateException;
 
+    /**
+     * 异步线程执行的代码.
+     */
+    @Override
+    public int executeVideoEditor(String[] array)  {
+        return execute_video_editor(array);
+    }
+    
+    private native int execute_video_editor(Object cmdArray);
+    
+    @Override
     public void start() throws IllegalStateException {
         stayAwake(true);
         _start();
@@ -321,7 +447,7 @@ public class VideoPlayer implements IMediaPlayer{
 
     private native void _start() throws IllegalStateException;
 
-     
+    @Override
     public void stop() throws IllegalStateException {
         stayAwake(false);
         _stop();
@@ -329,7 +455,7 @@ public class VideoPlayer implements IMediaPlayer{
 
     private native void _stop() throws IllegalStateException;
 
-     
+    @Override
     public void pause() throws IllegalStateException {
         stayAwake(false);
         _pause();
@@ -338,13 +464,13 @@ public class VideoPlayer implements IMediaPlayer{
     private native void _pause() throws IllegalStateException;
     
     
-     
+    @Override
     public void seekback100() throws IllegalStateException {
         stayAwake(false);
         _seekback100();
     }
     
-     
+    @Override
     public void seekfront100() throws IllegalStateException {
         stayAwake(false);
         _seekfront100();
@@ -355,6 +481,7 @@ public class VideoPlayer implements IMediaPlayer{
     
 
     @SuppressLint("Wakelock")
+    @Override
     public void setWakeMode(Context context, int mode) {
         boolean washeld = false;
         if (mWakeLock != null) {
@@ -375,10 +502,12 @@ public class VideoPlayer implements IMediaPlayer{
         }
     }
 
-     
+    @Override
     public void setScreenOnWhilePlaying(boolean screenOn) {
         if (mScreenOnWhilePlaying != screenOn) {
             if (screenOn && mSurfaceHolder == null) {
+                Log.w(TAG,
+                        "setScreenOnWhilePlaying(true) is ineffective without a SurfaceHolder");
             }
             mScreenOnWhilePlaying = screenOn;
             updateSurfaceScreenOn();
@@ -403,44 +532,84 @@ public class VideoPlayer implements IMediaPlayer{
             mSurfaceHolder.setKeepScreenOn(mScreenOnWhilePlaying && mStayAwake);
         }
     }
+
+  
+
+//    // TODO: @Override
+//    public int getSelectedTrack(int trackType) {
+//        switch (trackType) {
+//            case ITrackInfo.MEDIA_TRACK_TYPE_VIDEO:
+//                return (int)_getPropertyLong(FFP_PROP_INT64_SELECTED_VIDEO_STREAM, -1);
+//            case ITrackInfo.MEDIA_TRACK_TYPE_AUDIO:
+//                return (int)_getPropertyLong(FFP_PROP_INT64_SELECTED_AUDIO_STREAM, -1);
+//            default:
+//                return -1;
+//        }
+//    }
+
+    // experimental, should set DEFAULT_MIN_FRAMES and MAX_MIN_FRAMES to 25
+    // TODO: @Override
     public void selectTrack(int track) {
         _setStreamSelected(track, true);
     }
 
+    // experimental, should set DEFAULT_MIN_FRAMES and MAX_MIN_FRAMES to 25
+    // TODO: @Override
     public void deselectTrack(int track) {
         _setStreamSelected(track, false);
     }
 
     private native void _setStreamSelected(int stream, boolean select);
 
-     
+    @Override
     public int getVideoWidth() {
         return mVideoWidth;
     }
 
-     
+    @Override
     public int getVideoHeight() {
         return mVideoHeight;
     }
 
-     
+    @Override
     public int getVideoSarNum() {
         return mVideoSarNum;
     }
 
-     
+    @Override
     public int getVideoSarDen() {
         return mVideoSarDen;
     }
 
+    @Override
     public native boolean isPlaying();
 
+    @Override
     public native void seekTo(long msec) throws IllegalStateException;
 
-     
+    @Override
     public native long getCurrentPosition();
+
+    @Override
     public native long getDuration();
 
+    /**
+     * Releases resources associated with this IjkMediaPlayer object. It is
+     * considered good practice to call this method when you're done using the
+     * IjkMediaPlayer. In particular, whenever an Activity of an application is
+     * paused (its onPause() method is called), or stopped (its onStop() method
+     * is called), this method should be invoked to release the IjkMediaPlayer
+     * object, unless the application has a special need to keep the object
+     * around. In addition to unnecessary resources (such as memory and
+     * instances of codecs) being held, failure to call this method immediately
+     * if a IjkMediaPlayer object is no longer needed may also lead to
+     * continuous battery consumption for mobile devices, and playback failure
+     * for other applications if no multiple instances of the same codec are
+     * supported on a device. Even if multiple instances of the same codec are
+     * supported, some performance degradation may be expected when unnecessary
+     * multiple instances are used at the same time.
+     */
+    @Override
     public void release() {
         stayAwake(false);
         updateSurfaceScreenOn();
@@ -448,12 +617,15 @@ public class VideoPlayer implements IMediaPlayer{
         _release();
     }
 
+    private native void _release();
 
-     
+    @Override
     public void reset() {
         stayAwake(false);
         _reset();
+        // make sure none of the listeners get called anymore
         mEventHandler.removeCallbacksAndMessages(null);
+
         mVideoWidth = 0;
         mVideoHeight = 0;
     }
@@ -465,7 +637,7 @@ public class VideoPlayer implements IMediaPlayer{
      *
      * @param looping whether to loop or not
      */
-     
+    @Override
     public void setLooping(boolean looping) {
         int loopCount = looping ? 0 : 1;
         setOption(OPT_CATEGORY_PLAYER, "loop", loopCount);
@@ -474,7 +646,12 @@ public class VideoPlayer implements IMediaPlayer{
 
     private native void _setLoopCount(int loopCount);
 
-     
+    /**
+     * Checks whether the MediaPlayer is looping or non-looping.
+     *
+     * @return true if the MediaPlayer is currently looping, false otherwise
+     */
+    @Override
     public boolean isLooping() {
         int loopCount = _getLoopCount();
         return loopCount != 1;
@@ -482,26 +659,31 @@ public class VideoPlayer implements IMediaPlayer{
 
     private native int _getLoopCount();
 
+    public float getVideoOutputFramesPerSecond() {
+        return _getPropertyFloat(PROP_FLOAT_VIDEO_OUTPUT_FRAMES_PER_SECOND, 0.0f);
+    }
+
+    public float getVideoDecodeFramesPerSecond() {
+        return _getPropertyFloat(PROP_FLOAT_VIDEO_DECODE_FRAMES_PER_SECOND, 0.0f);
+    }
 
     private native float _getPropertyFloat(int property, float defaultValue);
     private native void  _setPropertyFloat(int property, float value);
     private native long  _getPropertyLong(int property, long defaultValue);
     private native void  _setPropertyLong(int property, long value);
 
-     
+    @Override
     public native void setVolume(float leftVolume, float rightVolume);
 
-     
+    @Override
     public native int getAudioSessionId();
 
-     
-
-     
+    @Override
     public void setLogEnabled(boolean enable) {
         // do nothing
     }
 
-     
+    @Override
     public boolean isPlayable() {
         return true;
     }
@@ -533,107 +715,29 @@ public class VideoPlayer implements IMediaPlayer{
 
     private static native String _getColorFormatName(int mediaCodecColorFormat);
 
-     
+    @Override
     public void setAudioStreamType(int streamtype) {
         // do nothing
     }
 
-     
+    @Override
     public void setKeepInBackground(boolean keepInBackground) {
         // do nothing
     }
-    
-    private native void native_setup(Object play_this);
-    private native void _release();
-//-----------------------------------------------------------------------------------------
-    private OnPlayerPreparedListener mOnPreparedListener;
-    private OnPlayerCompletionListener mOnCompletionListener;
-    private OnPlayerBufferingUpdateListener mOnBufferingUpdateListener;
-    private OnPlayerSeekCompleteListener mOnSeekCompleteListener;
-    private OnPlayerVideoSizeChangedListener mOnVideoSizeChangedListener;
-    private OnPlayerErrorListener mOnErrorListener;
-    private OnPlayerInfoListener mOnInfoListener;
 
-    public final void setOnPreparedListener(OnPlayerPreparedListener listener) {
-        mOnPreparedListener = listener;
+    private static native void native_init();
+
+    private native void native_setup(Object IjkMediaPlayer_this);
+
+    private native void native_finalize();
+
+    private native void native_message_loop(Object IjkMediaPlayer_this);
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        native_finalize();
     }
 
-    public final void setOnCompletionListener(OnPlayerCompletionListener listener) {
-        mOnCompletionListener = listener;
-    }
-
-    public final void setOnBufferingUpdateListener(
-            OnPlayerBufferingUpdateListener listener) {
-        mOnBufferingUpdateListener = listener;
-    }
-
-    public final void setOnSeekCompleteListener(OnPlayerSeekCompleteListener listener) {
-        mOnSeekCompleteListener = listener;
-    }
-
-    public final void setOnVideoSizeChangedListener(
-            OnPlayerVideoSizeChangedListener listener) {
-        mOnVideoSizeChangedListener = listener;
-    }
-
-    public final void setOnErrorListener(OnPlayerErrorListener listener) {
-        mOnErrorListener = listener;
-    }
-
-    public final void setOnInfoListener(OnPlayerInfoListener listener) {
-        mOnInfoListener = listener;
-    }
-
-    public void resetListeners() {
-        mOnPreparedListener = null;
-        mOnBufferingUpdateListener = null;
-        mOnCompletionListener = null;
-        mOnSeekCompleteListener = null;
-        mOnVideoSizeChangedListener = null;
-        mOnErrorListener = null;
-        mOnInfoListener = null;
-        mOnMediaCodecSelectListener = null;
-    }
-
-    protected final void notifyOnPrepared() {
-        if (mOnPreparedListener != null)
-            mOnPreparedListener.onPrepared(this);
-    }
-
-    protected final void notifyOnCompletion() {
-        if (mOnCompletionListener != null)
-            mOnCompletionListener.onCompletion(this);
-    }
-
-    protected final void notifyOnBufferingUpdate(int percent) {
-        if (mOnBufferingUpdateListener != null)
-            mOnBufferingUpdateListener.onBufferingUpdate(this, percent);
-    }
-
-    protected final void notifyOnSeekComplete() {
-        if (mOnSeekCompleteListener != null)
-            mOnSeekCompleteListener.onSeekComplete(this);
-    }
-
-    protected final void notifyOnVideoSizeChanged(int width, int height,
-                                                  int sarNum, int sarDen) {
-        if (mOnVideoSizeChangedListener != null)
-            mOnVideoSizeChangedListener.onVideoSizeChanged(this, width, height,
-                    sarNum, sarDen);
-    }
-
-    protected final boolean notifyOnError(int what, int extra) {
-        return mOnErrorListener != null && mOnErrorListener.onError(this, what, extra);
-    }
-
-    protected final boolean notifyOnInfo(int what, int extra) {
-        return mOnInfoListener != null && mOnInfoListener.onInfo(this, what, extra);
-    }
-
-    public void setDataSource(IMediaDataSource mediaDataSource) {
-        throw new UnsupportedOperationException();
-    }
-    
     private static class EventHandler extends Handler {
         private final WeakReference<VideoPlayer> mWeakPlayer;
 
@@ -642,20 +746,15 @@ public class VideoPlayer implements IMediaPlayer{
             mWeakPlayer = new WeakReference<VideoPlayer>(mp);
         }
 
-         
+        @Override
         public void handleMessage(Message msg) {
             VideoPlayer player = mWeakPlayer.get();
             if (player == null || player.mNativeMediaPlayer == 0) {
-            	Log.w(TAG,
-                        "VideoPlayer went away with unhandled events");
+                Log.w(TAG,
+                        "IjkMediaPlayer went away with unhandled events");
                 return;
             }
 
-            Log.i("sno","msg.what===============>"+msg.what+" arg:"+msg.arg1);
-            
-            if(msg.what==MEDIA_PLAYBACK_COMPLETE){
-            	Log.i("sno","收到播放完毕的命令");
-            }
             switch (msg.what) {
             case MEDIA_PREPARED:
                 player.notifyOnPrepared();
@@ -665,11 +764,9 @@ public class VideoPlayer implements IMediaPlayer{
                 player.notifyOnCompletion();
                 player.stayAwake(false);
                 return;
-                
             case VIDEOEDIT_EVENT_COMPLETE:
+            	Log.i("sno","VIDEOEDIT_EVENT_COMPLETE==================");
             	return ;
-            	
-            	
             case MEDIA_BUFFERING_UPDATE:
                 long bufferPosition = msg.arg1;
                 if (bufferPosition < 0) {
@@ -701,7 +798,7 @@ public class VideoPlayer implements IMediaPlayer{
                 return;
 
             case MEDIA_ERROR:
-            	Log.e(TAG, "Error (" + msg.arg1 + "," + msg.arg2 + ")");
+                Log.e(TAG, "Error (" + msg.arg1 + "," + msg.arg2 + ")");
                 if (!player.notifyOnError(msg.arg1, msg.arg2)) {
                     player.notifyOnCompletion();
                 }
@@ -711,7 +808,7 @@ public class VideoPlayer implements IMediaPlayer{
             case MEDIA_INFO:
                 switch (msg.arg1) {
                     case MEDIA_INFO_VIDEO_RENDERING_START:
-                    	Log.i(TAG, "Info: MEDIA_INFO_VIDEO_RENDERING_START\n");
+                        Log.i(TAG, "Info: MEDIA_INFO_VIDEO_RENDERING_START\n");
                         break;
                 }
                 player.notifyOnInfo(msg.arg1, msg.arg2);
@@ -732,11 +829,18 @@ public class VideoPlayer implements IMediaPlayer{
                 break;
 
             default:
-            	Log.e(TAG, "Unknown message type " + msg.what);
+                Log.e(TAG, "Unknown message type " + msg.what);
             }
         }
     }
-    @SuppressWarnings("unused") /* Used from JNI */
+
+    /*
+     * Called from native code when an interesting event happens. This method
+     * just uses the EventHandler system to post the event back to the main app
+     * thread. We use a weak reference to the original IjkMediaPlayer object so
+     * that the native code is safe from the object disappearing from underneath
+     * it. (This is the cookie passed to native_setup().)
+     */
     private static void postEventFromNative(Object weakThiz, int what,
             int arg1, int arg2, Object obj) {
         if (weakThiz == null)
@@ -798,8 +902,15 @@ public class VideoPlayer implements IMediaPlayer{
          */
         boolean onNativeInvoke(int what, Bundle args);
     }
-    @SuppressWarnings("unused") /* Used from JNI */
+/**
+ * 底层调用.
+ * @param weakThiz
+ * @param what
+ * @param args
+ * @return
+ */
     private static boolean onNativeInvoke(Object weakThiz, int what, Bundle args) {
+//        Log.ifmt(TAG, "onNativeInvoke %d", what);
         
         if (weakThiz == null || !(weakThiz instanceof WeakReference<?>))
             throw new IllegalStateException("<null weakThiz>.onNativeInvoke()");
@@ -836,6 +947,9 @@ public class VideoPlayer implements IMediaPlayer{
         }
     }
 
+    /*
+     * MediaCodec select
+     */
 
     public interface OnMediaCodecSelectListener {
         String onMediaCodecSelect(IMediaPlayer mp, String mimeType, int profile, int level);
@@ -844,7 +958,12 @@ public class VideoPlayer implements IMediaPlayer{
     public void setOnMediaCodecSelectListener(OnMediaCodecSelectListener listener) {
         mOnMediaCodecSelectListener = listener;
     }
-    @SuppressWarnings("unused") /* Used from JNI */
+
+    public void resetListeners() {
+        super.resetListeners();
+        mOnMediaCodecSelectListener = null;
+    }
+
     private static String onSelectCodec(Object weakThiz, String mimeType, int profile, int level) {
         if (weakThiz == null || !(weakThiz instanceof WeakReference<?>))
             return null;
@@ -870,15 +989,16 @@ public class VideoPlayer implements IMediaPlayer{
         public String onMediaCodecSelect(IMediaPlayer mp, String mimeType, int profile, int level) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
                 return null;
-            
+
             if (TextUtils.isEmpty(mimeType))
                 return null;
-            
+
+            Log.i(TAG, String.format(Locale.US, "onSelectCodec: mime=%s, profile=%d, level=%d", mimeType, profile, level));
             ArrayList<CodecInfoKnowed> candidateCodecList = new ArrayList<CodecInfoKnowed>();
             int numCodecs = MediaCodecList.getCodecCount();
             for (int i = 0; i < numCodecs; i++) {
                 MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
-                
+                Log.d(TAG, String.format(Locale.US, "  found codec: %s", codecInfo.getName()));
                 if (codecInfo.isEncoder())
                     continue;
 
@@ -890,6 +1010,7 @@ public class VideoPlayer implements IMediaPlayer{
                     if (TextUtils.isEmpty(type))
                         continue;
 
+                    Log.d(TAG, String.format(Locale.US, "    mime: %s", type));
                     if (!type.equalsIgnoreCase(mimeType))
                         continue;
 
@@ -898,9 +1019,11 @@ public class VideoPlayer implements IMediaPlayer{
                         continue;
 
                     candidateCodecList.add(candidate);
+                    Log.i(TAG, String.format(Locale.US, "candidate codec: %s rank=%d", codecInfo.getName(), candidate.mRank));
                     candidate.dumpProfileLevels(mimeType);
                 }
             }
+
             if (candidateCodecList.isEmpty()) {
                 return null;
             }
@@ -912,11 +1035,24 @@ public class VideoPlayer implements IMediaPlayer{
                     bestCodec = codec;
                 }
             }
+
             if (bestCodec.mRank < CodecInfoKnowed.RANK_LAST_CHANCE) {
                 Log.w(TAG, String.format(Locale.US, "unaccetable codec: %s", bestCodec.mCodecInfo.getName()));
                 return null;
             }
+
+            Log.i(TAG, String.format(Locale.US, "selected codec: %s rank=%d", bestCodec.mCodecInfo.getName(), bestCodec.mRank));
             return bestCodec.mCodecInfo.getName();
         }
     }
+
+    public static native void native_profileBegin(String libName);
+    public static native void native_profileEnd();
+    public static native void native_setLogLevel(int level);
+
+//	@Override
+//	public ITrackInfo[] getTrackInfo() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 }

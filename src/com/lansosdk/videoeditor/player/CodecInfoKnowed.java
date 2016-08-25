@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class CodecInfoKnowed {
-    private final static String TAG = "CodecInfoKnowed";
+    private final static String TAG = "IjkMediaCodecInfo";
 
     public static int RANK_MAX = 1000;
     public static final int RANK_TESTED = 800;

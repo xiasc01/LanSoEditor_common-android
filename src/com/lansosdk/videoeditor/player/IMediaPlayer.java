@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2013-2014 Zhang Rui <bbcallen@gmail.com>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,13 +16,16 @@
 
 package com.lansosdk.videoeditor.player;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.view.Surface;
+import android.view.SurfaceHolder;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
-
+import java.util.Map;
 
 
 public interface IMediaPlayer {
@@ -54,9 +57,14 @@ public interface IMediaPlayer {
     int MEDIA_ERROR_UNSUPPORTED = -1010;
     int MEDIA_ERROR_TIMED_OUT = -110;
 
+    void setDisplay(SurfaceHolder sh);
+
     void setDataSource(Context context, Uri uri)
             throws IOException, IllegalArgumentException, SecurityException, IllegalStateException;
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    void setDataSource(Context context, Uri uri, Map<String, String> headers)
+            throws IOException, IllegalArgumentException, SecurityException, IllegalStateException;
 
     void setDataSource(FileDescriptor fd)
             throws IOException, IllegalArgumentException, IllegalStateException;
@@ -68,6 +76,9 @@ public interface IMediaPlayer {
 
     void prepareAsync() throws IllegalStateException;
     
+    int executeVideoEditor(String[] array);
+    
+
     void start() throws IllegalStateException;
 
     void stop() throws IllegalStateException;
@@ -176,12 +187,16 @@ public interface IMediaPlayer {
 
     boolean isLooping();
 
+//    /*--------------------
+//     * AndroidMediaPlayer: JELLY_BEAN
+//     */
+//    ITrackInfo[] getTrackInfo();
+
     /*--------------------
      * AndroidMediaPlayer: ICE_CREAM_SANDWICH:
      */
     void setSurface(Surface surface);
-    
-    
+
     /*--------------------
      * AndroidMediaPlayer: M:
      */

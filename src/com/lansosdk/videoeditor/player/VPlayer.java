@@ -26,6 +26,8 @@ import android.widget.TableLayout;
 import java.io.IOException;
 import java.util.Map;
 
+
+
 public class VPlayer {
     private String TAG = "LanSoSDK";
     private Uri mUri;
@@ -279,6 +281,11 @@ public class VPlayer {
     public boolean isPlaying() {
         return isInPlaybackState() && mMediaPlayer.isPlaying();
     }
+    private boolean isSoftDecoder=true; //是否使用软件.默认使用.
+    public void setUseSoftDecoder(boolean use)
+    {
+    	isSoftDecoder=use;
+    }
     public void setLooping(boolean looping){
     	if(mMediaPlayer!=null)
     		mMediaPlayer.setLooping(looping);
@@ -391,11 +398,16 @@ public class VPlayer {
     private VideoPlayer createPlayer() {
     	VideoPlayer mediaPlayer = null;
 
-        		VideoPlayer player = null;
+    	VideoPlayer player = null;
                 if (mUri != null) {
                     player = new VideoPlayer();
 
-                        player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
+                    	if(isSoftDecoder){
+                    		player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);//软解是0, 硬解是1.
+                    	}else{
+                    		player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);	
+                    	}
+                    		
                         player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
                         player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
                         player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "overlay-format", VideoPlayer.SDL_FCC_RV32);
@@ -403,6 +415,7 @@ public class VPlayer {
                         player.setOption(VideoPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
                         player.setOption(VideoPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
                         player.setOption(VideoPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+                        
                 }
                 mediaPlayer = player;
         return mediaPlayer;
