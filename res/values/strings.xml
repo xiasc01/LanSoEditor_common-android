@@ -13,7 +13,7 @@
     
 	<string name="video_editor_demo_hint">此演示功能是:解码==>画面裁剪(比如1280x720的画面裁剪成240x240, 从视频画面的左上角开始裁剪,裁剪240x240的像素点)==>编码输出,保存在/sdcard/video_demo_framecrop.mp4中.\n\n</string>
     
-	<string name="sdk_limit">SDK版本号是V1.7 [商用版本]\n\nSDK底层做了授权限制,仅可在此demo中运行,并有效时间到 \"%1$d\"年 \"%2$d\"月之前,请注意.</string>
+	<string name="sdk_limit">SDK版本号是V1.8.0 [商用版本]\n\nSDK底层做了授权限制,仅可在此demo中运行,并有效时间到 \"%1$d\"年 \"%2$d\"月之前,请注意.</string>
 	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求, 这里仅仅是部分功能的举例,您完全可以根据我们的举例自定义完整的ffmpeg命令\n</string>
 	<string name="file_not_exist">文件不存在</string>
 	<string name="videoplay_hint">视频小知识:\n当前是等比例的显示到屏幕上, 目的是保持视频的宽高比一致,视频不变形;\n\n 或许会导致分辨率小的画面被放大了,画面质量下降,这是正常情况,只是播放的界面事情,不影响视频本身</string>
@@ -32,6 +32,7 @@
 	
 	
 	<string name="avsplite_hint">音视频分离:\n把多媒体文件如mp4,flv等中的的音频和视频分离开,形成独立的音频文件和视频文件 \n\n</string>
+	<string name="avmerge_hint">音视频合成:\n把一个纯音频文件和纯视频文件合并成一个mp4格式的多媒体文件 \n\n</string>
 	<string name="videocut_hint">视频剪切:\n剪切视频的长度,可以指定开始位置,指定结束位置.\n这里演示截取视频的前20秒形成新的视频文件.</string>
 	<string name="audiocut_hint">音频剪切:\n剪切音频的长度,可以指定开始位置,指定结束位置.\n这里演示截取音频的前20秒形成新的音频文件.</string>
 	<string name="videoscale_hint">视频缩放:缩小视频的宽度和高度\n 这里演示把宽度和高度都缩小一半.\n 注意:这里是采用软缩放的形式来做,耗时比较长,我们在增强版SDK有opengl加速缩放版本,欢迎索取demo</string>

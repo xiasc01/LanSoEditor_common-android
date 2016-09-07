@@ -206,7 +206,8 @@ public class MainActivity2 extends Activity implements OnClickListener{
 	    }	
     private void showHintDialog()
    	{
-      	 	Calendar c = Calendar.getInstance();
+      	 	
+    	Calendar c = Calendar.getInstance();
    		int year=c.get(Calendar.YEAR);
    		int month=c.get(Calendar.MONTH)+1;
    		
@@ -226,7 +227,7 @@ public class MainActivity2 extends Activity implements OnClickListener{
    			public void onClick(DialogInterface dialog, int which) {
    				// TODO Auto-generated method stub
    				
-   				showHintDialog("注意:  native-jni层我们提供了三个ARM架构的so动态库,实际仅用给一个即可.建议用armeabi-v7a .\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
+   				showHintDialog("注意:  native-jni层我们提供了三个ARM架构的so动态库,实际仅用一个即可.建议用armeabi-v7a .\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
    			}
    		})
            .show();

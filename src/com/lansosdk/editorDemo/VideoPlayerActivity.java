@@ -78,28 +78,28 @@ public class VideoPlayerActivity extends Activity {
 			public void onSurfaceTextureAvailable(SurfaceTexture surface, int width,
 					int height) {
 				// TODO Auto-generated method stub
-//				play(new Surface(surface));
-				VPlayVideo(new Surface(surface));
+				play(new Surface(surface));
+//				VPlayVideo(new Surface(surface));
 			}
 		});
         
-        findViewById(R.id.id_player_pause).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				mVPlayer.pause();
-//				 VplayerSeekTo(2000,7000);  //测试seek;
-			}
-		});
-		findViewById(R.id.id_player_start).setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						mVPlayer.start();
-					}
-			});
+//        findViewById(R.id.id_player_pause).setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				mVPlayer.pause();
+////				 VplayerSeekTo(2000,7000);  //测试seek;
+//			}
+//		});
+//		findViewById(R.id.id_player_start).setOnClickListener(new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						mVPlayer.start();
+//					}
+//			});
         
     }  
     public void play(Surface surface)  {  

@@ -179,17 +179,17 @@ public class VideoEditor {
 	 * @return
 	 */
 	public native int  videoMirrorH( String srcPath,String decoder,String dstPath);
-	/**
-	 * 暂时不要使用.
-	 * 两个音频文件混合，可以一个是mp3格式，另一个是aac格式。　TODO:实际测试混合后的音频长度
-	 * @param srcPath1　　音频１的路径
-	 * @param srcPath2　　音频２的路径
-	 * @param vol1　　　音频１混合时的音量
-	 * @param vol2　　　音频２混合时的音量
-	 * @param dstPath　　目标音频存放的路径。建议是aac格式
-	 * @return
-	 */
-	public native int audioAdjustVolumeMix( String srcPath1,String srcPath2,float vol1,float vol2,String dstPath);
+//	/**
+//	 * 暂时不要使用.
+//	 * 两个音频文件混合，可以一个是mp3格式，另一个是aac格式。　TODO:实际测试混合后的音频长度
+//	 * @param srcPath1　　音频１的路径
+//	 * @param srcPath2　　音频２的路径
+//	 * @param vol1　　　音频１混合时的音量
+//	 * @param vol2　　　音频２混合时的音量
+//	 * @param dstPath　　目标音频存放的路径。建议是aac格式
+//	 * @return
+//	 */
+//	public native int audioAdjustVolumeMix( String srcPath1,String srcPath2,float vol1,float vol2,String dstPath);
 	/**
 	 * 视频转场，第二个视频从右侧渐渐的显示（可以联系我们，做更多的视频转场方法）　TODO:没有第二个视频从哪里开始转场。
 	 * @param srcPath1　　第一个视频
@@ -553,7 +553,6 @@ public class VideoEditor {
 	 */
 		public int executeVideoCompress(String srcPath,String dstPath,float percent)
 		{
-			//ffmpeg -i 2x.mp4 -acodec copy -vcodec libx264 -b:v 200k 2xpress.mp4
 			if(fileExist(srcPath)){
 				
 				MediaInfo info=new MediaInfo(srcPath,false);
@@ -615,15 +614,15 @@ public class VideoEditor {
 				return audioPath;
 			}
 	
-			/**
-			 * 把原视频文件中的音频部分, 增加到新的视频中,
-			 * 
-			 * @param oldMp4   源视频, 需要内部有音频部分, 如没有音频则则方法无动作.
-			 * @param newMp4   通过视频录制后,保存的新视频.里面只有视频部分或h264裸码流,需确保里面没有音频部分.
-			 * @param tmpDir  此方法处理过程中生成的临时文件存放地, 临时文件夹路径.
-			 * @param dstMp4   方法处理完后, 增加音频后的文件目标路径.
-			 * @return  执行成功,返回true, 失败返回false(一般源视频中没有音频会执行失败)
-			 */
+	/**
+	 * 把原视频文件中的音频部分, 增加到新的视频中,
+	 * 
+	 * @param oldMp4   源视频, 需要内部有音频部分, 如没有音频则则方法无动作.
+	 * @param newMp4   通过视频录制后,保存的新视频.里面只有视频部分或h264裸码流,需确保里面没有音频部分.
+	 * @param tmpDir  此方法处理过程中生成的临时文件存放地, 临时文件夹路径.
+	 * @param dstMp4   方法处理完后, 增加音频后的文件目标路径.
+	 * @return  执行成功,返回true, 失败返回false(一般源视频中没有音频会执行失败)
+	 */
 	public static boolean encoderAddAudio(String oldMp4,String newMp4,String tmpDir,String dstMp4)
 	{
 		//
@@ -727,14 +726,12 @@ public class VideoEditor {
 		  }
 		  /**
 		   * 音频和视频合成为多媒体文件，等于给视频增加一个音频。
-		    当前版本近测试了，把一个没有音频的mp4文件和 一个音频合成为多媒体格式.
 		   
 		   * @param videoFile 输入的视频文件,需视频文件中不存储音频部分, 如有音频怎会增加两个声音.
 		   * @param audioFile 输入的音频文件
 		   * @param dstFile  合成后的输出，文件名的后缀是.mp4
 		   * @return 返回执行的结果.
 		   * 
-		   * 注意:如果合并的音频是aac格式,ffmpeg -i test.mp4 -i test.aac -vcodec copy -acodec copy -absf aac_adtstoasc shanchu4.mp4
 		   */
 		  public int executeVideoMergeAudio(String videoFile,String audioFile,String dstFile)
 		  {
@@ -774,7 +771,9 @@ public class VideoEditor {
 		  /**
 		   * 
 		   * 给视频MP4增加上音频，audiostartS表示从从音频的哪个时间点开始增加，单位是秒
-		   * @param videoFile  原视频文件
+		   * 注意:原视频文件里必须是没有音频部分.
+		   * 
+		   * @param videoFile  原视频文件,只有视频部分的多媒体文件.
 		   * @param audioFile  需要增加的音频文件
 		   * @param dstFile  处理后保存的路径 文件名的后缀需要.mp4格式
 		   * @param audiostartS  音频增加的时间点，单位秒，类型float，可以有小数，比如从音频的2.35秒开始增加到视频中。
@@ -1084,7 +1083,7 @@ public class VideoEditor {
 			  }
 		  }
 		  /**
-		   * 把多段ｔｓ流拼接在一起，然后保存成mp4格式
+		   * 把多段TS流拼接在一起，然后保存成mp4格式
 		   * 注意:输入的各个流需要编码参数一致,
 		   * 适用于断点拍照,拍照多段视频; 或者想在两段视频中增加一个转场的视频
 		   * @param tsArray　多段ts流的数组

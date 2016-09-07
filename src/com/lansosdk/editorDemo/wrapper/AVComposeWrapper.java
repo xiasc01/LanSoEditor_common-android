@@ -18,7 +18,7 @@ public class AVComposeWrapper extends CmdWrapper{
 	@Override
 	public int getHint() {
 		// TODO Auto-generated method stub
-		return R.string.avsplite_hint;
+		return R.string.avmerge_hint;
 	}
 	
 	public void setAudioSource(String src)
