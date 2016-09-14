@@ -8,6 +8,7 @@ import java.util.List;
 import com.lansoeditor.demo.R;
 import com.lansosdk.editorDemo.utils.FileUtils;
 import com.lansosdk.editorDemo.utils.snoCrashHandler;
+import com.lansosdk.videoeditor.CopyDefaultVideoAsyncTask;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.VideoEditor;
 import com.lansosdk.videoeditor.onVideoEditorProgressListener;

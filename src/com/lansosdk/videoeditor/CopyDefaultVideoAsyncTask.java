@@ -1,8 +1,6 @@
-package com.lansosdk.editorDemo;
+package com.lansosdk.videoeditor;
 
 import com.lansosdk.editorDemo.utils.FileUtils;
-import com.lansosdk.videoeditor.CopyFileFromAssets;
-import com.lansosdk.videoeditor.SDKDir;
 
 import android.app.ProgressDialog;
 import android.content.Context;

@@ -4,6 +4,10 @@
  https://github.com/LanSoSdk/LanSoEditor_advance
  欢迎您的使用,高级版本可以实现滤镜, 叠加,混合,标记,涂鸦,贴纸等各种视频编辑效果.
 
+####工程为Eclipse,修改为Android Studio的步骤
+*  选择AS中的file--->import project ,选择项目的路径名，（注意，一定要是当前项目的根文件夹），点击Ok，会弹出对话框，让您选择需要保存的路径， 选择后点击Next,会弹出3个按钮都选中的对话框，直接点击Finish，导入完成。
+*  可联系我们,为您转换成Android Studio版本工程, 并提供技术支持(联系方式见下面). 
+
 ###当前版本是LanSoEditor-v1.8.0
 *  主要使用在音视频的: 裁剪,剪切,分离,合并,转换,拼接,水印,叠加,混合,转码等场合;
 *  
@@ -29,6 +33,7 @@
 ###联系方式:
 *   QQ 1852600324 
 *   Email:support@lansongtech.com
+*   Phone:0571-89052701
 
 ###直接下载获取APK:
    下载整个项目后, 在bin文件下有apk, 直接安装后即可演示.
