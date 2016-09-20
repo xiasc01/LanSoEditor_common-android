@@ -34,6 +34,8 @@ public class CodecInfoKnowed {
         if (sKnownCodecList != null)
             return sKnownCodecList;
 
+       
+        
         sKnownCodecList = new TreeMap<String, Integer>(
                 String.CASE_INSENSITIVE_ORDER);
 
@@ -134,13 +136,21 @@ public class CodecInfoKnowed {
         return sKnownCodecList;
     }
 
+    /**
+     * 
+     * @param codecInfo
+     * @param mimeType 输入的mimeType类型
+     * @return
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static CodecInfoKnowed setupCandidate(MediaCodecInfo codecInfo,
             String mimeType) {
+    	
         if (codecInfo == null
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
             return null;
 
+        
         String name = codecInfo.getName();
         if (TextUtils.isEmpty(name))
             return null;
@@ -202,6 +212,7 @@ public class CodecInfoKnowed {
         try {
             CodecCapabilities caps = mCodecInfo
                     .getCapabilitiesForType(mimeType);
+            
             int maxProfile = 0;
             int maxLevel = 0;
             if (caps != null) {

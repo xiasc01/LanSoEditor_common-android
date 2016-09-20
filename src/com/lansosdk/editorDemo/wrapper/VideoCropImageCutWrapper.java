@@ -22,7 +22,7 @@ public class VideoCropImageCutWrapper extends CmdWrapper{
 	@Override
 	public String getTitle() {
 		// TODO Auto-generated method stub
-		return "视频剪切+画面裁剪+增加水印+";
+		return "视频剪切+画面裁剪+增加水印";
 	}
 	@Override
 	public int getHint() {

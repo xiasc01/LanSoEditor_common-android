@@ -30,9 +30,19 @@ public class VideoCropWrapper extends CmdWrapper{
 		Log.i("sno","isPrepareSuccess:"+isPrepareSuccess);
 		if(isPrepareSuccess){
 			float dstBr=(float)mInfo.vBitRate;
-  	    	dstBr*=0.7f;
+  	    	dstBr*=0.4f;
   	    	int dstBr2=(int)dstBr;
-			mEditor.executeVideoFrameCrop(srcPath, mInfo.vWidth, mInfo.vHeight/2, 0, 0, dstVideo, mInfo.vCodecName,dstBr2);
+  	    	
+  	    	//检查宽高
+  	    	int width=mInfo.vCodecWidth;
+	    		int height=mInfo.vCodecHeight;
+	    		if(mInfo.vRotateAngle==90 || mInfo.vRotateAngle==270){
+	    			width=mInfo.vCodecHeight;
+	    			height=mInfo.vCodecWidth;
+	    	}
+	    		
+			mEditor.executeVideoFrameCrop(srcPath, width/2, height/2, 0, 0, dstVideo, mInfo.vCodecName,dstBr2);
+  	    	//mEditor.executeVideoFrameCrop(srcPath, 480,480, 0, 0, dstVideo, mInfo.vCodecName,1000*1000);
 		}
 	}
 	public boolean prepare()

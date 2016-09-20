@@ -8,11 +8,16 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import com.lansosdk.videoeditor.player.CodecInfoKnowed;
 
 
+
+import android.media.MediaCodecInfo;
+import android.media.MediaCodecList;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
 
@@ -1049,7 +1054,7 @@ public class VideoEditor {
 		   */
 		  public int executeConvertMp4toTs(String mp4Path,String dstTs)
 		  {
-		  	//		  ./ffmpeg -i 0.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts0.ts
+		  	//./ffmpeg -i 0.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts0.ts
 //		  ./ffmpeg -i 1.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts1.ts
 //		  ./ffmpeg -i 2.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts2.ts
 //		  ./ffmpeg -i 3.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts3.ts
@@ -1152,6 +1157,7 @@ public class VideoEditor {
 						ret=executeFrameCrop(videoFile,"h264",cropcmd,dstFile,bitrate);  //采用软解
 					}
 					return ret;
+//					return executeFrameCrop(videoFile,"h264",cropcmd,dstFile,bitrate);  //仅仅测试
 			  }else{
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
@@ -1460,15 +1466,22 @@ public class VideoEditor {
 		   * @return
 		   */
 		  public int executeAddWaterMark(String videoFile,String imagePngPath,int x,int y,String dstFile,int bitrate){
-			  //./ffmpeg -i miaopai.mp4 -i watermark.png -filter_complex "overlay=0:0" -acodec copy out2.mp4  
 			  
 			  if(fileExist(videoFile)){
-					String filter=String.format(Locale.getDefault(),"overlay=%d:%d",x,y);
-					int ret=videoAddWatermark(videoFile,"lansoh264_dec",imagePngPath, filter, dstFile, bitrate);
-					if(ret!=0){
-						ret=videoAddWatermark(videoFile,"h264",imagePngPath, filter, dstFile, bitrate);
-					}
-					return ret;
+				  
+				  String filter=String.format(Locale.getDefault(),"overlay=%d:%d",x,y);
+				  
+					  	int ret=videoAddWatermark(videoFile,"lansoh264_dec",imagePngPath, filter, dstFile, bitrate);
+					  	Log.i(TAG,"executeAddWaterMark  ret =:"+ret);
+						if(ret!=0){
+							Log.i(TAG,"use soft decoder to add water mark");
+							ret=videoAddWatermark(videoFile,"h264",imagePngPath, filter, dstFile, bitrate);
+						}
+						if(ret!=0){	//如果再不行, 就用软解和软编码来做.
+							ret=videoAddWatermarkX264(videoFile, "lansoh264_dec", imagePngPath, filter, dstFile, bitrate);
+						}
+						return ret;
+					
 			  }else{
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
@@ -1491,15 +1504,19 @@ public class VideoEditor {
 		  */
 		  public int executeAddWaterMark(String videoFile,String imagePngPath,float startTimeS,float endTimeS,int x,int y,String dstFile,int bitrate)
 		  {
-			// ./ffmpeg -i miaopai.mp4 -i test.png -filter_complex "[0:v][1:v] overlay=25:25:enable='between(t,0,5)'" -pix_fmt yuv420p -c:a copy output33.mp4
 			  if(fileExist(videoFile)){
-					List<String> cmdList=new ArrayList<String>();
-					String filter=String.format(Locale.getDefault(),"overlay=%d:%d:enable='between(t,%f,%f)",x,y,startTimeS,endTimeS);
-					int ret=videoAddWatermark(videoFile,"lansoh264_dec",imagePngPath, filter, dstFile, bitrate);
-					if(ret!=0){
-						ret=videoAddWatermark(videoFile,"h264",imagePngPath, filter, dstFile, bitrate);
-					}
-					return ret;
+				  
+				  String filter=String.format(Locale.getDefault(),"overlay=%d:%d:enable='between(t,%f,%f)",x,y,startTimeS,endTimeS);
+				
+						
+				  		int ret=videoAddWatermark(videoFile,"lansoh264_dec",imagePngPath, filter, dstFile, bitrate);
+						if(ret!=0){
+							ret=videoAddWatermark(videoFile,"h264",imagePngPath, filter, dstFile, bitrate);
+						}
+						if(ret!=0){	//如果再不行, 就用软解和软编码来做.
+							ret=videoAddWatermarkX264(videoFile, "lansoh264_dec", imagePngPath, filter, dstFile, bitrate);
+						}
+						return ret;
 			  }else{
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
@@ -1540,7 +1557,41 @@ public class VideoEditor {
 			     }  
 			    return  executeVideoEditor(command);
 		  }
-		
+		  //如果是NVIDIA的处理器,则使用软件来做.
+		  private  int videoAddWatermarkX264(String videoFile,String decName,String imagePngPath,String filter,String dstFile,int bitrate)
+		  {
+			  	Log.i(TAG,"is nvidia codec. use x264 to encode data....");
+			  	
+			  	List<String> cmdList=new ArrayList<String>();
+				cmdList.add("-vcodec");
+				cmdList.add(decName);
+				
+				cmdList.add("-i");
+				cmdList.add(videoFile);
+
+				cmdList.add("-i");
+				cmdList.add(imagePngPath);
+
+				cmdList.add("-filter_complex");
+				cmdList.add(filter);
+				
+				cmdList.add("-acodec");
+				cmdList.add("copy");
+				
+				cmdList.add("-vcodec");
+				cmdList.add("libx264"); 
+				
+				cmdList.add("-b:v");
+				cmdList.add(String.valueOf(bitrate)); 
+				
+				cmdList.add("-y");
+				cmdList.add(dstFile);
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     }  
+			    return  executeVideoEditor(command);
+		  }
 			/**
 			 * 给视频旋转角度,注意这里 只是 旋转画面的的角度,而不会调整视频的宽高.
 			 * @param srcPath　需要旋转角度的原视频
@@ -1594,4 +1645,29 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
+		  //---------2016年9月19日16:31:35 测试增加:
+		public static boolean isNvidiaCodec()
+		{
+			boolean contain=false;
+//			 int numCodecs = MediaCodecList.getCodecCount();
+//	            
+//	            for (int i = 0; i < numCodecs; i++) 
+//	            {
+//	                MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
+//	                
+//	                if (codecInfo.isEncoder())
+//	                    continue;
+//
+//	                String[] types = codecInfo.getSupportedTypes();
+//	                if (types == null)
+//	                    continue;
+//	                
+//	                if(codecInfo.getName().contains("OMX.Nvidia.h264"))
+//	                	contain=true;
+//	                	
+////	                for(String type: types)
+////	                	Log.i(TAG,"is---"+codecInfo.getName()+ " types is"+ type);  //type="video/avc"
+//	            }
+	            return contain;
+		}
 }

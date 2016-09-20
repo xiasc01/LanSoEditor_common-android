@@ -10,6 +10,7 @@ import com.lansosdk.editorDemo.utils.FileUtils;
 import com.lansosdk.editorDemo.utils.snoCrashHandler;
 import com.lansosdk.videoeditor.CopyDefaultVideoAsyncTask;
 import com.lansosdk.videoeditor.MediaInfo;
+import com.lansosdk.videoeditor.SDKFileUtils;
 import com.lansosdk.videoeditor.VideoEditor;
 import com.lansosdk.videoeditor.onVideoEditorProgressListener;
 
@@ -41,7 +42,7 @@ public class VideoEditDemoActivity extends Activity{
 	ProgressDialog  mProgressDialog;
 	int videoDuration;
 	MediaInfo   mInfo;
-	private String dstMP4="/sdcard/01.mp4";
+	private String dstMP4="/sdcard/03.mp4";
 	private String dstAAC="/sdcard/01.aac";
 	
 
@@ -80,9 +81,13 @@ public class VideoEditDemoActivity extends Activity{
 				public void onClick(View v) {
 					
 					videoPath= CopyDefaultVideoAsyncTask.copyFile(getApplicationContext(),"ping20s.mp4");
+					
+					//videoPath="/sdcard/test_720p.mp4"; 
+					videoPath="/sdcard/VIDEO_90du.mp4"; 
+//					videoPath="/sdcard/V720P_90du.mp4";
+							
 					 mInfo=new MediaInfo(videoPath);
 					 mInfo.prepare();
-					
 					 Log.i(TAG,"info:"+mInfo.toString());
 					 
 					 isTestAudio=false;
@@ -121,6 +126,11 @@ public class VideoEditDemoActivity extends Activity{
 				}
 			});
 	        isTestAudio=false;
+	        
+	        //删除之前的, 保证这个是唯一的.
+	        if(SDKFileUtils.fileExist(dstMP4)){
+	        	SDKFileUtils.deleteFile(dstMP4);
+	        }
 	  } 
 	  @Override
 	protected void onResume() {
@@ -222,7 +232,17 @@ public class VideoEditDemoActivity extends Activity{
       	    	if(isTestAudio){
       	    		int ret=mEditor.executeAudioMix("/sdcard/lansongBox/niusanjin.mp3", "/sdcard/lansongBox/aac20s.aac", 3000, 3000, dstAAC);
       	    	}else{
-      	    		int ret=mEditor.executeVideoFrameCrop(videoPath, mInfo.vWidth,mInfo.vHeight/2, 0, 0, dstMP4,mInfo.vCodecName,1000*1000);	
+//      	    		int width=mInfo.vCodecWidth;
+//      	    		int height=mInfo.vCodecHeight;
+//      	    		if(mInfo.vRotateAngle==90 || mInfo.vRotateAngle==270){
+//      	    			width=mInfo.vCodecHeight;
+//      	    			height=mInfo.vCodecWidth;
+//      	    		}
+      	    		//int ret=mEditor.executeVideoFrameCrop(videoPath, width/2,height/2, 0, 0, dstMP4,mInfo.vCodecName,mInfo.vBitRate/3);
+      	    		
+      	    		int ret=mEditor.executeAddWaterMark(videoPath,"/sdcard/ic_72x72.png",0,0,dstMP4,(int)(mInfo.vBitRate*0.8f));
+      	    		//Log.i(TAG,"视频压缩");
+      	    		//mEditor.executeVideoCompress(videoPath, dstMP4, 0.7f);
       	    	}
       	    	
 //      	    	Log.i(TAG,"editor executeVideoFrameCrop return ret====================:"+ret);

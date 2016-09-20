@@ -968,6 +968,10 @@ public class VideoPlayer extends AbstractMediaPlayer {
         if (weakThiz == null || !(weakThiz instanceof WeakReference<?>))
             return null;
 
+        
+        Log.i(TAG,"的奥---------------22--");
+        
+        
         @SuppressWarnings("unchecked")
         WeakReference<VideoPlayer> weakPlayer = (WeakReference<VideoPlayer>) weakThiz;
         VideoPlayer player = weakPlayer.get();
@@ -994,11 +998,17 @@ public class VideoPlayer extends AbstractMediaPlayer {
                 return null;
 
             Log.i(TAG, String.format(Locale.US, "onSelectCodec: mime=%s, profile=%d, level=%d", mimeType, profile, level));
+            
             ArrayList<CodecInfoKnowed> candidateCodecList = new ArrayList<CodecInfoKnowed>();
+           
             int numCodecs = MediaCodecList.getCodecCount();
-            for (int i = 0; i < numCodecs; i++) {
+            
+            for (int i = 0; i < numCodecs; i++) 
+            {
                 MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
-                Log.d(TAG, String.format(Locale.US, "  found codec: %s", codecInfo.getName()));
+                
+                //Log.d(TAG, String.format(Locale.US, "  found codec: %s", codecInfo.getName()));
+                
                 if (codecInfo.isEncoder())
                     continue;
 
@@ -1011,6 +1021,7 @@ public class VideoPlayer extends AbstractMediaPlayer {
                         continue;
 
                     Log.d(TAG, String.format(Locale.US, "    mime: %s", type));
+                    
                     if (!type.equalsIgnoreCase(mimeType))
                         continue;
 
@@ -1019,7 +1030,10 @@ public class VideoPlayer extends AbstractMediaPlayer {
                         continue;
 
                     candidateCodecList.add(candidate);
-                    Log.i(TAG, String.format(Locale.US, "candidate codec: %s rank=%d", codecInfo.getName(), candidate.mRank));
+                 
+                    //Log.i(TAG, String.format(Locale.US, "candidate codec: %s rank=%d", codecInfo.getName(), candidate.mRank));
+                    
+                    
                     candidate.dumpProfileLevels(mimeType);
                 }
             }
@@ -1042,6 +1056,7 @@ public class VideoPlayer extends AbstractMediaPlayer {
             }
 
             Log.i(TAG, String.format(Locale.US, "selected codec: %s rank=%d", bestCodec.mCodecInfo.getName(), bestCodec.mRank));
+            
             return bestCodec.mCodecInfo.getName();
         }
     }

@@ -94,6 +94,8 @@ public class MainActivity extends Activity implements OnClickListener{
 	        	isPermissionOk=true;
 	        }
 	
+//		  VideoEditor.isNvidiaCodec();
+		  
 //		   showHintDialog();
 			
 		 	new Handler().postDelayed(new Runnable() {
@@ -101,10 +103,13 @@ public class MainActivity extends Activity implements OnClickListener{
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-//					gotoActivity(VideoEditDemoActivity.class);
-					gotoActivity(VideoPlayerActivity.class);
+					gotoActivity(VideoEditDemoActivity.class);
+					
+//					Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
+//			    	intent.putExtra("videopath", "/sdcard/test_1080p.mp4");
+//			    	startActivity(intent);
 				}
-			}, 2000);
+			}, 1000);
 			
 //			 findViewById(R.id.id_main_use_default_videobtn).setOnClickListener(new OnClickListener() {
 //					

@@ -78,8 +78,8 @@ public class VideoPlayerActivity extends Activity {
 			public void onSurfaceTextureAvailable(SurfaceTexture surface, int width,
 					int height) {
 				// TODO Auto-generated method stub
-				play(new Surface(surface));
-//				VPlayVideo(new Surface(surface));
+//				play(new Surface(surface));
+				VPlayVideo(new Surface(surface));
 			}
 		});
         
@@ -122,6 +122,8 @@ public class VideoPlayerActivity extends Activity {
 			  mediaPlayer.setSurface(surface);  
 		        mediaPlayer.prepare();  
 		        
+		        Log.i(TAG,"测试, 获取到的宽高:"+mediaPlayer.getVideoWidth()+" 高度:"+ mediaPlayer.getVideoHeight());
+		        
 		        textureView.setVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
 		        textureView.requestLayout();
 		        
@@ -163,8 +165,6 @@ public class VideoPlayerActivity extends Activity {
     				        textureView.requestLayout();
     				        mVPlayer.setLooping(true);
     				        
-    				        mVPlayer.setUseSoftDecoder(true);
-    				        
     				        mVPlayer.start();
     				        
     				       
@@ -176,9 +176,11 @@ public class VideoPlayerActivity extends Activity {
 				public void onCompletion(IMediaPlayer mp) {
 					// TODO Auto-generated method stub
 					Log.i(TAG,"播放完毕了------------------->xxx0");
+					Toast.makeText(getApplicationContext(), "视频播放完毕",Toast.LENGTH_LONG).show();
 //					getTimeHandler.removeCallbacks(getTimeRunnable);
 				}
 			});
+              mVPlayer.setUseSoftDecoder(true);
         	  mVPlayer.prepareAsync();
           }else {
               Log.e("sno", "Null Data Source\n");
