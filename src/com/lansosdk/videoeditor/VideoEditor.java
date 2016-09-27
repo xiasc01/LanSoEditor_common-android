@@ -21,7 +21,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
-
+/**
+ * 如果您想扩展ffmpeg的命令, 可以继承这个类,然后在其中想我们的各种executeXXX的举例一样来使用,不要直接修改我们的这个文件, 以方便以后的sdk更新升级.
+ *
+ */
 public class VideoEditor {
 
 	
@@ -46,7 +49,11 @@ public class VideoEditor {
 //	  #define MEDIACODEC_ERROR_QUEUE_INPUT_BUFFER  0x6804
 //	  #define MEDIACODEC_ERROR_GET_INPUT_BUFFER  0x6805
 //	  #define MEDIACODEC_ERROR_DEQUEUE_INPUT_BUFFER  0x6806
-	  
+	  /**
+	   * 构造方法.
+	   * 如果您想扩展ffmpeg的命令, 可以继承这个类,然后在其中像我们的各种executeXXX的举例一样来拼接ffmpeg的命令;不要直接修改我们的这个文件, 以方便以后的sdk更新升级.
+	   *
+	   */
 	  
 		public VideoEditor() {
 		// TODO Auto-generated constructor stub
@@ -124,12 +131,6 @@ public class VideoEditor {
 	     */
 	    private native int execute(Object cmdArray);
 	
-	public int vAdjustSpped(String srcPath,MediaInfo media,String dstPath)
-	{
-		return videoAdjustSpeed(srcPath,media.vCodecName,2,dstPath);
-	}
-	
-
 	/**
 	 * 把一张图片转换为视频,并有淡入淡出的效果.
 	 * 适用于视频转场的场合,比如两个视频AB之间需要转场,中间需要"五分钟过去了..."这样的文字,可以用这个命令来生成一个提示的视频,然后把这个转场和两个视频拼接起来即可.
@@ -166,105 +167,6 @@ public class VideoEditor {
 	 * @return
 	 */
 	public native int  pictureFadeOut( String srcPath,int totalTime,int fadeoutstart,int fadeoutCnt,String dstPath);
-	
-	/**
-	 * 调整视频的播放速度，　可以把视频加快速度，或放慢速度。适用在希望缩短视频中不重要的部分的场景，比如走路等
-	 * @param srcPath　　源视频
-	 * @param decoder　　指定视频的解码器名字
-	 * @param speed　　　　源视频中　　画面和音频同时改变的倍数，比如放慢一倍，则这里是0.5;加快一倍，这里是２；建议速度在0.5--2.0之间。
-	 * @param dstPath　　处理后的视频存放路径，后缀需要是.mp4
-	 * @return
-	 */
-	public native int  videoAdjustSpeed( String srcPath,String decoder,float speed,String dstPath);
-	/**
-	 * 视频水平镜像，即把视频左半部分镜像显示在右半部分
-	 * @param srcPath　源视频路径
-	 * @param decoder　　指定解码器
-	 * @param dstPath　　目标视频路径
-	 * @return
-	 */
-	public native int  videoMirrorH( String srcPath,String decoder,String dstPath);
-//	/**
-//	 * 暂时不要使用.
-//	 * 两个音频文件混合，可以一个是mp3格式，另一个是aac格式。　TODO:实际测试混合后的音频长度
-//	 * @param srcPath1　　音频１的路径
-//	 * @param srcPath2　　音频２的路径
-//	 * @param vol1　　　音频１混合时的音量
-//	 * @param vol2　　　音频２混合时的音量
-//	 * @param dstPath　　目标音频存放的路径。建议是aac格式
-//	 * @return
-//	 */
-//	public native int audioAdjustVolumeMix( String srcPath1,String srcPath2,float vol1,float vol2,String dstPath);
-	/**
-	 * 视频转场，第二个视频从右侧渐渐的显示（可以联系我们，做更多的视频转场方法）　TODO:没有第二个视频从哪里开始转场。
-	 * @param srcPath1　　第一个视频
-	 * @param srcPath2　　待要显示的第二个视频
-	 * @param decoder1　　第一个视频的解码器
-	 * @param speed　　　　视频的转场速度
-	 * @param dstPath　　目标视频存放路径　，需要是mp4
-	 * @return
-	 */
-	public native int videoTransferRight2Left( String srcPath1,String srcPath2,String decoder1,float speed,String dstPath);
-	/**
-	 * 视频垂直方向反转
-	 * @param srcPath1　　原视频
-	 * @param decoder　　视频的解码器名字
-	 * @param dstPath　　目标视频　需要是mp4格式。
-	 * @return
-	 */
-	public native int videoRotateVertically( String srcPath1,String decoder,String dstPath);
-	/**
-	 * 视频水平方向反转
-	 * @param srcPath1　　原视频
-	 * @param decoder　　视频的解码器名字
-	 * @param dstPath　　目标视频. 需要是mp4格式
-	 * @return
-	 */
-	public native int videoRotateHorizontally( String srcPath1,String decoder,String dstPath);
-	/**
-	 * 视频顺时针旋转９０度
-	 * @param srcPath1　　原视频
-	 * @param decoder　　　视频的解码器名字
-	 * @param dstPath　　　目标视频.需要是mp4格式
-	 * @return
-	 */
-	public native int videoRotate90Clockwise( String srcPath1,String decoder,String dstPath);
-	/**
-	 * 视频逆时针旋转９０度
-	 * @param srcPath1　原视频
-	 * @param decoder　　视频的解码器名字
-	 * @param dstPath　　目标视频，需要是mp4格式
-	 * @return
-	 */
-	public native int videoRotate90CounterClockwise( String srcPath1,String decoder,String dstPath);
-	/**
-	 * 视频倒序；比如正常的视频画面是一个人从左边走到右边，倒序后，人从右边倒退到左边，即视频画面发生了倒序
-	 * 注意：此处理会占用大量的内存，建议视频不要过长，尽量在１分钟内
-	 * @param srcPath1　原视频
-	 * @param decoder　　解码器的名字
-	 * @param dstPath　　目标视频，需要是mp4格式
-	 * @return
-	 */
-	public native int videoReverse( String srcPath1,String decoder,String dstPath);
-	/**
-	 * 音频倒序，和视频倒序类似，把原来正常的声音，处理成从后向前的声音。　适合在搞怪的一些场合。
-	 * 注意：　此处理会占用大量的内存，建议时长在１分钟以内
-	 *
-	 * @param srcPath1 原音频
-	 * @param dstPath　　目标音频
-	 * @return
-	 */
-	public native int audioReverse( String srcPath1,String dstPath);
-	/**
-	 * 　把一个mp4文件中的音频部分和视频都倒序播放。
-	 * @param srcPath1　　原mp4文件
-	 * @param decoder　　mp4文件中的视频解码器名字
-	 * @param dstPath　　目标mp4文件存放路径
-	 * @return
-	 */
-	public native int avReverse( String srcPath1,String decoder,String dstPath);
-	
-	
 	/**
 	 * 截取一段pcm数据.
 	 * 
@@ -316,14 +218,34 @@ public class VideoEditor {
 	 * @param dstPath
 	 * @return
 	 */
-	public static native int copyFile(String srcPath,String dstPath);
+	 public static native int copyFile(String srcPath,String dstPath);
 	
-	 
+	 /**
+	  * 
+	  * @return
+	  */
 	  public static native int getLimitYear();
+	  /**
+	   * 
+	   * @return
+	   */
 	  public static native int getLimitMonth();
 	  
 	  //-------------------------------------------------------------------------------
-		
+	  /**
+	   * 两个pcm格式的音频数据,(裸数据)混合.  
+	   * 
+	   * @param srcPach1 pcm格式的主音频
+	   * @param samplerate  主音频采样率
+	   * @param channel  主音频通道数
+	   * @param srcPach2 pcm格式的次音频
+	   * @param samplerate2  次音频采样率
+	   * @param channel2  次音频通道数
+	   * @param value1    主音频的音量
+	   * @param value2 次音频的音量
+	   * @param dstPath  输出文件.输出也是pcm格式的音频文件.
+	   * @return
+	   */
 	public int executePcmMix(String srcPach1,int samplerate,int channel,String srcPach2,int samplerate2,int channel2,
 			float value1,float value2,String dstPath)
 	{
@@ -365,82 +287,14 @@ public class VideoEditor {
 	     }  
 	     return executeVideoEditor(command);
 	}
-	
-	public int executePcmMix(String srcPach1,String srcPach2,int samplerate,int channel,float value1,float value2,String dstPath)
-	{
-		List<String> cmdList=new ArrayList<String>();
-	
-		cmdList.add("-f");
-		cmdList.add("s16le");
-		cmdList.add("-ar");
-		cmdList.add(String.valueOf(samplerate));
-		cmdList.add("-ac");
-		cmdList.add(String.valueOf(channel));
-		cmdList.add("-i");
-		cmdList.add(srcPach1);
-		
-		cmdList.add("-f");;
-		cmdList.add("s16le");
-		cmdList.add("-ar");
-		cmdList.add(String.valueOf(samplerate));
-		cmdList.add("-ac");
-		cmdList.add(String.valueOf(channel));
-		cmdList.add("-i");
-		cmdList.add(srcPach2);
-
-		cmdList.add("-y");
-		cmdList.add("-filter_complex");
-		cmdList.add("[0:a]volume=volume=0.5[a1]; [1:a]volume=volume=5[a2]; [a1][a2]amix=inputs=2:duration=first:dropout_transition=2");
-		cmdList.add("-f");
-		cmdList.add("s16le");
-		cmdList.add("-acodec");
-		cmdList.add("pcm_s16le");
-		cmdList.add(dstPath);
-		
-		
-		String[] command=new String[cmdList.size()];  
-	     for(int i=0;i<cmdList.size();i++){  
-	    	 command[i]=(String)cmdList.get(i);  
-	     }  
-	     return executeVideoEditor(command);
-	}
-	/**
-	 * 两个音频文件混合, 混合后的编码为aac格式的音频文件.
-	 * 注意,如果两个音频的时长不同, 以第一个音频的音频为准. 如需修改可联系我们或查询ffmpeg命令即可.
-	 * 
-	 * @param audioPath1 
-	 * @param audioPath2
-	 * @param leftDelayMS  第二个音频的左声道 相对 于第一个音频的延迟时间
-	 * @param rightDelayMS 第二个音频的右声道 相对 于第一个音频的延迟时间
-	 * @param dstPath   目标文件, 保存为aac格式.
-	 * @return
-	 */
-	  public int executeAudioMix(String audioPath1,String audioPath2,int leftDelayMS,int rightDelayMS,String dstPath)
-	  {
-		  List<String> cmdList=new ArrayList<String>();
-			String overlayXY=String.format(Locale.getDefault(),"[1:a]adelay=%d|%d[delaya1]; [0:a][delaya1]amix=inputs=2:duration=first:dropout_transition=2",leftDelayMS,rightDelayMS);
-			
-			
-			cmdList.add("-i");
-			cmdList.add(audioPath1);
-
-			cmdList.add("-i");
-			cmdList.add(audioPath2);
-
-			cmdList.add("-filter_complex");
-			cmdList.add(overlayXY);
-			
-			cmdList.add("-acodec");
-			cmdList.add("libfaac");
-			
-			cmdList.add("-y");
-			cmdList.add(dstPath);
-			String[] command=new String[cmdList.size()];  
-		     for(int i=0;i<cmdList.size();i++){  
-		    	 command[i]=(String)cmdList.get(i);  
-		     } 
-		     return  executeVideoEditor(command);
-	  }
+	  /**
+	   * 把pcm格式的音频文件编码成AAC
+	   * @param srcPach  源pcm文件
+	   * @param samplerate  pcm的采样率
+	   * @param channel pcm的通道数
+	   * @param dstPath  输出的aac文件路径, 需要后缀是aac或m4a
+	   * @return
+	   */
 	  public int executePcmEncodeAac(String srcPach,int samplerate,int channel,String dstPath)
 	  {
 			List<String> cmdList=new ArrayList<String>();
@@ -469,8 +323,17 @@ public class VideoEditor {
 		    	 command[i]=(String)cmdList.get(i);  
 		     }  
 		     return executeVideoEditor(command);
-	}
-	
+	  }
+	/**
+	 * 把 pcm和视频文件合并在一起, pcm数据会编码成aac格式.
+	 * 注意:需要原视频文件里没有音频部分, 如果有, 则需要先用 {@link #executeDeleteAudio(String, String)}删除后, 在输入到这里.
+	 * @param srcPcm  原pcm音频文件, 
+	 * @param samplerate pcm的采样率
+	 * @param channel  pcm的通道数
+	 * @param srcVideo  原视频文件, 没有音频部分
+	 * @param dstPath  输出的视频文件路径, 需后缀是mp4格式.
+	 * @return
+	 */
 	public int executePcmComposeVideo(String srcPcm,int samplerate,int channel,String srcVideo,String dstPath)
 	{
 		List<String> cmdList=new ArrayList<String>();
@@ -505,7 +368,82 @@ public class VideoEditor {
 	     }  
 	     return executeVideoEditor(command);
 	}
-	
+	/**
+	 * 两个音频文件延迟混合, 即把第二个音频延迟多长时间后, 与第一个音频混合.
+	 *  混合后的编码为aac格式的音频文件.
+	 * 注意,如果两个音频的时长不同, 以第一个音频的音频为准. 如需修改可联系我们或查询ffmpeg命令即可.
+	 * 
+	 * @param audioPath1 
+	 * @param audioPath2
+	 * @param leftDelayMS  第二个音频的左声道 相对 于第一个音频的延迟时间
+	 * @param rightDelayMS 第二个音频的右声道 相对 于第一个音频的延迟时间
+	 * @param dstPath   目标文件, 保存为aac格式.
+	 * @return
+	 */
+	  public int executeAudioDelayMix(String audioPath1,String audioPath2,int leftDelayMS,int rightDelayMS,String dstPath)
+	  {
+		  List<String> cmdList=new ArrayList<String>();
+			String overlayXY=String.format(Locale.getDefault(),"[1:a]adelay=%d|%d[delaya1]; [0:a][delaya1]amix=inputs=2:duration=first:dropout_transition=2",leftDelayMS,rightDelayMS);
+			
+			
+			cmdList.add("-i");
+			cmdList.add(audioPath1);
+
+			cmdList.add("-i");
+			cmdList.add(audioPath2);
+
+			cmdList.add("-filter_complex");
+			cmdList.add(overlayXY);
+			
+			cmdList.add("-acodec");
+			cmdList.add("libfaac");
+			
+			cmdList.add("-y");
+			cmdList.add(dstPath);
+			String[] command=new String[cmdList.size()];  
+		     for(int i=0;i<cmdList.size();i++){  
+		    	 command[i]=(String)cmdList.get(i);  
+		     } 
+		     return  executeVideoEditor(command);
+	  }
+	  /**
+	   * 两个音频文件混合.
+	   * 混合后的文件压缩格式是aac格式, 故需要您dstPath的后缀是aac或m4a.
+	   * 
+	   * @param audioPath1  主音频的完整路径
+	   * @param audioPath2  次音频的完整路径
+	   * @param value1  主音频的音量, 浮点类型, 大于1.0为放大音量, 小于1.0是减低音量.比如设置0.5则降低一倍.
+	   * @param value2  次音频的音量, 浮点类型.
+	   * @param dstPath  输出保存的完整路径.需要文件名的后缀是aac 或 m4a格式.
+	   * @return
+	   */
+	  public int executeAudioVolumeMix(String audioPath1,String audioPath2,float value1,float value2,String dstPath)
+	  {
+		  List<String> cmdList=new ArrayList<String>();
+			
+		  	String filter=String.format(Locale.getDefault(),"[0:a]volume=volume=%f[a1]; [1:a]volume=volume=%f[a2]; [a1][a2]amix=inputs=2:duration=first:dropout_transition=2",value1,value2);
+		  
+			
+			cmdList.add("-i");
+			cmdList.add(audioPath1);
+
+			cmdList.add("-i");
+			cmdList.add(audioPath2);
+
+			cmdList.add("-filter_complex");
+			cmdList.add(filter);
+			
+			cmdList.add("-acodec");
+			cmdList.add("libfaac");
+			
+			cmdList.add("-y");
+			cmdList.add(dstPath);
+			String[] command=new String[cmdList.size()];  
+		     for(int i=0;i<cmdList.size();i++){  
+		    	 command[i]=(String)cmdList.get(i);  
+		     } 
+		     return  executeVideoEditor(command);
+	  }
 	    //--------------------------------------------------------------------------
 	/**
 	 * 把h264裸码流数据包装成MP4格式,因为是裸码流,未知帧率, 包装成MP4默认帧率是25帧/秒
@@ -579,7 +517,7 @@ public class VideoEditor {
 						cmdList.add("-b:v");
 						float bitrate=info.vBitRate*percent;
 						int nbitrate=(int)bitrate;
-						cmdList.add(String.valueOf(nbitrate));
+						cmdList.add(checkBitRate(nbitrate));
 						
 						cmdList.add("-pix_fmt");  //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
 						cmdList.add("yuv420p");
@@ -731,8 +669,7 @@ public class VideoEditor {
 		  }
 		  /**
 		   * 音频和视频合成为多媒体文件，等于给视频增加一个音频。
-		   
-		   * @param videoFile 输入的视频文件,需视频文件中不存储音频部分, 如有音频怎会增加两个声音.
+		   * @param videoFile 输入的视频文件,需视频文件中不存储音频部分. 如有音频部分, 建议用 {@link #executeDeleteAudio(String, String)}把音频删除后的目标文件作为当前的输入.
 		   * @param audioFile 输入的音频文件
 		   * @param dstFile  合成后的输出，文件名的后缀是.mp4
 		   * @return 返回执行的结果.
@@ -954,6 +891,9 @@ public class VideoEditor {
 		  }
 		  /**
 		   * 获取视频的所有帧图片,并保存到指定路径.
+		   * 所有的帧会按照后缀名字加上_001.jpeg prefix_002.jpeg的顺序依次生成, 如果发现之前已经有同样格式的文件,则在原来数字后缀的基础上增加, 比如原来有prefix_516.jpeg;则这个方法执行从
+		   * prefix_517.jpeg开始生成视频帧.
+		   * 
 		   * 这条命令是把视频中的所有帧都提取成图片，适用于视频比较短的场合，比如一秒钟是２５帧，视频总时长是10秒，则会提取250帧图片，保存到您指定的路径
 		   * @param videoFile  
 		   * @param dstDir  目标文件夹绝对路径.
@@ -962,7 +902,7 @@ public class VideoEditor {
 		   * 
 		   * ./ffmpeg -i tenSecond.mp4 -qscale:v 2 output_%03d.jpg
 		   */
-		  public int executeGetAllFrames(String videoFile,String dstDir,String jpgPrefix)
+		  public int executeGetAllFrames(String videoFile,String decoder,String dstDir,String jpgPrefix)
 		  {
 			  String dstPath=dstDir+jpgPrefix+"_%3d.jpeg";
 			  if(fileExist(videoFile)){
@@ -970,7 +910,7 @@ public class VideoEditor {
 					List<String> cmdList=new ArrayList<String>();
 					
 					cmdList.add("-vcodec");
-					cmdList.add("lansoh264_dec");
+					cmdList.add(decoder);
 					
 			    	cmdList.add("-i");
 					cmdList.add(videoFile);
@@ -1183,7 +1123,7 @@ public class VideoEditor {
 				cmdList.add("lansoh264_enc"); 
 				
 				cmdList.add("-b:v");
-				cmdList.add(String.valueOf(bitrate)); 
+				cmdList.add(checkBitRate(bitrate)); 
 				
 				cmdList.add("-pix_fmt");  //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
 				cmdList.add("yuv420p");
@@ -1199,7 +1139,10 @@ public class VideoEditor {
 		  }
 		  
 		  /**
-		   *此视频缩放算法，采用是软缩放来实现，速度特慢, 不建议使用.　我们有更快速的视频缩放方法，请联系我们
+		   *此视频缩放算法，采用是软缩放来实现，速度特慢, 不建议使用.　
+		   *我们有更快速的视频缩放方法，链接地址是: 
+		   *https://github.com/LanSoSdk/LanSoEditor_advance/blob/master/src/com/example/lansongeditordemo/ScaleExecuteActivity.java
+		   *
 		   * 视频画面缩放, 务必保持视频的缩放后的宽高比,等于原来视频的宽高比.
 		   * 
 		   * @param videoFile
@@ -1232,7 +1175,7 @@ public class VideoEditor {
 					cmdList.add("lansoh264_enc"); 
 					
 					cmdList.add("-b:v");
-					cmdList.add(String.valueOf(bitrate)); 
+					cmdList.add(checkBitRate(bitrate)); 
 										
 					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
 					cmdList.add("yuv420p");
@@ -1308,7 +1251,7 @@ public class VideoEditor {
 				cmdList.add("lansoh264_enc"); 
 				
 				cmdList.add("-b:v");
-				cmdList.add(String.valueOf(bitrate)); 
+				cmdList.add(checkBitRate(bitrate)); 
 									
 				cmdList.add("-pix_fmt");  
 				cmdList.add("yuv420p");
@@ -1385,7 +1328,7 @@ public class VideoEditor {
 				cmdList.add("lansoh264_enc"); 
 				
 				cmdList.add("-b:v");
-				cmdList.add(String.valueOf(bitrate)); 
+				cmdList.add(checkBitRate(bitrate)); 
 									
 				cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
 				cmdList.add("yuv420p");
@@ -1409,8 +1352,8 @@ public class VideoEditor {
 		   * @param jpgprefix　图片的文件名有规律的前缀
 		   * @param framerate　每秒钟需要显示几张图片
 		   * @param dstPath　　处理后保存的路径，需要文件后缀是.mp4
-		   * @param bitrate  <============注意:这里的bitrate在设置的时候, 因为是设置编码器的恒定码率, 推荐设置为 预设值的1.5倍为准, 比如视频原有的码率是1M,则裁剪一半,预设值可能是500k, 
-		   * 这里推荐是为500k的1.5,因为原有的视频大部分是动态码率VBR,可以认为通过{@link MediaInfo} 得到的 {@link MediaInfo#vBitRate}是平均码率,这里要设置,推荐是1.5倍为好.
+		   * @param bitrate  <============注意:这里的bitrate在设置的时候, 因为是设置编码器的恒定码率, 推荐设置为 预设值的1.5倍为准,
+		   * 因为原有的视频大部分是动态码率VBR,可以认为通过{@link MediaInfo} 得到的 {@link MediaInfo#vBitRate}是平均码率,这里要设置,推荐是1.5倍为好.
 		   * @return
 		   */
 		  //./ffmpeg -framerate 1 -i r5r-%03d.jpeg -c:v libx264 -r 25 -pix_fmt yuv420p out33.mp4
@@ -1433,7 +1376,7 @@ public class VideoEditor {
 					cmdList.add("25");
 					
 					cmdList.add("-b:v");
-					cmdList.add(String.valueOf(bitrate)); 
+					cmdList.add(checkBitRate(bitrate)); 
 					
 					cmdList.add("-pix_fmt"); //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
 					cmdList.add("yuv420p"); 
@@ -1448,7 +1391,11 @@ public class VideoEditor {
 				    return  executeVideoEditor(command);
 		  }
 		  
-		 
+		 /*
+		  * 同时叠加多个图片.
+		  * ffmpeg -i Text.mp4 -i qzone.png -i qq2.png -i phiz5.png -i send.png -i cancel.png -i download.png  -filter_complex "overlay=25:25,overlay=0:0,overlay=35:35,overlay=45:45,overlay=55:55,overlay=65:65" -pix_fmt yuv420p -c:a copy HeT.mp4
+		  * */
+		  
 		  /**
 		   * 为视频增加图片，图片可以是带透明的png类型，也可以是jpg类型;
 		   * 适用在为视频增加logo，或增加一些好玩的图片的场合，
@@ -1544,7 +1491,7 @@ public class VideoEditor {
 				cmdList.add("lansoh264_enc"); 
 				
 				cmdList.add("-b:v");
-				cmdList.add(String.valueOf(bitrate)); 
+				cmdList.add(checkBitRate(bitrate)); 
 				
 				cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
 				cmdList.add("yuv420p");
@@ -1584,6 +1531,7 @@ public class VideoEditor {
 				cmdList.add("-b:v");
 				cmdList.add(String.valueOf(bitrate)); 
 				
+				
 				cmdList.add("-y");
 				cmdList.add(dstFile);
 				String[] command=new String[cmdList.size()];  
@@ -1591,6 +1539,148 @@ public class VideoEditor {
 			    	 command[i]=(String)cmdList.get(i);  
 			     }  
 			    return  executeVideoEditor(command);
+		  }
+		  
+		  /**
+		   * 把视频填充成指定大小的画面, 比视频的宽高大的部分用黑色来填充.
+		   * 
+		   * @param videoFile 源视频路径
+		   * @param decCodec  视频用到的解码器, 通过MediaInfo得到.
+		   * @param padWidth  填充成的目标宽度 , 参数需要是16的倍数
+		   * @param padHeight 填充成的目标高度 , 参数需要是16的倍数
+		   * @param padX  原视频的在填充宽高度的X坐标开始位置
+		   * @param padY  原视频的在填充宽宽度的Y坐标开始位置
+		   * @param dstFile  目标文件
+		   * @param bitrate  目标文件的码率, 可以用原视频的MediaInfo.vBitRate的1.2f倍表示即可.
+		   * @return
+		   */
+		  public int executePadingVideo(String videoFile,String decCodec,int padWidth,int padHeight,int padX,int padY,String dstFile,int bitrate)
+		  {
+			  //ffmpeg -i ping20s.mp4 -vf "pad=480:480:50:50:black" -y ping_pad3.mp4
+			  if(fileExist(videoFile))
+			  {
+				  //第一步检测设置填充的高度和宽度是否比原来+坐标的大, 如果小于,则出错.
+				    MediaInfo info=new MediaInfo(videoFile);
+				    if(info.prepare()){
+				    	int minWidth=info.vWidth+padX;
+				    	int minHeight=info.vHeight+padY;
+				    	if( minWidth>padWidth || minHeight>padHeight)
+				    	{
+				    		Log.e(TAG,"pad set position is error. min Width>pading width.or min height > padding height");
+				    		return -1;  //失败.
+				    	}
+				    }else{
+				    	 Log.e(TAG,"media info prepare is error!!!");
+				    	return -1; 
+				    }
+				    
+				    //第二步: 开始padding.
+					String filter=String.format(Locale.getDefault(),"pad=%d:%d:%d:%d:black",padWidth,padHeight,padX,padY);
+				
+					List<String> cmdList=new ArrayList<String>();
+					cmdList.add("-vcodec");
+					cmdList.add(decCodec);
+					
+					cmdList.add("-i");
+					cmdList.add(videoFile);
+
+					cmdList.add("-vf");
+					cmdList.add(filter);
+					
+					cmdList.add("-acodec");
+					cmdList.add("copy");
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc"); 
+					
+					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-y");
+					cmdList.add(dstFile);
+					
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		  /**
+		   * 先裁剪画面的一部分, 然后再填充成一个指定大小的画面, 等于把裁剪后的画面,放到指定大小的画面上, 如小于指定的画面,则用黑色填充.
+		   * 
+		   * @param videoFile
+		   * @param decCodec  视频文件的解码器, 用MediaInfo得到
+		   * @param cropWidth  视频裁剪后的目标宽度
+		   * @param cropHeight 视频裁剪后的目标高度
+		   * @param cropX  视频裁剪的X开始位置
+		   * @param cropY  视频裁剪的Y开始位置
+		   * @param padWidth  视频裁剪后, 需要填充的目标宽度 , 参数需要是16的倍数
+		   * @param padHeight 视频裁剪后, 需要填充的目标高度, 参数需要是16的倍数
+		   * @param padX  把裁剪后的画面放入到padWidth中的开始位置
+		   * @param padY  把裁剪后的画面放入到padHeight中的开始位置
+		   * @param dstFile  目标文件
+		   * @param bitrate  目标文件的码率.可以根据cropWidth和cropHeight来评估(如是480x480或640x480,则建议1000*1000或1100*1000;), 因为虽然padwidth很大,pad填充的是黑色,黑色的码率可以忽略
+		   * @return
+		   */
+		  public int executeCropPaddingVideo(String videoFile,String decCodec,int cropWidth,int cropHeight,int cropX,int cropY,
+				  int padWidth,int padHeight,int padX,int padY,String dstFile,int bitrate)
+		  {
+			//ffmpeg -i ping20s.mp4 -vf "crop=300:300:0:0,pad=480:480:50:50:black" -y ping_pad3.mp4
+			  if(fileExist(videoFile))
+			  {
+				  //这里没有检测裁剪的坐标是否有效. 注意!!!
+				  
+				  //第一步检测设置填充的高度和宽度是否比原来+坐标的大, 如果小于,则出错.
+				    	int minWidth=cropWidth+padX;
+				    	int minHeight=cropWidth+padY;
+				    	if( minWidth>padWidth || minHeight>padHeight)
+				    	{
+				    		Log.e(TAG,"pad set position is error. min Width>pading width.or min height > padding height");
+				    		return -1;  //失败.
+				    	}
+				    
+				    //第二步: 开始padding.
+					String filter=String.format(Locale.getDefault(),"crop=%d:%d:%d:%d,pad=%d:%d:%d:%d:black",cropWidth,cropHeight,cropX,cropY,padWidth,padHeight,padX,padY);
+				
+					List<String> cmdList=new ArrayList<String>();
+					cmdList.add("-vcodec");
+					cmdList.add(decCodec);
+					
+					cmdList.add("-i");
+					cmdList.add(videoFile);
+
+					cmdList.add("-vf");
+					cmdList.add(filter);
+					
+					cmdList.add("-acodec");
+					cmdList.add("copy");
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc"); 
+					
+					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-y");
+					cmdList.add(dstFile);
+					
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
 		  }
 			/**
 			 * 给视频旋转角度,注意这里 只是 旋转画面的的角度,而不会调整视频的宽高.
@@ -1600,9 +1690,9 @@ public class VideoEditor {
 			 * @param dstPath　　处理后的视频存放的路径,后缀需要是.mp4
 			 * @return
 			 */
-		  public int executeRotateAngle(String srcPath,String decoder,float angle,String dstPath,int bitrate)
+		  public int executeRotateAngle(String srcPath,String decoder,float angle,int bitrate,String dstPath)
 		  {
-			  ////ffmpeg -i miaopai.mp4 -vf "rotate=45*(PI/180),format=yuv420p" -metadata:s:v rotate=0 -codec:v libx264 -codec:a copy output.mp4
+			  ////ffmpeg -i INPUT -vf "rotate=45*(PI/180),format=yuv420p" -metadata:s:v rotate=0 -codec:v libx264 -codec:a copy output.mp4
 			  if(fileExist(srcPath)){
 					
 				  String filter=String.format(Locale.getDefault(),"rotate=%f*(PI/180),format=yuv420p",angle);
@@ -1620,15 +1710,14 @@ public class VideoEditor {
 					
 					cmdList.add("-metadata:s:v");
 					cmdList.add("rotate=0");
+					
 					cmdList.add("-acodec");
 					cmdList.add("copy");
-					cmdList.add("-y");
+					
 					cmdList.add("-vcodec");
 					cmdList.add("lansoh264_enc");
-					
 					cmdList.add("-b:v");
-					cmdList.add(String.valueOf(bitrate)); 
-					
+					cmdList.add(checkBitRate(bitrate)); 
 					cmdList.add("-pix_fmt");
 					cmdList.add("yuv420p");
 					
@@ -1645,8 +1734,98 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
+		  /**
+		   * 把拍摄的有角度值的视频, 矫正成没有角度的视频. 
+		   * 如原来视频有90度或270度, 这样在有些播放器中, 会出现视频是横着播放的, 这是因为播放器没有检测视频角度; 为了兼容这样的播放器,需要把视频矫正成没有角度的并且画面正常显示的视频.
+		   * 
+		   * @param srcPath 原视频.
+		   * @param decoder 原视频的解码器
+		   * @param bitrate  原视频的码率的1.5f, 即info.vBitRate的1.5f
+		   * @param dstPath  目标文件路径.
+		   * @return
+		   */
+		  public int executeVideoZeroAngle(String srcPath,String decoder,int bitrate,String dstPath)
+		  {
+			  if(fileExist(srcPath)){
+					
+				  
+				  	List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-acodec");
+					cmdList.add("copy");
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		  /**
+		   * 设置多媒体文件中的 视频元数据的角度.
+		   * 一个多媒体文件中有很多种元数据, 包括音频轨道, 视频轨道, 各种元数据, 字幕,其他文字等信息,这里仅仅更改元数据中的视频播放角度, 当视频播放器播放该视频时, 会得到"要旋转多少度"播放的信息, 这样在播放时就会旋转后再播放画面
+		   *
+		   *  此设置不改变音视频的各种参数, 仅仅是告诉播放器,"要旋转多少度"来播放而已.
+		   *  适用在拍摄的视频有90度和270的情况, 想更改这个角度参数的场合.
+		   * @param srcPath  原视频
+		   * @param angle  需要更改的角度
+		   * @param dstPath  目标视频路径
+		   * @return
+		   */
+		  public int executeSetVideoMetaAngle(String srcPath,int angle,String dstPath)
+		  {
+			  //ffmpeg -i input.mp4 -c copy -metadata:s:v:0 rotate=90 output.mp4
+			  
+			  if(fileExist(srcPath)){
+					
+					List<String> cmdList=new ArrayList<String>();
+
+					String filter=String.format(Locale.getDefault(),"rotate=%d",angle);
+					  
+					  
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-c");
+					cmdList.add("copy");
+					
+					cmdList.add("-metadata:s:v:0");
+					cmdList.add(filter);
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
 		  //---------2016年9月19日16:31:35 测试增加:
-		public static boolean isNvidiaCodec()
+		private static boolean isNvidiaCodec()
 		{
 			boolean contain=false;
 //			 int numCodecs = MediaCodecList.getCodecCount();
@@ -1669,5 +1848,455 @@ public class VideoEditor {
 ////	                	Log.i(TAG,"is---"+codecInfo.getName()+ " types is"+ type);  //type="video/avc"
 //	            }
 	            return contain;
+		}
+		
+		
+		//---------------------------
+		/**
+		 * 调整视频的播放速度，　可以把视频加快速度，或放慢速度。适用在希望缩短视频中不重要的部分的场景，比如走路等
+		 * @param srcPath　　源视频
+		 * @param decoder　　指定视频的解码器名字
+		 * @param speed　　　　源视频中　　画面和音频同时改变的倍数，比如放慢一倍，则这里是0.5;加快一倍，这里是２；建议速度在0.5--2.0之间。
+		 * @param dstPath　　处理后的视频存放路径，后缀需要是.mp4
+		 * @return
+		 */
+		public int  executeVideoAdjustSpeed( String srcPath,String decoder,float speed,int bitrate,String dstPath)
+		{
+			//./ffmpeg -i 2x.mp4 -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
+			if(fileExist(srcPath)){
+				
+				  String filter=String.format(Locale.getDefault(),"[0:v]setpts=%f*PTS[v];[0:a]atempo=%f[a]",1/speed,speed);
+				  
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-filter_complex");
+					cmdList.add(filter);
+					
+					cmdList.add("-map");
+					cmdList.add("[v]");
+					cmdList.add("-map");
+					cmdList.add("[a]");
+					
+//					cmdList.add("-acodec");  //音频采用默认编码.
+//					cmdList.add("copy");
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		/**
+		 * 视频水平镜像，即把视频左半部分镜像显示在右半部分
+		 * @param srcPath　源视频路径
+		 * @param decoder　　指定解码器
+		 * @param dstPath　　目标视频路径
+		 * @return
+		 */
+		public int  executeVideoMirrorH( String srcPath,String decoder,int bitrate,String dstPath)
+		{
+			//ffmpeg -i 2x.mp4 -vf "crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack" -acodec copy 2x_hmirror.mp4
+			 if(fileExist(srcPath)){
+					
+				  String filter=String.format(Locale.getDefault(),"crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack");
+				  
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-vf");
+					cmdList.add(filter);
+				
+					cmdList.add("-acodec");  
+					cmdList.add("copy"); 
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		/**
+		 * 视频垂直方向反转
+		 * @param srcPath1　　原视频
+		 * @param decoder　　视频的解码器名字
+		 * @param dstPath　　目标视频　需要是mp4格式。
+		 * @return
+		 */
+		public int executeVideoRotateVertically( String srcPath,String decoder,int bitrate,String dstPath)
+		{
+			//./ffmpeg -i input.mp4 -vf vflip -c:a copy output_v.mp4  //<----垂直方向上反转
+				if(fileExist(srcPath)){
+					
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-vf");
+					cmdList.add("hflip");
+					
+					cmdList.add("-c:a");
+					cmdList.add("copy");
+					
+					cmdList.add("-c:v");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		/**
+		 * 视频水平方向反转
+		 * @param srcPath1　　原视频
+		 * @param decoder　　视频的解码器名字
+		 * @param dstPath　　目标视频. 需要是mp4格式
+		 * @return
+		 */
+		public int executeVideoRotateHorizontally( String srcPath,String decoder,int bitrate,String dstPath)
+		{
+			//./ffmpeg -i input.mp4 -vf hflip -c:a copy output_v.mp4  //<----水平方向上反转
+				if(fileExist(srcPath)){
+					
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-vf");
+					cmdList.add("hflip");
+					
+					cmdList.add("-c:a");
+					cmdList.add("copy");
+					
+					cmdList.add("-c:v");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		/**
+		 * 视频顺时针旋转９０度
+		 * @param srcPath 原视频
+		 * @param decoder 视频的解码器名字
+		 * @param bitrate 希望目标视频的码率. 一般为原视频码率的1.2f为好.
+		 * @param dstPath 目标视频.需要是mp4格式
+		 * @return
+		 */
+		public int executeVideoRotate90Clockwise( String srcPath,String decoder,int bitrate,String dstPath)
+		{
+			//ffmpeg -i INPUT -vf transpose=1 -c:a copy output.mp4  //<----顺时针旋转视频90度
+			if(fileExist(srcPath)){
+				
+				List<String> cmdList=new ArrayList<String>();
+				
+				cmdList.add("-vcodec");
+				cmdList.add(decoder);
+				
+				cmdList.add("-i");
+				cmdList.add(srcPath);
+				
+				cmdList.add("-vf");
+				cmdList.add("transpose=1");
+				
+				cmdList.add("-c:a");
+				cmdList.add("copy");
+				
+				cmdList.add("-c:v");
+				cmdList.add("lansoh264_enc");
+				cmdList.add("-pix_fmt");
+				cmdList.add("yuv420p");
+				cmdList.add("-b:v");
+				cmdList.add(checkBitRate(bitrate)); 
+				
+				cmdList.add("-y");
+				cmdList.add(dstPath);
+				 
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     }  
+			    return  executeVideoEditor(command);
+			  
+		  }else{
+			  return VIDEO_EDITOR_EXECUTE_FAILED;
+		  }
+		}
+		/**
+		 * 
+		 * 视频逆时针旋转９０度
+		 * @param srcPath1　原视频
+		 * @param decoder　　视频的解码器名字
+		 * @param dstPath　　目标视频，需要是mp4格式
+		 * @return
+		 */
+		public int executeVideoRotate90CounterClockwise( String srcPath,String decoder,int bitrate,String dstPath)
+		{
+			//ffmpeg -i INPUT -vf transpose=2 -c:a copy OUTPUT //---逆时针旋转视频90度
+			
+				if(fileExist(srcPath)){
+					
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-vf");
+					cmdList.add("transpose=2");
+					
+					cmdList.add("-c:a");
+					cmdList.add("copy");
+					
+					cmdList.add("-c:v");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		/**
+		 * 视频倒序；比如正常的视频画面是一个人从左边走到右边，倒序后，人从右边倒退到左边，即视频画面发生了倒序
+		 * 
+		 * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
+		 * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
+		 * 
+		 * 如您的视频过大, 则可能导致:Failed to inject frame into filter network: Out of memory;这个是正常的.因为已超过APP可使用的内容范围, 内存不足.
+		 * 
+		 * @param srcPath1　原视频
+		 * @param decoder　　解码器的名字
+		 * @param dstPath　　目标视频，需要是mp4格式
+		 * @return
+		 */
+		public int executeVideoReverse( String srcPath,String decoder,int bitrate,String dstPath)
+		{
+			 if(fileExist(srcPath)){
+					
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-vf");
+					cmdList.add("reverse");
+					
+					cmdList.add("-acodec");
+					cmdList.add("copy");
+					
+					cmdList.add("-c:v");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		
+		/**
+		 * 音频倒序，和视频倒序类似，把原来正常的声音，处理成从后向前的声音。　适合在搞怪的一些场合。
+		 * 
+		 * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
+		 * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
+		 *
+		 * @param srcPath  源文件完整路径. 原文件可以是mp4的视频, 也可以是mp3或m4a的音频文件
+		 * @param dstPath　目标文件完整路径. 需要输出路径名 和原文件的路径名 一致.
+		 * @return
+		 */
+		public int executeAudioReverse( String srcPath,String dstPath)
+		{
+			 if(fileExist(srcPath)){
+					
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-af");
+					cmdList.add("areverse");
+					 
+					cmdList.add("-c:v");
+					cmdList.add("copy");
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		/**
+		 * 把一个mp4文件中的音频部分和视频都倒序播放。
+		 * 
+		 * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
+		 * 注意：此处理会占用大量的内存，建议视频最好是480x480的分辨率, 并且不要过长，尽量在15秒内
+		 * 
+		 * 如您的视频过大, 则可能导致:Failed to inject frame into filter network: Out of memory;这个是正常的.因为已超过APP可使用的内容范围, 内存不足.
+		 * 
+		 * @param srcPath1　　原mp4文件
+		 * @param decoder　　mp4文件中的视频解码器名字
+		 * @param dstPath　　目标mp4文件存放路径
+		 * @return
+		 */
+		public int executeAVReverse( String srcPath,String decoder,int bitrate,String dstPath) 
+		{
+			//ffmpeg -i 2x.mp4 -vf reverse -af areverse reversed.mp4
+			 if(fileExist(srcPath)){
+					
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-vf");
+					cmdList.add("reverse");
+					
+					cmdList.add("-af");
+					cmdList.add("areverse");
+					 
+					cmdList.add("-c:v");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		
+		/**
+		 * 校对一下 bitrate, 因为一些2013年左右的SoC中的硬件编码器如果码率大于2000*1000(2M)的话, 则会崩溃, 故这里限制在2M范围内.
+		 * @param srcBitRate  源码率
+		 * @return  矫正后的码率
+		 */
+		public static String checkBitRate(int srcBitRate)
+		{
+			int bitrate=srcBitRate;
+	    		
+			if(bitrate>2500*1000)
+	    		bitrate=2500*1000; //2.5M
+			else if(bitrate<500)
+				bitrate=500;
+			
+	    	return String.valueOf(bitrate);	
 		}
 }

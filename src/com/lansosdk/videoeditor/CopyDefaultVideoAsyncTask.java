@@ -1,6 +1,5 @@
 package com.lansosdk.videoeditor;
 
-import com.lansosdk.editorDemo.utils.FileUtils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,7 +16,7 @@ public class CopyDefaultVideoAsyncTask extends AsyncTask<Object, Object, Boolean
 	public static String copyFile(Context ctx,String fileName)
 	{
 		 String str=SDKDir.TMP_DIR+fileName;
-		  if(FileUtils.fileExist(str)==false){
+		  if(SDKFileUtils.fileExist(str)==false){
 		  	CopyFileFromAssets.copy(ctx, fileName, SDKDir.TMP_DIR, fileName);
 		  }
 		  return str;
@@ -43,7 +42,7 @@ public class CopyDefaultVideoAsyncTask extends AsyncTask<Object, Object, Boolean
    	
    		  //copy ping20s.mp4	
 		  String str=SDKDir.TMP_DIR+fileName;
-		  if(FileUtils.fileExist(str)==false){
+		  if(SDKFileUtils.fileExist(str)==false){
 		  	CopyFileFromAssets.copy(mContext, fileName, SDKDir.TMP_DIR, fileName);
 		  }
 		  return null;
@@ -58,7 +57,7 @@ public class CopyDefaultVideoAsyncTask extends AsyncTask<Object, Object, Boolean
 		}
 		
 		 String str=SDKDir.TMP_DIR+fileName;
-		 if(FileUtils.fileExist(str)){
+		 if(SDKFileUtils.fileExist(str)){
 			 Toast.makeText(mContext, "默认视频文件拷贝完成.视频样片路径:"+str, Toast.LENGTH_SHORT).show();
 			 if(tvHint!=null)
 				 tvHint.setText(str);

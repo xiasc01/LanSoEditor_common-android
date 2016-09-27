@@ -18,7 +18,6 @@ import com.lansosdk.videoeditor.LoadLanSongSdk;
 import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.SDKDir;
 import com.lansosdk.videoeditor.SDKFileUtils;
-import com.lansosdk.videoeditor.SpriteShader;
 import com.lansosdk.videoeditor.VideoEditor;
 
 
@@ -103,7 +102,10 @@ public class MainActivity extends Activity implements OnClickListener{
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					gotoActivity(VideoEditDemoActivity.class);
+//					gotoActivity(VideoEditDemoActivity.class);
+					
+					gotoActivity(ScaleExecuteDemoActivity.class);
+					
 					
 //					Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
 //			    	intent.putExtra("videopath", "/sdcard/test_1080p.mp4");
@@ -170,7 +172,6 @@ public class MainActivity extends Activity implements OnClickListener{
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				
 				showHintDialog("注意: native-jni层我们提供了三个ARM架构的so动态库,实际仅用给一个即可.建议用armeabi-v7a.\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
 			}
 		})

@@ -42,7 +42,7 @@ public class VideoEditDemoActivity extends Activity{
 	ProgressDialog  mProgressDialog;
 	int videoDuration;
 	MediaInfo   mInfo;
-	private String dstMP4="/sdcard/03.mp4";
+	private String dstMP4="/sdcard/04.mp4";
 	private String dstAAC="/sdcard/01.aac";
 	
 
@@ -84,11 +84,14 @@ public class VideoEditDemoActivity extends Activity{
 					
 					//videoPath="/sdcard/test_720p.mp4"; 
 					videoPath="/sdcard/VIDEO_90du.mp4"; 
+//					videoPath="/sdcard/VIDEO_270du.mp4"; 
 //					videoPath="/sdcard/V720P_90du.mp4";
-							
-					 mInfo=new MediaInfo(videoPath);
+						
+//					videoPath="/sdcard/peirui_1.mp4";
+					
+					 mInfo=new MediaInfo(videoPath,true);
 					 mInfo.prepare();
-					 Log.i(TAG,"info:"+mInfo.toString());
+					 Log.i(TAG,"info true:"+mInfo.toString());
 					 
 					 isTestAudio=false;
 					 startVideoEditorTask();
@@ -111,9 +114,19 @@ public class VideoEditDemoActivity extends Activity{
 							Toast.makeText(VideoEditDemoActivity.this, R.string.file_not_exist,Toast.LENGTH_SHORT).show();
 						}
 					}
-					
 				}
 			});
+	        
+//	        mEditor.setOnProgessListener(new onVideoEditorProgressListener() {
+//				
+//				@Override
+//				public void onProgress(VideoEditor v, int percent) {
+//					// TODO Auto-generated method stub
+//					Log.i(TAG,"current percent is:"+percent);
+//					if(mProgressDialog!=null)
+//						mProgressDialog.setMessage("正在处理中..."+String.valueOf(percent)+"%");
+//				}
+//			});
 	        
 	        mEditor.setOnProgessListener(new onVideoEditorProgressListener() {
 				
@@ -136,10 +149,6 @@ public class VideoEditDemoActivity extends Activity{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
-//        if(FileUtils.fileExist(dstPath)){
-//        	FileUtils.deleteFile(dstPath);
-//        }
 //        findViewById(R.id.id_video_play_btn).setEnabled(false);
 	}
 		private void showHintDialog()
@@ -208,6 +217,7 @@ public class VideoEditDemoActivity extends Activity{
       	    @Override
       	    protected synchronized Boolean doInBackground(Object... params) {
       	    	// TODO Auto-generated method stub
+      	    	//这里完全是我们测试VideoEditor中的方法时使用的,为了方便高效的测试, 我们在这里直接调用每个方法来做,请知悉.
       	    	
 //      	    	mEditor.executeDeleteAudio("/sdcard/2x.mp4", "/sdcard/2x_noaudio.mp4");
 //      	    	
@@ -230,7 +240,7 @@ public class VideoEditDemoActivity extends Activity{
 //      	    	isRunning=true;
       	    	
       	    	if(isTestAudio){
-      	    		int ret=mEditor.executeAudioMix("/sdcard/lansongBox/niusanjin.mp3", "/sdcard/lansongBox/aac20s.aac", 3000, 3000, dstAAC);
+//      	    		int ret=mEditor.executeAudioMix("/sdcard/lansongBox/niusanjin.mp3", "/sdcard/lansongBox/aac20s.aac", 0, 0, dstAAC);
       	    	}else{
 //      	    		int width=mInfo.vCodecWidth;
 //      	    		int height=mInfo.vCodecHeight;
@@ -240,10 +250,36 @@ public class VideoEditDemoActivity extends Activity{
 //      	    		}
       	    		//int ret=mEditor.executeVideoFrameCrop(videoPath, width/2,height/2, 0, 0, dstMP4,mInfo.vCodecName,mInfo.vBitRate/3);
       	    		
-      	    		int ret=mEditor.executeAddWaterMark(videoPath,"/sdcard/ic_72x72.png",0,0,dstMP4,(int)(mInfo.vBitRate*0.8f));
+//      	    		int ret=mEditor.executeAddWaterMark(videoPath,"/sdcard/ic_72x72.png",0,0,dstMP4,(int)(mInfo.vBitRate*0.8f));
+      	    	
       	    		//Log.i(TAG,"视频压缩");
       	    		//mEditor.executeVideoCompress(videoPath, dstMP4, 0.7f);
-      	    	}
+      	    		
+//      	    		int bitrate=(int)(mInfo.vBitRate*1.2f);
+//      	    		if(bitrate>2000*1000)
+//      	    			bitrate=2000*1000; //2M
+//      	    		int ret=mEditor.executeVideoMirrorH(videoPath,mInfo.vCodecName,bitrate,dstMP4);
+      	    		
+//      	    		int ret=mEditor.videoReverse(videoPath, mInfo.vCodecName, bitrate, dstMP4);
+      	    		
+//      	    		int ret=mEditor.executeGetAllFrames(videoPath,mInfo.vCodecName, "/sdcard/","peirui");
+      	    		 // mEditor.executePadingVideo(videoPath, mInfo.vCodecName, 720, 640, 0, 0, dstMP4, (int)(mInfo.vBitRate*1.2f));
+//      	    		 mEditor.executeCropPaddingVideo(videoPath, mInfo.vCodecName, 320,320,0,0,720,640,0,0,dstMP4, (int)(mInfo.vBitRate*1.2f));
+      	    		
+//      	    		//测试如下方法. 
+      	    		   //mEditor.executeVideoRotateVertically(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
+      	    		
+//      	    		mEditor.executeVideoRotate90Clockwise(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
+//      	    		mEditor.executeVideoRotate90CounterClockwise(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
+//      	    		mEditor.executeAVReverse(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
+      	    		
+//      	    			mEditor.executeVideoAdjustSpeed(videoPath, mInfo.vCodecName, 0.5f,(int)(mInfo.vBitRate*1.2f), dstMP4);
+//      	    			mEditor.executeVideoZeroAngle(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.5f), dstMP4);
+      	    		
+//      	    				mEditor.executeRotateAngle(videoPath, mInfo.vCodecName, 270,(int)(mInfo.vBitRate*1.2f), dstMP4);
+      	    			mEditor.executeSetVideoMetaAngle(videoPath, 270,dstMP4);
+      	    		     
+      	    		}
       	    	
 //      	    	Log.i(TAG,"editor executeVideoFrameCrop return ret====================:"+ret);
       	    

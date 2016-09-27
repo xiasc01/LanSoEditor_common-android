@@ -10,7 +10,24 @@ import android.util.Log;
 
 /**
  *  暂时只支持一个音频和一个视频组成的多媒体文件,如MP4等,如果有多个音频,则音频数据是最后一个音频的info.
- *
+ *	
+ *	如您的视频个格式比较特殊, 需要另外另外的方式, 请联系我们.
+ *  如您的视频个格式比较特殊, 需要另外另外的方式, 请联系我们.
+ *  
+ *  使用方法是:创建对象, 执行prepare, 使用结果.
+ *  可以在任意线程中执行如下:
+ *  
+ *  MediaInfo info=new MediaInfo(videoPath);
+ *  
+ *  if(info.prepare()){     //<==============主要是这里, 需要执行以下, 
+ *    
+ *    //可以使用MediaInfo中的各种成员变量, 比如vHeight, vWidth vBitrate等等.
+ *    
+ *  }else{
+ *    
+ *    //执行失败.....(大部分是视频路径不对,或Android6.0及以上设备没有打开权限导致)
+ *    
+ *  }
  */
 public class MediaInfo {
 //
@@ -113,7 +130,11 @@ public class MediaInfo {
       *  一般在不需要解码的场合,可以设置为false,比如文件浏览器选择音视频文件, 音视频分离剪切的场合.
       */
      private boolean isCheckCodec=true;  //是否检测 
-     
+     /**
+      * 构造方法, 输入文件路径; 
+      * 注意: 创建对象后, 需要执行 {@link #prepare()}后才可以使用.
+      * @param path
+      */
      public MediaInfo(String path)
      {
     	 filePath=path;
@@ -147,7 +168,11 @@ public class MediaInfo {
     		 if(ret>=0){
     			 getSuccess=true;
     			 return isSupport();
-    		 }else{
+    		 }else{   
+    			 /**
+    			  * 如果返回的值是-13, 请检查您的手机设备是否是Android6.0以上,并确定是否打开读写文件的授权.//很多客户是因为没有授权而失败.我们提供了PermissionsManager类来检测,可参考使用.
+    			  * 
+    			  */
     			 Log.e(TAG,"mediainfo prepare media is failed:"+filePath);
     			 return false;
     		 }
@@ -293,7 +318,7 @@ public class MediaInfo {
 	            return path.substring(index+1);
 	        else
 	            return "";
-	    }
+	}
      /*
       * ****************************************************************************
       * 测试
@@ -302,7 +327,7 @@ public class MediaInfo {
 //			@Override
 //			public void run() {
 //				// TODO Auto-generated method stub
-//				MediaInfo mif=new MediaInfo("/sdcard/2x.mp4");
+//				MediaInfo mif=new MediaInfo("/sdcard/2x.mp4"); //这里是我们的测试视频地址, 如您测试, 则需要修改视频地址.
 //				mif.prepare();
 //				Log.i(TAG,"mif is:"+ mif.toString());
 //				mif.release();
@@ -313,7 +338,7 @@ public class MediaInfo {
 //			@Override
 //			public void run() {
 //				// TODO Auto-generated method stub
-//				MediaInfo mif=new MediaInfo("/sdcard/2x.mp4");
+//				MediaInfo mif=new MediaInfo("/sdcard/2x.mp4");//这里是我们的测试视频地址, 如您测试, 则需要修改视频地址.
 //				mif.prepare();
 //				Log.i(TAG,"mif is:"+ mif.toString());
 //				mif.release();

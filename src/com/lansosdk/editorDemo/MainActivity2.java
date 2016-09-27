@@ -91,6 +91,9 @@ public class MainActivity2 extends Activity implements OnClickListener{
 
 		 findViewById(R.id.id_demo_list_kuozhan).setOnClickListener(this);
 		 findViewById(R.id.id_demo_list_connectus).setOnClickListener(this);
+		 findViewById(R.id.id_demo_list_videoscale_hw).setOnClickListener(this);
+		 findViewById(R.id.id_demo_list_videoscale).setOnClickListener(this);
+		 
 		 
 		 
 		 findViewById(R.id.id_demo_list_use_default_videobtn).setOnClickListener(new OnClickListener() {
@@ -131,9 +134,9 @@ public class MainActivity2 extends Activity implements OnClickListener{
 	    		case R.id.id_demo_list_videocompress:
 					gotoActivity(CmdId.VIDEO_COMPRESS_WRAPPER);
 					break;
-//	    		case R.id.id_demo_list_videoscale:  不推荐用ffmpeg来做视频缩放, 应该用MediaCodec+opengl来做.
-//					gotoActivity(CmdId.VIDEO_SCALE_WRAPPER);
-//					break;
+	    		case R.id.id_demo_list_videoscale:  //不推荐用ffmpeg来做视频缩放, 应该用MediaCodec+opengl来做.
+					gotoActivity(CmdId.VIDEO_SCALE_WRAPPER);
+					break;
 	    		case R.id.id_demo_list_videocrop:
 					gotoActivity(CmdId.VIDEO_CROP_WRAPPER);
 					break;
@@ -151,6 +154,9 @@ public class MainActivity2 extends Activity implements OnClickListener{
 	    		break;
 	    		case R.id.id_demo_list_connectus:
 	    			gotoActivity(BusynessActivity.class);
+	    			break;
+	    		case R.id.id_demo_list_videoscale_hw:
+	    			gotoActivity(ScaleExecuteDemoActivity.class);
 	    			break;
 				default:
 					break;
