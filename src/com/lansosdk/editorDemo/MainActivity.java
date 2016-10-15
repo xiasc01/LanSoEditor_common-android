@@ -102,9 +102,9 @@ public class MainActivity extends Activity implements OnClickListener{
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-//					gotoActivity(VideoEditDemoActivity.class);
+					gotoActivity(VideoEditDemoActivity.class);
 					
-					gotoActivity(ScaleExecuteDemoActivity.class);
+//					gotoActivity(ScaleExecuteDemoActivity.class);
 					
 					
 //					Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
@@ -151,32 +151,7 @@ public class MainActivity extends Activity implements OnClickListener{
         .show();
     }
     		
-    private void showHintDialog()
-	{
-   	 	Calendar c = Calendar.getInstance();
-		int year=c.get(Calendar.YEAR);
-		int month=c.get(Calendar.MONTH)+1;
-		
-		int lyear=VideoEditor.getLimitYear();
-		int lmonth=VideoEditor.getLimitMonth();
-		
-		Log.i(TAG,"current year is:"+year+" month is:"+month +" limit year:"+lyear+" limit month:"+lmonth);
-		String timeHint=getResources().getString(R.string.sdk_limit);
-		timeHint=String.format(timeHint, lyear,lmonth);
-		
-		new AlertDialog.Builder(this)
-		.setTitle("提示")
-		.setMessage(timeHint)
-        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				showHintDialog("注意: native-jni层我们提供了三个ARM架构的so动态库,实际仅用给一个即可.建议用armeabi-v7a.\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
-			}
-		})
-        .show();
-	}
+    
     @SuppressLint("NewApi") 
 	  public static boolean selfPermissionGranted(Context context,String permission) {
 	        // For Android < Android M, self permissions are always granted.

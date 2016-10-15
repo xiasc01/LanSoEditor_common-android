@@ -213,17 +213,10 @@ public class MainActivity2 extends Activity implements OnClickListener{
     private void showHintDialog()
    	{
       	 	
-    	Calendar c = Calendar.getInstance();
-   		int year=c.get(Calendar.YEAR);
-   		int month=c.get(Calendar.MONTH)+1;
-   		
-   		int lyear=VideoEditor.getLimitYear();
-   		int lmonth=VideoEditor.getLimitMonth();
-   		
-   		Log.i(TAG,"current year is:"+year+" month is:"+month +" limit year:"+lyear+" limit month:"+lmonth);
-   		String timeHint=getResources().getString(R.string.sdk_limit);
-   		timeHint=String.format(timeHint, lyear,lmonth);
-   		
+    	String timeHint=getResources().getString(R.string.sdk_limit);
+	   	timeHint=String.format(timeHint, VideoEditor.getSDKVersion());
+	   		
+	   		
    		new AlertDialog.Builder(this)
    		.setTitle("提示")
    		.setMessage(timeHint)
@@ -233,7 +226,21 @@ public class MainActivity2 extends Activity implements OnClickListener{
    			public void onClick(DialogInterface dialog, int which) {
    				// TODO Auto-generated method stub
    				
-   				showHintDialog("注意:  native-jni层我们提供了三个ARM架构的so动态库,实际仅用一个即可.建议用armeabi-v7a .\n\nUI界面仅仅是一些常用功能的举例,我们会一直持续的增加,不影响您的使用.请知悉~~");
+
+   		    	Calendar c = Calendar.getInstance();
+   		   		int year=c.get(Calendar.YEAR);
+   		   		int month=c.get(Calendar.MONTH)+1;
+   		   				
+   				int lyear=VideoEditor.getLimitYear();
+   		   		int lmonth=VideoEditor.getLimitMonth();
+
+   		   		Log.i(TAG,"current year is:"+year+" month is:"+month +" limit year:"+lyear+" limit month:"+lmonth);
+   		   		
+   		   		String timeHint=getResources().getString(R.string.sdk_limit2);
+   		   		timeHint=String.format(timeHint, lyear,lmonth);
+   		   		
+   		   		
+   				showHintDialog(timeHint);
    			}
    		})
            .show();

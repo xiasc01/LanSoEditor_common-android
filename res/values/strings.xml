@@ -13,8 +13,10 @@
     
 	<string name="video_editor_demo_hint">此演示功能是:解码==>画面裁剪(比如1280x720的画面裁剪成240x240, 从视频画面的左上角开始裁剪,裁剪240x240的像素点)==>编码输出,保存在/sdcard/video_demo_framecrop.mp4中.\n\n</string>
     
-	<string name="sdk_limit">SDK版本号是V1.8.4 [商用版本]\n\nSDK底层做了授权限制,仅可在此demo中运行,并有效时间到 \"%1$d\"年 \"%2$d\"月之前,请注意.</string>
-	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约30个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求, 这里仅仅是部分功能的举例,您完全可以根据我们的举例自定义完整的ffmpeg命令\n</string>
+	<string name="sdk_limit">当前SDK是我们视频编辑编辑的基本版本,版本号:\"%1$s\" [商用版本]\n\n您可以在了解调用流程后,直接集成到您项目中实际评估测试,测试好后再和我们合作.</string>
+	<string name="sdk_limit2">此演示demo，我们在SDK底层做了授权限制，有效时间为 \"%1$d\"年 \"%2$d\"月之前。请注意\n 您可以和我们合作取得授权后，永久使用。\n更多资料，详见项目doc下的pdf文档</string>
+	
+	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约40个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求, 这里仅仅是部分功能的举例,您完全可以根据我们的举例自定义完整的ffmpeg命令\n</string>
 	<string name="file_not_exist">文件不存在</string>
 	<string name="videoplay_hint">视频小知识:\n当前是等比例的显示到屏幕上, 目的是保持视频的宽高比一致,视频不变形;\n\n 或许会导致分辨率小的画面被放大了,画面质量下降,这是正常情况,只是播放的界面事情,不影响视频本身</string>
 	

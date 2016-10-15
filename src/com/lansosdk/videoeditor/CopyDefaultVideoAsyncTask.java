@@ -21,6 +21,12 @@ public class CopyDefaultVideoAsyncTask extends AsyncTask<Object, Object, Boolean
 		  }
 		  return str;
 	}
+	/**
+	 * 
+	 * @param ctx
+	 * @param tvhint  拷贝后, 把拷贝到的目标完整路径显示到这个TextView上.
+	 * @param file   需要拷贝的文件名字.
+	 */
 	  public CopyDefaultVideoAsyncTask(Context ctx,TextView tvhint,String file){
 		  mContext=ctx;
 		  tvHint=tvhint;

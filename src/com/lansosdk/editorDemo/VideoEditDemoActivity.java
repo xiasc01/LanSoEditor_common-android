@@ -83,7 +83,7 @@ public class VideoEditDemoActivity extends Activity{
 					videoPath= CopyDefaultVideoAsyncTask.copyFile(getApplicationContext(),"ping20s.mp4");
 					
 					//videoPath="/sdcard/test_720p.mp4"; 
-					videoPath="/sdcard/VIDEO_90du.mp4"; 
+//					videoPath="/sdcard/VIDEO_90du.mp4"; 
 //					videoPath="/sdcard/VIDEO_270du.mp4"; 
 //					videoPath="/sdcard/V720P_90du.mp4";
 						
@@ -242,13 +242,14 @@ public class VideoEditDemoActivity extends Activity{
       	    	if(isTestAudio){
 //      	    		int ret=mEditor.executeAudioMix("/sdcard/lansongBox/niusanjin.mp3", "/sdcard/lansongBox/aac20s.aac", 0, 0, dstAAC);
       	    	}else{
+      	    		
 //      	    		int width=mInfo.vCodecWidth;
 //      	    		int height=mInfo.vCodecHeight;
 //      	    		if(mInfo.vRotateAngle==90 || mInfo.vRotateAngle==270){
 //      	    			width=mInfo.vCodecHeight;
 //      	    			height=mInfo.vCodecWidth;
 //      	    		}
-      	    		//int ret=mEditor.executeVideoFrameCrop(videoPath, width/2,height/2, 0, 0, dstMP4,mInfo.vCodecName,mInfo.vBitRate/3);
+//      	    		int ret=mEditor.executeVideoFrameCrop(videoPath, width/2,height/2, 0, 0, dstMP4,mInfo.vCodecName,mInfo.vBitRate/3);
       	    		
 //      	    		int ret=mEditor.executeAddWaterMark(videoPath,"/sdcard/ic_72x72.png",0,0,dstMP4,(int)(mInfo.vBitRate*0.8f));
       	    	
@@ -274,11 +275,11 @@ public class VideoEditDemoActivity extends Activity{
 //      	    		mEditor.executeAVReverse(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
       	    		
 //      	    			mEditor.executeVideoAdjustSpeed(videoPath, mInfo.vCodecName, 0.5f,(int)(mInfo.vBitRate*1.2f), dstMP4);
-//      	    			mEditor.executeVideoZeroAngle(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.5f), dstMP4);
+      	    			mEditor.executeVideoZeroAngle(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.5f), dstMP4);
       	    		
 //      	    				mEditor.executeRotateAngle(videoPath, mInfo.vCodecName, 270,(int)(mInfo.vBitRate*1.2f), dstMP4);
-      	    			mEditor.executeSetVideoMetaAngle(videoPath, 270,dstMP4);
-      	    		     
+//      	    			mEditor.executeSetVideoMetaAngle(videoPath, 270,dstMP4);
+//      	    			mEditor.executeGetOneFrame(videoPath,mInfo.vCodecName,mInfo.vDuration/2,"/sdcard/pp.png");
       	    		}
       	    	
 //      	    	Log.i(TAG,"editor executeVideoFrameCrop return ret====================:"+ret);

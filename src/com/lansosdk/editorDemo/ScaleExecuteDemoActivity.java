@@ -186,7 +186,8 @@ public class ScaleExecuteDemoActivity extends Activity{
 	  		 scaleHeight=tmp;
 	  	 }
 		 
-	  	 float scaleBitRate=(float)mInfo.vBitRate*0.7f;
+	  	 //这里暂定为码率为原来的70%,如果您想更小一些,则可以在这里修改即可,码率不是越小越好, 在分辨率不变的情况下, 码率过小可能出现马赛克,过大或许编码器出错.一般线性比例为好.
+	  	 float scaleBitRate=(float)mInfo.vBitRate*0.7f;  
 	  	 
 		
 	  	//当没有设置或设置为false时,,如果原来视频旋转了270或90度,则缩放后的视频也旋转270或90度. 当设置为true时, 把原来旋转的视频角度值去掉,进行缩放.默认是false或不设置.

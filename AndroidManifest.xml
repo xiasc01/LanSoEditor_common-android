@@ -27,21 +27,22 @@
          <activity android:name="com.lansosdk.editorDemo.StartActivity"
             android:label="@string/app_name" >
                    
-                 <intent-filter>
+             
+             
+             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-             
-            
                    
          </activity>
         
+         
         <activity
             android:name="com.lansosdk.editorDemo.MainActivity">
-            <!-- 测试用 -->
-            
-         
+            <!-- 蓝松开发人员测试命令用 -->
+           
+             
             
            
         </activity>
@@ -64,8 +65,6 @@
          
          <activity android:name="com.lansosdk.editorDemo.VideoWrapperEditorActivity"/>
          <activity android:name="com.lansosdk.editorDemo.ScaleExecuteDemoActivity"/>
-         
-         
          
                  
         <activity

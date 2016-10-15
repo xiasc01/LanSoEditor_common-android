@@ -24,6 +24,18 @@ import android.util.Log;
 /**
  * 如果您想扩展ffmpeg的命令, 可以继承这个类,然后在其中想我们的各种executeXXX的举例一样来使用,不要直接修改我们的这个文件, 以方便以后的sdk更新升级.
  *
+ *
+ *  最简单的调用形式是:(easy demo):
+ *  
+ *  在一个线程中,或AsyncTask中执行如下操作:
+ *  
+ *  VideoEditor veditor=new VideoEditor();
+ *  
+ *  veditor.setOnProgessListener(XXXXX);
+ *  
+ *  mEditor.executeXXXXX();
+ *  
+ *
  */
 public class VideoEditor {
 
@@ -230,6 +242,8 @@ public class VideoEditor {
 	   * @return
 	   */
 	  public static native int getLimitMonth();
+	  
+	  public static native String getSDKVersion();
 	  
 	  //-------------------------------------------------------------------------------
 	  /**
@@ -981,6 +995,98 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
+		  /**
+		   * 从视频的指定位置中获取一帧图片. 因为这个是精确提取视频的一帧, 不建议作为提取缩略图来使用,用mediametadataRetriever最好.
+		   * 
+		   * @param videoSrcPath 源视频的完整路径 
+		   * @param decodeName   解码器, 由{@link MediaInfo#vCodecName}填入
+		   * @param postionS  时间点，单位秒，类型float，可以有小数，比如从视频的2.35秒的地方获取一张图片。
+		   * @param dstPng   得到目标图片的完整路径名.
+		   * @return
+		   */
+		  public int executeGetOneFrame(String videoSrcPath,String decodeName,float postionS,String dstPng)
+		  {
+			  //参考命令:ffmpeg -i input.mp4 -ss 10 -vframes 1 out.png 
+			  if(fileExist(videoSrcPath)){
+				
+					List<String> cmdList=new ArrayList<String>();
+//					
+//					cmdList.add("-vcodec");
+//					cmdList.add(decodeName);
+					
+			    	cmdList.add("-i");
+					cmdList.add(videoSrcPath);
+
+					cmdList.add("-ss");
+					cmdList.add(String.valueOf(postionS));
+					
+					cmdList.add("-vframes");
+					cmdList.add("1");
+					
+					cmdList.add("-y");
+					
+					cmdList.add(dstPng);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		  /**
+		   * 从视频的指定位置中获取一帧图片,得到图片后,把图片缩放到指定的宽高. 因为这个是精确提取视频的一帧, 不建议作为提取缩略图来使用.
+		   * 
+		   * @param videoSrcPath 源视频的完整路径 
+		   * @param decodeName  解码器, 由{@link MediaInfo#vCodecName}填入
+		   * @param postionS   时间点，单位秒，类型float，可以有小数，比如从视频的2.35秒的地方获取一张图片。
+		   * @param pngWidth   得到目标图片后缩放的宽度.
+		   * @param pngHeight  得到目标图片后需要缩放的高度.
+		   * @param dstPng   得到目标图片的完整路径名.
+		   * @return
+		   */
+		  public int executeGetOneFrame(String videoSrcPath,String decodeName,float postionS,int pngWidth,int pngHeight,String dstPng)
+		  {
+			  //参考命令:ffmpeg -i input.mp4 -ss 10 -s 480x480 -vframes 1 out.png 
+			  if(fileExist(videoSrcPath)){
+				
+					List<String> cmdList=new ArrayList<String>();
+					
+					String resolution=String.valueOf(pngWidth);
+					resolution+="x";
+					resolution+=String.valueOf(pngHeight);
+					
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decodeName);
+					
+			    	cmdList.add("-i");
+					cmdList.add(videoSrcPath);
+
+					cmdList.add("-ss");
+					cmdList.add(String.valueOf(postionS));
+					
+					cmdList.add("-s");
+					cmdList.add(resolution);
+					
+					cmdList.add("-vframes");
+					cmdList.add("1");
+					
+					cmdList.add("-y");
+					
+					cmdList.add(dstPng);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
 		  
 
 		  /**
@@ -1395,7 +1501,65 @@ public class VideoEditor {
 		  * 同时叠加多个图片.
 		  * ffmpeg -i Text.mp4 -i qzone.png -i qq2.png -i phiz5.png -i send.png -i cancel.png -i download.png  -filter_complex "overlay=25:25,overlay=0:0,overlay=35:35,overlay=45:45,overlay=55:55,overlay=65:65" -pix_fmt yuv420p -c:a copy HeT.mp4
 		  * */
-		  
+		  /**
+		   * 同时增加两个图片的水印.
+		   * @param videoFile
+		   * @param decName
+		   * @param imagePngPath1
+		   * @param imagePngPath2
+		   * @param X1
+		   * @param Y1
+		   * @param X2
+		   * @param Y2
+		   * @param dstFile
+		   * @param bitrate
+		   * @return
+		   */
+		  public int executeAddWaterMark(String videoFile,String decName,String imagePngPath1,String imagePngPath2,int X1,int Y1,int X2,int Y2,String dstFile,int bitrate){
+			  
+			  if(fileExist(videoFile)){
+				  
+				  String filter=String.format(Locale.getDefault(),"overlay=%d:%d,overlay=%d:%d",X1,Y1,X2,Y2);
+				  
+				  List<String> cmdList=new ArrayList<String>();
+					cmdList.add("-vcodec");
+					cmdList.add(decName);
+					
+					cmdList.add("-i");
+					cmdList.add(videoFile);
+
+					cmdList.add("-i");
+					cmdList.add(imagePngPath1);
+					
+					cmdList.add("-i");
+					cmdList.add(imagePngPath2);
+
+					cmdList.add("-filter_complex");
+					cmdList.add(filter);
+					
+					cmdList.add("-acodec");
+					cmdList.add("copy");
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc"); 
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-y");
+					cmdList.add(dstFile);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
 		  /**
 		   * 为视频增加图片，图片可以是带透明的png类型，也可以是jpg类型;
 		   * 适用在为视频增加logo，或增加一些好玩的图片的场合，
