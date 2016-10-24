@@ -24,7 +24,8 @@ import android.util.Log;
 /**
  * 如果您想扩展ffmpeg的命令, 可以继承这个类,然后在其中想我们的各种executeXXX的举例一样来使用,不要直接修改我们的这个文件, 以方便以后的sdk更新升级.
  *
- *
+ *  此类的executeXXX的方法，是阻塞性执行， 即调用后，会一直阻塞在这里执行，直到执行完退出后，才执行下一行代码。您可以仿照我们的例子，采用ASynctask的形式或new Thread的形式来做。
+ *  
  *  最简单的调用形式是:(easy demo):
  *  
  *  在一个线程中,或AsyncTask中执行如下操作:
@@ -44,7 +45,7 @@ public class VideoEditor {
 	 
 	  public static final int VIDEO_EDITOR_EXECUTE_SUCCESS1 =0;
 	  public static final int VIDEO_EDITOR_EXECUTE_SUCCESS2 =1;
-	  public static final int VIDEO_EDITOR_EXECUTE_FAILED =-1;
+	  public static final int VIDEO_EDITOR_EXECUTE_FAILED =-101;  //文件不存在。
 	  
 	  
 	  
@@ -1899,8 +1900,12 @@ public class VideoEditor {
 			  }
 		  }
 		  /**
-		   * 把拍摄的有角度值的视频, 矫正成没有角度的视频. 
+		   * 
+		   * 把拍摄的有角度值的视频, 矫正成没有角度的视频,如果在您代码流程中会用到另外设置bitrate需要编码的地方，则不需要调用这里，因为另外设置bitrate的方法会自动校正原视频的角度。
+		   *  
+		   *  
 		   * 如原来视频有90度或270度, 这样在有些播放器中, 会出现视频是横着播放的, 这是因为播放器没有检测视频角度; 为了兼容这样的播放器,需要把视频矫正成没有角度的并且画面正常显示的视频.
+		   * 此方法仅适用在单单需要校正角度，而不需要另外的编码操作，如有另外的编码操作， 则无需适用这个方法。
 		   * 
 		   * @param srcPath 原视频.
 		   * @param decoder 原视频的解码器
@@ -2119,6 +2124,54 @@ public class VideoEditor {
 			  }
 		}
 		/**
+		 * 视频垂直镜像，即把视频上半部分镜像显示在下半部分
+		 * @param srcPath　源视频路径
+		 * @param decoder　　指定解码器
+		 * @param dstPath　　目标视频路径
+		 * @return
+		 */
+		public int  executeVideoMirrorV( String srcPath,String decoder,int bitrate,String dstPath)
+		{
+			//ffmpeg -i 2x.mp4 -vf "crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack" -acodec copy 2x_hmirror.mp4
+			 if(fileExist(srcPath)){
+					
+				  String filter=String.format(Locale.getDefault(),"crop=iw:ih/2:0:0,split[top][tmp];[tmp]hflip[bottom];[top][bottom] hstack");
+				  
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+					cmdList.add("-i");
+					cmdList.add(srcPath);
+					
+					cmdList.add("-vf");
+					cmdList.add(filter);
+				
+					cmdList.add("-acodec");  
+					cmdList.add("copy"); 
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc");
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-y");
+					cmdList.add(dstPath);
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		/**
 		 * 视频垂直方向反转
 		 * @param srcPath1　　原视频
 		 * @param decoder　　视频的解码器名字
@@ -2139,7 +2192,7 @@ public class VideoEditor {
 					cmdList.add(srcPath);
 					
 					cmdList.add("-vf");
-					cmdList.add("hflip");
+					cmdList.add("vflip");
 					
 					cmdList.add("-c:a");
 					cmdList.add("copy");
@@ -2417,6 +2470,9 @@ public class VideoEditor {
 					
 					List<String> cmdList=new ArrayList<String>();
 					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
 					cmdList.add("-i");
 					cmdList.add(srcPath);
 					
@@ -2445,6 +2501,118 @@ public class VideoEditor {
 			  }else{
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
+		}
+		
+		/**
+		 * 此方法仅仅是为了客户的需求,而临时性测试, 不建议使用, 仅供客户参考..请注意.
+		 * 
+		 * @param videoPath  视频路径
+		 * @param decoder  视频的解码器
+		 * @param subtilePath  字幕的路径
+		 * @param bitrate  目标文件的编码码率
+		 * @param dstPath  目标文件的路径.
+		 * @return
+		 */
+		public int testAddSubtitle2Video(String videoPath,String decoder,String subtilePath,int bitrate,String dstPath)
+		{
+			//参考代码://ffmpeg -i 2x.mp4 -vf "subtitles=tenSub.srt" -y out3.mp4
+			List<String> cmdList=new ArrayList<String>();
+			
+			String filter="subtitles=";
+			filter+=subtilePath;
+					
+			cmdList.add("-vcodec");
+			cmdList.add(decoder);
+			
+			cmdList.add("-i");
+			cmdList.add(videoPath);
+			
+			cmdList.add("-vf");
+			cmdList.add(filter);
+			
+			cmdList.add("-acodec");
+			cmdList.add("copy");
+			 
+			cmdList.add("-c:v");
+			cmdList.add("lansoh264_enc");
+			cmdList.add("-pix_fmt");
+			cmdList.add("yuv420p");
+			cmdList.add("-b:v");
+			cmdList.add(checkBitRate(bitrate)); 
+			
+			cmdList.add("-y");
+			cmdList.add(dstPath);
+			 
+			String[] command=new String[cmdList.size()];  
+		     for(int i=0;i<cmdList.size();i++){  
+		    	 command[i]=(String)cmdList.get(i);  
+		     }  
+		    return  executeVideoEditor(command);
+		}
+		
+		// -vf drawtext="fontfile=/usr/share/fonts/truetype/freefont/FreeSerif.ttf: text='Test Text'"
+		public int testVideoAddText(String videoPath,String decoder,int bitrate,String dstPath)
+		{
+			//参考代码://ffmpeg -i 2x.mp4 -vf "subtitles=tenSub.srt" -y out3.mp4
+			List<String> cmdList=new ArrayList<String>();
+			
+					
+			cmdList.add("-vcodec");
+			cmdList.add(decoder);
+			
+			cmdList.add("-i");
+			cmdList.add(videoPath);
+			
+			cmdList.add("-vf");
+			cmdList.add("drawtext=fontfile=/system/fonts/DroidSansFallback.ttf: text='杭州蓝松科技001abc'");
+			
+			cmdList.add("-acodec");
+			cmdList.add("copy");
+			 
+			cmdList.add("-c:v");
+			cmdList.add("lansoh264_enc");
+			cmdList.add("-pix_fmt");
+			cmdList.add("yuv420p");
+			cmdList.add("-b:v");
+			cmdList.add(checkBitRate(bitrate)); 
+			
+			cmdList.add("-y");
+			cmdList.add(dstPath);
+			 
+			String[] command=new String[cmdList.size()];  
+		     for(int i=0;i<cmdList.size();i++){  
+		    	 command[i]=(String)cmdList.get(i);  
+		     }  
+		    return  executeVideoEditor(command);
+		}
+		
+		/**
+		 * 仅仅测试gif的编码。
+		 * @return
+		 */
+		public int executeImage2Gif() 
+		{
+			//ffmpeg -f image2 -framerate 10 -i gif_%03d.jpg neat.gif 参考代码。
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-f");
+					cmdList.add("image2");
+					
+					cmdList.add("-framerate");
+					cmdList.add("10");
+
+					cmdList.add("-i");
+					cmdList.add("/sdcard/test_gif/gif_%03d.jpg");
+					
+					
+					cmdList.add("-y");
+					cmdList.add("/sdcard/test_gif/m7_gif.gif");
+					 
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
 		}
 		
 		/**

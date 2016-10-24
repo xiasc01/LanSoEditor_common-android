@@ -31,6 +31,10 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * 蓝松科技开发人员测试界面.
+ *
+ */
 public class VideoEditDemoActivity extends Activity{
 
 
@@ -82,11 +86,10 @@ public class VideoEditDemoActivity extends Activity{
 					
 					videoPath= CopyDefaultVideoAsyncTask.copyFile(getApplicationContext(),"ping20s.mp4");
 					
-					//videoPath="/sdcard/test_720p.mp4"; 
+//					videoPath="/sdcard/Ke270.mp4"; 
 //					videoPath="/sdcard/VIDEO_90du.mp4"; 
 //					videoPath="/sdcard/VIDEO_270du.mp4"; 
 //					videoPath="/sdcard/V720P_90du.mp4";
-						
 //					videoPath="/sdcard/peirui_1.mp4";
 					
 					 mInfo=new MediaInfo(videoPath,true);
@@ -268,18 +271,26 @@ public class VideoEditDemoActivity extends Activity{
 //      	    		 mEditor.executeCropPaddingVideo(videoPath, mInfo.vCodecName, 320,320,0,0,720,640,0,0,dstMP4, (int)(mInfo.vBitRate*1.2f));
       	    		
 //      	    		//测试如下方法. 
-      	    		   //mEditor.executeVideoRotateVertically(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
+//      	    		   mEditor.executeVideoRotateVertically(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
       	    		
+//      	    			mEditor.executeVideoRotateHorizontally(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
+      	    		
+//      	    		   mEditor.executeImage2Gif();
 //      	    		mEditor.executeVideoRotate90Clockwise(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
 //      	    		mEditor.executeVideoRotate90CounterClockwise(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
 //      	    		mEditor.executeAVReverse(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.2f), dstMP4);
       	    		
 //      	    			mEditor.executeVideoAdjustSpeed(videoPath, mInfo.vCodecName, 0.5f,(int)(mInfo.vBitRate*1.2f), dstMP4);
-      	    			mEditor.executeVideoZeroAngle(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.5f), dstMP4);
+//      	    			mEditor.executeVideoZeroAngle(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.5f), dstMP4);
       	    		
 //      	    				mEditor.executeRotateAngle(videoPath, mInfo.vCodecName, 270,(int)(mInfo.vBitRate*1.2f), dstMP4);
 //      	    			mEditor.executeSetVideoMetaAngle(videoPath, 270,dstMP4);
 //      	    			mEditor.executeGetOneFrame(videoPath,mInfo.vCodecName,mInfo.vDuration/2,"/sdcard/pp.png");
+      	    		
+//      	    			mEditor.testAddSubtitle2Video(videoPath, mInfo.vCodecName, "/sdcard/subtitle.ass", (int)(mInfo.vBitRate*1.2f), "/sdcard/san.mp4");
+      	    		mEditor.testVideoAddText(videoPath, mInfo.vCodecName, (int)(mInfo.vBitRate*1.5f), dstMP4);
+      	    		
+      	    			
       	    		}
       	    	
 //      	    	Log.i(TAG,"editor executeVideoFrameCrop return ret====================:"+ret);

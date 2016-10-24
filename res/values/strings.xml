@@ -62,5 +62,41 @@
 	
 	<string name="filter_mark_hint">\n实时标记:\n在视频播放中,点击视频画面, 您点击的地方会出现一个叠加图片,并图片会随您的触屏移动而移动,起到标记的效果.\n\n 后台标记:\n这个功能等同于 视频+图片的后台处理功能,请参看(视频+图片的后台处理),这里不再重复.</string>
 	
+	<string name="demo_cmd_avsplit">音视频分离</string>
+	<string name="demo_cmd_avmerge">音视频合成</string>
+	<string name="demo_cmd_replaceaudio">替换音频</string>
+	<string name="demo_cmd_cutaudio">音频剪切</string>
+	<string name="demo_cmd_cutvideo">视频剪切</string>
+	<string name="demo_cmd_concatvideo">视频拼接</string>
+	<string name="demo_cmd_convataudio">音频拼接</string>
+	<string name="demo_cmd_videocompress">视频压缩</string>
+	<string name="demo_cmd_videocrop">视频画面裁剪</string>
+	<string name="demo_cmd_videoscale_soft">视频缩放[软件]</string>
+	<string name="demo_cmd_videoscale_hard">视频缩放[硬件]</string>
+	<string name="demo_cmd_videowatermark">视频增加水印</string>
+	<string name="demo_cmd_videocropwatermark">视频裁剪和加水印</string>
+	<string name="demo_cmd_audiodelaymix">音频延迟混合</string>
+	<string name="demo_cmd_audiovolumemix">音频音量控制混合</string>
+	<string name="demo_cmd_videogetframes">从视频中获取每帧图片</string>
+	<string name="demo_cmd_videogetoneframe">从视频中获取指定一帧图片</string>
+	<string name="demo_cmd_ontpicturevideo">一张图片转视频</string>
+	<string name="demo_cmd_morepicturevideo">多张图片转视频</string>
+	<string name="demo_cmd_videopad">视频增加边框</string>
+	<string name="demo_cmd_videocroppad">视频先裁剪后增加边框</string>
+	<string name="demo_cmd_videorotate">视频旋转角度</string>
+	<string name="demo_cmd_videoclockwise90">视频顺时针90度</string>
+	<string name="demo_cmd_videocounterClockwise90">视频逆时针90度</string>
+	<string name="demo_cmd_videozeroangle">视频矫正角度</string>
+	<string name="demo_cmd_videoaddanglemeta">视频增加角度元</string>
+	<string name="demo_cmd_videoadjustspeed">视频加减速度</string>
+	<string name="demo_cmd_videomirrorh">视频水平镜像</string>
+	<string name="demo_cmd_videomirrorv">视频垂直镜像</string>
+	<string name="demo_cmd_videorotateh">视频垂直反转</string>
+	<string name="demo_cmd_videorotatev">视频水平反转</string>
+	<string name="demo_cmd_videoreverse">视频倒序</string>
+	<string name="demo_cmd_audioreverse">音频倒序</string>
+	<string name="demo_cmd_avreverse">音视频倒序</string>
+	
+	
 	
 </resources>
