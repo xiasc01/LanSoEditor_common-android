@@ -15,18 +15,6 @@
         android:text="@string/scaleexecute_demo_hint"/>
    
 
-       <RelativeLayout  
-          android:id="@+id/id_video_scale_selectfile" 
-          style="@style/main_item_reletivelayout"
-        android:background="#FFFF00">
-	           	    <TextView   android:text="选择媒体文件" 	
-	           	        android:layout_width="wrap_content"
-	           	        android:layout_height="wrap_content"
-	           	        android:textSize="20sp"
-	           	        android:textStyle="bold"
-	           	        android:layout_centerInParent="true"/>
-				<TextView  style="@style/main_item_arrow"/> 
-	</RelativeLayout>
 	 
 	 <TextView 
         android:id="@+id/id_video_scale_selectfilehint"

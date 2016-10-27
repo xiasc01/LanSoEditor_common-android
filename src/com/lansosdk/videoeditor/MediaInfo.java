@@ -189,6 +189,20 @@ public class MediaInfo {
     	 //TODO nothing 
     	 getSuccess=false;
      }
+     public boolean isHaveAudio()
+     {
+    	 if(aBitRate>0)  //有音频
+    	 {
+    		 if(aChannels==0)
+    			 return false;
+    		 
+    		 if(aCodecName==null || aCodecName.isEmpty())
+    			 return false;
+    		 
+    		 return true;
+    	 }
+    	 return false;
+     }
      /**
       * 传递过来的文件是否支持
       * 
@@ -295,6 +309,7 @@ public class MediaInfo {
     		 return false;
     	 }
      }
+     
      //-------------------------------文件操作-------------------------
      private static boolean fileExist(String absolutePath)
 	 {

@@ -592,7 +592,7 @@ public class VideoEditor {
 			{
 				if(info.aCodecName.equalsIgnoreCase("aac")){
 					audioPath=SDKFileUtils.createFile(tmpDir, ".aac");
-				}else if(info.aCodecName.equalsIgnoreCase("mp4"))
+				}else if(info.aCodecName.equalsIgnoreCase("mp3"))
 					audioPath=SDKFileUtils.createFile(tmpDir, ".mp3");	
 				
 				if(audioPath!=null){
@@ -1012,7 +1012,7 @@ public class VideoEditor {
 				
 					List<String> cmdList=new ArrayList<String>();
 //					
-//					cmdList.add("-vcodec");
+//					cmdList.add("-vcodec");  //获取一张图片, 不需要采用硬件编码.
 //					cmdList.add(decodeName);
 					
 			    	cmdList.add("-i");
@@ -2135,7 +2135,7 @@ public class VideoEditor {
 			//ffmpeg -i 2x.mp4 -vf "crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack" -acodec copy 2x_hmirror.mp4
 			 if(fileExist(srcPath)){
 					
-				  String filter=String.format(Locale.getDefault(),"crop=iw:ih/2:0:0,split[top][tmp];[tmp]hflip[bottom];[top][bottom] hstack");
+				  String filter=String.format(Locale.getDefault(),"crop=iw:ih/2:0:0,split[top][tmp];[tmp]vflip[bottom];[top][bottom] vstack");
 				  
 					List<String> cmdList=new ArrayList<String>();
 					
@@ -2312,7 +2312,7 @@ public class VideoEditor {
 		}
 		/**
 		 * 
-		 * 视频逆时针旋转９０度
+		 * 视频逆时针旋转９０度,也即使顺时针旋转270度.
 		 * @param srcPath1　原视频
 		 * @param decoder　　视频的解码器名字
 		 * @param dstPath　　目标视频，需要是mp4格式

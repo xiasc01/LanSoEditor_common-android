@@ -13,8 +13,8 @@
     
 	<string name="video_editor_demo_hint">此演示功能是:解码==>画面裁剪(比如1280x720的画面裁剪成240x240, 从视频画面的左上角开始裁剪,裁剪240x240的像素点)==>编码输出,保存在/sdcard/video_demo_framecrop.mp4中.\n\n</string>
     
-	<string name="sdk_limit">当前SDK是我们视频编辑编辑的基本版本,版本号:\"%1$s\" [商用版本]\n\n您可以在了解调用流程后,直接集成到您项目中实际评估测试,测试好后再和我们合作.</string>
-	<string name="sdk_limit2">此演示demo，我们在SDK底层做了授权限制，有效时间为 \"%1$d\"年 \"%2$d\"月之前。请注意\n 您可以和我们合作取得授权后，永久使用。\n更多资料，详见项目doc下的pdf文档</string>
+	<string name="sdk_limit">当前SDK是我们视频编辑编辑的基本版本,版本号:\"%1$s\" [商用版本]\n\n 欢迎您的测试评估.</string>
+	<string name="sdk_limit2">此演示demo，我们在SDK底层做了授权限制，有效时间为 \"%1$d\"年 \"%2$d\"月之前。请注意\n为了您更好的使用,希望您和我们合作取得授权后，永久使用。\n更多资料，详见项目doc下的pdf文档</string>
 	
 	<string name="sdk_hnit">我们在VideoEditor.java中提供了大约40个常用的方法并写了详细的说明注释,基本满足一般视频编辑的需求, 这里仅仅是部分功能的举例,您完全可以根据我们的举例自定义完整的ffmpeg命令\n</string>
 	<string name="file_not_exist">文件不存在</string>
@@ -25,78 +25,79 @@
 		<string name="scaleexecute_demo_hint">此演示演示: 视频缩放\n\n 利用视频硬件加速来做视频缩放,把视频画面等比例缩小一半,处理完后,形成新视频.
 		    适用在用户自己拍摄了高清的画面,需要缩放后再传输的场合.\n</string>
 		    
-	<string name="libs_codecs">本SDK的编解码器有:\n\n软解码器H264\n硬件加速解码器lansoh264_dec\n软编码器libx264\n硬件加速编码器lansoh264_enc\n音频mp3解码器mp3\n音频mp3编码器libmp3lame\n音频aac解码器aac\n音频aac编码器 faac\n音频pcm编解码器 pcm_s16le</string>
+	<string name="libs_codecs">本SDK的编解码器有:\n\n软编解码器gif\n软解码器MPEG4\n软解码器H264\n硬件加速解码器lansoh264_dec\n软编码器libx264\n硬件加速编码器lansoh264_enc\n音频mp3解码器mp3\n音频mp3编码器libmp3lame\n音频aac解码器aac\n音频aac编码器 faac\n音频pcm编解码器 pcm_s16le</string>
 	<string name="advance_version_hint">我们有高级版本,可以实现视频的任意实时处理,涂鸦,标记,写字甚至可以把一个View增加到视频上, 欢迎向我们索取demo</string>
-	<string name="no_free">此SDK为收费版本, 费用为7000元, 单一APP使用,永久授权,提供一年技术支持.</string>
+	<string name="no_free">此SDK为收费版本, 费用为7000元, 单一APP使用,永久授权,提供一年技术支持,普通问题三个工作日内解决.</string>
 	<string name="connect_us">联系我们:\n 电话:0571-89052701 \n QQ:\t 1852600324 \n email:\tsupport@lansongtech.com \n 地址:\t杭州市余杭区运通网城软件园6栋428室.</string>
 	
 	<!-- =========场景======== -->
-	<string name="used_context">使用场景:</string>
 	<string name="cmdwrapper_hint">当前功能已经测试完毕,但还没有编写UI界面,请在VideoEditor.java文件中查看相关的实现方法.如有问题,请联系我们,谢谢!\n\n</string>
 	
+	<string name="demo_id_mediainfo">获取视频信息</string>
+	<string name="demo_id_avsplit">音视频分离</string>
+	<string name="demo_id_avmerge">合成音频/替换音频</string>
+	<string name="demo_id_cutaudio">音频剪切</string>
+	<string name="demo_id_cutvideo">视频剪切</string>
+	<string name="demo_id_concatvideo">视频拼接</string>
+	<string name="demo_id_videocompress">视频压缩</string>
+	<string name="demo_id_videocrop">画面裁剪</string>
+	<string name="demo_id_videoscale_soft">视频缩放[软件实现]</string>
+	<string name="demo_id_videoscale_hard">视频缩放[GPU实现]</string>
+	<string name="demo_id_videowatermark">增加水印</string>
+	<string name="demo_id_videocropwatermark">裁剪和加水印</string>
+	<string name="demo_id_videogetframes">获取所有帧图片</string>
+	<string name="demo_id_videogetoneframe">获取一帧图片</string>
+	<string name="demo_id_videozeroangle">视频矫正角度</string>
+	<string name="demo_id_videoclockwise90">视频旋转90度</string>
+	<string name="demo_id_videocounterClockwise90">视频旋转270度</string>
+	<string name="demo_id_videoaddanglemeta">视频增加角度数据</string>
+	<string name="demo_id_ontpicturevideo">一张图片转视频</string>
+	<string name="demo_id_morepicturevideo">多张图片转视频</string>
+	<string name="demo_id_audiodelaymix">音频延迟混合</string>
+	<string name="demo_id_audiovolumemix">音频音量控制混合</string>
+	<string name="demo_id_videopad">视频增加边框</string>
+	<string name="demo_id_videoadjustspeed">视频加减速度</string>
+	<string name="demo_id_videomirrorh">视频水平镜像</string>
+	<string name="demo_id_videomirrorv">视频垂直镜像</string>
+	<string name="demo_id_videorotateh">视频垂直反转</string>
+	<string name="demo_id_videorotatev">视频水平反转</string>
+	<string name="demo_id_videoreverse">视频倒序</string>
+	<string name="demo_id_avreverse">音视频倒序</string>
 	
-	<string name="avsplite_hint">音视频分离:\n把多媒体文件如mp4,flv等中的的音频和视频分离开,形成独立的音频文件和视频文件 \n\n</string>
-	<string name="avmerge_hint">音视频合成:\n把一个纯音频文件和纯视频文件合并成一个mp4格式的多媒体文件 \n\n</string>
-	<string name="videocut_hint">视频剪切:\n剪切视频的长度,可以指定开始位置,指定结束位置.\n这里演示截取视频的前20秒形成新的视频文件.</string>
-	<string name="audiocut_hint">音频剪切:\n剪切音频的长度,可以指定开始位置,指定结束位置.\n这里演示截取音频的前20秒形成新的音频文件.</string>
-	<string name="videoscale_hint">视频缩放:缩小视频的宽度和高度\n 这里演示把宽度和高度都缩小一半.\n 注意:这里是采用软缩放的形式来做,耗时比较长,我们在增强版SDK有opengl加速缩放版本,欢迎索取demo</string>
-	<string name="videocrop_hint">视频画面裁剪:裁剪视频的宽度和高度\n 这里演示从左上角裁剪视频高度和宽度为原来的一半保存为新的视频.\n[使用我们的核心技术:视频编码和解码均 硬件加速]</string>
-	<string name="videocompress_hint">视频压缩转码:\n调整视频的码率,让视频文件大小变小一些,方便传输.注意:如调整的小太多,则会导致画面下降.这里演示把码率降低为70%\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>
 	
-	<string name="adjustcamearvideo_hint">调整录制视频的角度:\n因为录制的视频\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>
-	
-	<string name="videowatermark_hint">视频上增加图片:\n在视频上增加图片,可以指定开始时间和结束时间,指定在画面中的坐标处增加.\n这里演示增加app的图标.我们高级版本有动态实时增加图片,箭头标记涂鸦等,欢迎索取demo\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>
-	
-	
-	<string name="videocutcropimage_hint">统一执行视频时长剪切,画面裁剪,增加水印的功能:\n需要剪切一段视频,然后画面裁剪并打上logo这样的场合. 优势是:只需要解码编码一次就可以完成,比分三次处理,效率高很多.\n这里演示从第5秒开始剪切,剪切10秒,大小裁剪240x240,然后加logo.我们高级版本有动态实时增加图片,箭头标记涂鸦等,欢迎索取demo\n[使用我们的核心技术:视频编码和解码均 硬件加速]\n</string>
-	
-	
-	
-	<string name="extractimage_hint">视频提取图片:\n把视频中的画面转换为图片, 可以全部指定图片,也可以每秒钟提取一帧,可以设置开始和结束时间;这里演示,从视频中提取10帧图片保存到/sdcard下面,名字依次是img_001---010.jpeg.\n[使用我们的核心技术:视频编码和解码硬件加速]\n</string>
-	
-	
-	<string name="oneimage2video_hint">一张图片转视频:\n把一张图片转换为视频,图片可以是app里自带的图片,也可以是通过Bitmap由代码生成的图片.这里演示assert里带的一张图片生成视频.\n</string>
-	
-	<string name="filter_layout_hint">\n实时滤镜:\n在视频播放中,切换滤镜,调整某个滤镜的参数等操作,都会实时的成为视频的一部分.适合实时需要视频处理的场合.\n\n 后台滤镜:\n在不需要UI操作,一次性对视频进行滤镜处理的场景中使用.比如定义了一些样式,想让用户在预览确认后再处理保存的场合.</string>
-	<string name="filter_overlay_hint">\n实时叠加:\n在视频叠加过程中,您做的任何的操作都会实时的成为视频的一部分.适合实时需要视频处理的场合.\n\n 后台叠加:\n在不需要UI操作,一次性对视频进行叠加处理的场景中使用.比如定义了一些样式,想让用户在预览确认后再处理保存的场合.</string>
-	
-	<string name="filter_mark_hint">\n实时标记:\n在视频播放中,点击视频画面, 您点击的地方会出现一个叠加图片,并图片会随您的触屏移动而移动,起到标记的效果.\n\n 后台标记:\n这个功能等同于 视频+图片的后台处理功能,请参看(视频+图片的后台处理),这里不再重复.</string>
-	
-	<string name="demo_cmd_avsplit">音视频分离</string>
-	<string name="demo_cmd_avmerge">音视频合成</string>
-	<string name="demo_cmd_replaceaudio">替换音频</string>
-	<string name="demo_cmd_cutaudio">音频剪切</string>
-	<string name="demo_cmd_cutvideo">视频剪切</string>
-	<string name="demo_cmd_concatvideo">视频拼接</string>
-	<string name="demo_cmd_convataudio">音频拼接</string>
-	<string name="demo_cmd_videocompress">视频压缩</string>
-	<string name="demo_cmd_videocrop">视频画面裁剪</string>
-	<string name="demo_cmd_videoscale_soft">视频缩放[软件]</string>
-	<string name="demo_cmd_videoscale_hard">视频缩放[硬件]</string>
-	<string name="demo_cmd_videowatermark">视频增加水印</string>
-	<string name="demo_cmd_videocropwatermark">视频裁剪和加水印</string>
-	<string name="demo_cmd_audiodelaymix">音频延迟混合</string>
-	<string name="demo_cmd_audiovolumemix">音频音量控制混合</string>
-	<string name="demo_cmd_videogetframes">从视频中获取每帧图片</string>
-	<string name="demo_cmd_videogetoneframe">从视频中获取指定一帧图片</string>
-	<string name="demo_cmd_ontpicturevideo">一张图片转视频</string>
-	<string name="demo_cmd_morepicturevideo">多张图片转视频</string>
-	<string name="demo_cmd_videopad">视频增加边框</string>
-	<string name="demo_cmd_videocroppad">视频先裁剪后增加边框</string>
-	<string name="demo_cmd_videorotate">视频旋转角度</string>
-	<string name="demo_cmd_videoclockwise90">视频顺时针90度</string>
-	<string name="demo_cmd_videocounterClockwise90">视频逆时针90度</string>
-	<string name="demo_cmd_videozeroangle">视频矫正角度</string>
-	<string name="demo_cmd_videoaddanglemeta">视频增加角度元</string>
-	<string name="demo_cmd_videoadjustspeed">视频加减速度</string>
-	<string name="demo_cmd_videomirrorh">视频水平镜像</string>
-	<string name="demo_cmd_videomirrorv">视频垂直镜像</string>
-	<string name="demo_cmd_videorotateh">视频垂直反转</string>
-	<string name="demo_cmd_videorotatev">视频水平反转</string>
-	<string name="demo_cmd_videoreverse">视频倒序</string>
-	<string name="demo_cmd_audioreverse">音频倒序</string>
-	<string name="demo_cmd_avreverse">音视频倒序</string>
-	
+	<string name="demo_id_expend_cmd">自定义扩展功能</string>
+	<string name="demo_id_connet_us">联系我们</string>
+  
+	<!-- ========================================================================== -->
+	<string name="demo_more_avsplit">把多媒体文件如mp4,flv等中的的音频和视频分离开,形成独立的音频文件和视频文件 </string>
+	<string name="demo_more_avmerge">合成音频/替换音频\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
+	<string name="demo_more_cutaudio">演示截取音频的前20秒或时长的一半,形成新的音频文件\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
+	<string name="demo_more_cutvideo">这里演示截取视频的前20秒或时长的一半,形成新的视频文件.</string>
+	<string name="demo_more_concatvideo">为了方便演示,需要您的视频大于20秒(或用默认视频).\n先把原视频从(0到1/3处)和(2/3到结束)截取成两段,然后拼接</string>
+	<string name="demo_more_videocompress">调整的小太多,则会导致画面下降.这里演示把码率降低为70%</string>
+	<string name="demo_more_videocrop">演示从左上角裁剪视频高度和宽度为原来的一半保存为新的视频</string>
+	<string name="demo_more_videoscale_soft">演示宽高缩小一半,采用软缩放的形式来做\n流程是硬解码  软件缩放 硬编码</string>
+	<string name="demo_more_videoscale_hard">演示宽高缩小一半,采用硬缩放的形式来做\n流程是硬解码  软件缩放  硬编码</string>
+	<string name="demo_more_videowatermark">增加水印,增加一张demo自动的logo图片到视频中</string>
+	<string name="demo_more_videocropwatermark">裁剪和加水印,裁剪画面的同时增加一张logo图片</string>
+	<string name="demo_more_videogetframes">获取所有帧图片,保存在/sdcard下面</string>
+	<string name="demo_more_videogetoneframe">获取一帧图片,保存在/sdcard/lansongbox/下面</string>
+	<string name="demo_more_videozeroangle">视频矫正角度,把原来已经有的视频角度矫正过来.</string>
+	<string name="demo_more_videoclockwise90">视频旋转90度</string>
+	<string name="demo_more_videocounterClockwise90">视频旋转270度</string>
+	<string name="demo_more_videoaddanglemeta">视频增加角度数据</string>
+	<string name="demo_more_ontpicturevideo">一张图片转视频</string>
+	<string name="demo_more_morepicturevideo">此方法演示需要多张图片,并放在同一个文件夹内,并有一定的命令规则,暂时不演示, VideoEditor.java中的方法是完全正常的,实际您可以直接使用.</string>
+	<string name="demo_more_audiodelaymix">两个音频在混合时,第二个延时一定时间.\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
+	<string name="demo_more_audiovolumemix">两个音频在混合时,调整每个音频的音量.\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
+	<string name="demo_more_videopad">视频增加边框,为视频增加黑色的边框,演示是宽度和高度增加32个像素点</string>
+	<string name="demo_more_videoadjustspeed">视频加减速度</string>
+	<string name="demo_more_videomirrorh">视频水平镜像</string>
+	<string name="demo_more_videomirrorv">视频垂直镜像</string>
+	<string name="demo_more_videorotateh">视频垂直反转</string>
+	<string name="demo_more_videorotatev">视频水平反转</string>
+	<string name="demo_more_videoreverse">视频倒序</string>
+	<string name="demo_more_avreverse">音视频倒序</string>
 	
 	
 </resources>

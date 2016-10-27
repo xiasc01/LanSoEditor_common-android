@@ -12,9 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dip"/>
        
-     
-        
-    
        <Button 
         android:id="@+id/id_video_edit_btn"
         android:layout_width="match_parent"

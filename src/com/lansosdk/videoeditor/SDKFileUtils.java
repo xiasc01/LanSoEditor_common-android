@@ -22,7 +22,7 @@ public class SDKFileUtils {
 	 /**
     * 在指定的文件夹里创建一个文件名字, 名字是当前时间,指定后缀.
     * @param dir   "/sdcard/"
-    * @param suffix  ".mp4"
+    * @param suffix  ".mp4", 或"mp4",或info.aCodecName/info.vCodecName;
     * @return
     */
 	public static String createFile(String dir,String suffix){
@@ -43,6 +43,7 @@ public class SDKFileUtils {
 				d.mkdir();
 			name+="/";
 			
+			
 			name+=String.valueOf(year);
 			name+=String.valueOf(month);
 			name+=String.valueOf(day);
@@ -50,6 +51,9 @@ public class SDKFileUtils {
 			name+=String.valueOf(minute);
 			name+=String.valueOf(second);
 			name+=String.valueOf(millisecond);
+			if(suffix.startsWith(".")==false){
+				name+=".";
+			}
 			name+=suffix;
 			
 			try {
@@ -80,6 +84,23 @@ public class SDKFileUtils {
 		return createFile(SDKDir.TMP_DIR, ".mp4");
 	}
 	/**
+	 * 在box目录下生成一个aac的文件,并返回名字的路径.
+	 * @return
+	 */
+	public static String createAACFileInBox()
+	{
+		return createFile(SDKDir.TMP_DIR, ".aac");
+	}
+	/**
+	 * 在box目录下生成一个指定后缀名的文件,并返回名字的路径.这里仅仅创建一个名字.
+	 * @param suffix  指定的后缀名.
+	 * @return
+	 */
+	public static String createFileInBox(String suffix)
+	{
+		return createFile(SDKDir.TMP_DIR, suffix);
+	}
+	/**
 	 * 只是在box目录生成一个路径字符串,但这个文件并不存在.
 	 * @return
 	 */
@@ -87,6 +108,7 @@ public class SDKFileUtils {
 	{
 		return newFilePath(SDKDir.TMP_DIR,".mp4");
 	}
+	
 	 /**
 	    * 在指定的文件夹里 定义一个文件名字, 名字是当前时间,指定后缀.
 	    * 注意: 和 {@link #createFile(String, String)}的区别是,这里不生成文件,只是生成这个路径的字符串.
@@ -177,11 +199,14 @@ public class SDKFileUtils {
 	 */
    public static void deleteFile(String path)
    {
-   		File file=new File(path);
-		if(file.exists())
-		{
-			file.delete();
-		}
+	   if(path!=null)
+	   {
+		   File file=new File(path);
+			if(file.exists())
+			{
+				file.delete();
+			} 
+	   }
    }
    /**
     * 判断 两个文件大小相等.
@@ -227,7 +252,7 @@ public class SDKFileUtils {
 				 return false;
 			 else{
 				 File file=new File(absolutePath);
-				 if(file.exists() && file.length()>0)  //并且文件大小大于0;
+				 if(file.exists())
 					 return true;
 			 }
 			 return false;

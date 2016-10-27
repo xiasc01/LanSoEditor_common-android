@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.lansosdk.editorDemo.MainActivity"
+    tools:context="com.editorDemo.MainActivity"
     android:background="#FFA500"
     android:orientation="vertical" >
 

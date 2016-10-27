@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lansoeditor.demo"
-    android:versionCode="1085"
-    android:versionName="1.8.5" >
+    android:versionCode="1087"
+    android:versionName="1.8.7" >
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -24,65 +24,29 @@
         android:theme="@style/AppTheme" >
         
             
-         <activity android:name="com.lansosdk.editorDemo.StartActivity"
+         <activity android:name="com.lansosdk.commonDemo.StartActivity"
             android:label="@string/app_name" >
-                   
-             
-            
-         
-                   
-         </activity>
-        
-         
-        <activity
-            android:name="com.lansosdk.editorDemo.MainActivity">
-            <!-- 蓝松开发人员测试命令用 -->
-           
-             <intent-filter>
+                   <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
-             
-        </activity>
-            
+                   
+         </activity>
+          <activity android:name="com.lansosdk.commonDemo.SdkHintActivity"></activity>
+         
         <activity
-            android:name="com.lansosdk.editorDemo.DemoActivity">
-            <!-- 蓝松开发人员测试命令用 -->
+            android:name="com.lansosdk.commonDemo.MainActivity">
             
-               
-            
-           
         </activity>
-        
-        
-        
-         <activity android:name="com.lansosdk.editorDemo.VideoEditDemoActivity"></activity>
-     
-         <activity android:name="com.lansosdk.editorDemo.SdkHintActivity"></activity>
          
-         <activity android:name="com.lansosdk.editorDemo.VideoPlayerActivity"></activity>
-         
-         
-         <activity android:name="com.lansosdk.editorDemo.FileExplorerActivity"></activity>
-         <activity android:name="com.lansosdk.editorDemo.MediaInfoActivity"></activity>
-         
-         
-         <activity android:name="com.lansosdk.editorDemo.CustomFunctionActivity"/>
-         
-         <activity android:name="com.lansosdk.editorDemo.BusynessActivity"/>
-         
-         
-         <activity android:name="com.lansosdk.editorDemo.VideoWrapperEditorActivity"/>
-         <activity android:name="com.lansosdk.editorDemo.ScaleExecuteDemoActivity"/>
-         
-                 
-        <activity
-            android:name="com.lansosdk.editorDemo.MainActivity2">
-            
-            
-           </activity> 
+         <activity android:name="com.lansosdk.commonDemo.VideoPlayerActivity"></activity>
+         <activity android:name="com.lansosdk.commonDemo.FileExplorerActivity"></activity>
+         <activity android:name="com.lansosdk.commonDemo.MediaInfoActivity"></activity>
+         <activity android:name="com.lansosdk.commonDemo.CustomFunctionActivity"/>
+         <activity android:name="com.lansosdk.commonDemo.BusynessActivity"/>
+         <activity android:name="com.lansosdk.commonDemo.AVEditorDemoActivity"/>
+         <activity android:name="com.lansosdk.commonDemo.ScaleExecuteDemoActivity"/>
              
              
     </application>
