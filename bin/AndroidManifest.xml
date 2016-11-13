@@ -24,11 +24,18 @@
         android:theme="@style/AppTheme" >
         
             
-         <activity android:name="com.lansosdk.commonDemo.StartActivity"
+         <activity android:name="com.lansosdk.commonDemo.startActivity"
+             android:theme="@style/startTheme"
             android:label="@string/app_name" >
-                
+                <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
                    
          </activity>
+         
+         
           <activity android:name="com.lansosdk.commonDemo.SdkHintActivity"></activity>
          
           
@@ -47,20 +54,7 @@
          <activity android:name="com.lansosdk.commonDemo.AVEditorDemoActivity"/>
          <activity android:name="com.lansosdk.commonDemo.ScaleExecuteDemoActivity"/>
          
-         <activity android:name="com.lansosdk.commonDemo.OnlyTestActivity"/>
-         
-         <activity android:name="com.lansosdk.commonDemo.OnlyTestPlayerActivity">
-                
-                <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            
-                
-             </activity>
-             
-             
+         <activity android:name="com.lansosdk.commonDemo.OnlyTestCmdActivity"/>
     </application>
 
 </manifest>

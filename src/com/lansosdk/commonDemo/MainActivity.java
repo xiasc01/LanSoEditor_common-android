@@ -95,7 +95,7 @@ public class MainActivity extends Activity{
 		 LoadLanSongSdk.loadLibraries();
 		 LanSoEditor.initSo(getApplicationContext(),null);
 		 
-			//因为从android6.0系统有各种权限的限制, 这里开始先检查是否有读写的权限. 
+			//因为从android6.0系统有各种权限的限制, 这里开始先检查是否有读写的权限,PermissionsManager采用github上开源库,不属于我们sdk的一部分.只是使用而已. 
 		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
 	            @Override
 	            public void onGranted() {
@@ -128,8 +128,6 @@ public class MainActivity extends Activity{
 					new com.lansosdk.videoeditor.CopyDefaultVideoAsyncTask(MainActivity.this, tvVideoPath, "ping20s.mp4").execute();
 				}
 			});
-	        
-		 
 		 mListView=(ListView)findViewById(R.id.id_demo_list);
 		 mListView.setAdapter(new SoftApAdapter(MainActivity.this));
 		 
@@ -166,18 +164,7 @@ public class MainActivity extends Activity{
 	        }else{
 	        	isPermissionOk=true;
 	        }
-//		 showHintDialog();
-		 
-//		 new Handler().postDelayed(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					// TODO Auto-generated method stub
-//					Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
-//					intent.putExtra("videopath", "/sdcard/he_b.ts");
-//					startActivity(intent);
-//				}
-//			}, 1000);
+		 showHintDialog();
 	}
 	@Override
 	protected void onResume() {
@@ -348,7 +335,6 @@ public class MainActivity extends Activity{
 	   		   		String timeHint=getResources().getString(R.string.sdk_limit2);
 	   		   		timeHint=String.format(timeHint, lyear,lmonth);
 	   		   		
-	   		   		
 	   				showHintDialog(timeHint);
 	   			}
 	   		})
@@ -411,7 +397,7 @@ public class MainActivity extends Activity{
 			        
 			        DemoInfo cmdInfo = mTestCmdArray[position];
 			        
-			        	String str="NO.";
+			        String str="NO.";
 					 str+=String.valueOf(position+1);
 					 
 					 tvNumber.setText(str);

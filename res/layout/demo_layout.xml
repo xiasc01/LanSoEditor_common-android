@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white_40">
+    android:background="@color/gold">
     <LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,8 +14,9 @@
              android:layout_width="0dip"
              android:layout_weight="5"
              android:layout_height="50dip"
+             android:textColor="@color/red"
              android:background="@drawable/rect_button_bg"
-             android:text="使用默认演示视频"
+             android:text="使用自带演示视频"
              />
          <ImageView
              android:id="@+id/id_main_select_video"
@@ -25,6 +26,7 @@
              android:src="@drawable/ic_menu_archive"
              />
 	</LinearLayout>
+	
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="15dip"
-        android:fadeScrollbars="false"
-        android:background="@color/white" >
+        android:fadeScrollbars="false" >
     </ListView>
 </LinearLayout>
