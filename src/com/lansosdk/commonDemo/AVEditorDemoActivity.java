@@ -237,9 +237,9 @@ public class AVEditorDemoActivity extends Activity implements OnClickListener{
 				case R.string.demo_id_videoaddanglemeta:
 					DemoFunctions.demoSetVideoMetaAngle(mEditor, srcVideo, dstVideo);
 					break;
-				case R.string.demo_id_ontpicturevideo:
-					DemoFunctions.demoOnePicture2Video(AVEditorDemoActivity.this, mEditor, dstVideo);
-					break;
+//				case R.string.demo_id_ontpicturevideo:
+//					DemoFunctions.demoOnePicture2Video(AVEditorDemoActivity.this, mEditor, dstVideo);
+//					break;
 				case R.string.demo_id_morepicturevideo:  //此方法演示需要多张图片,并放在同一个文件夹内,并有一定的命令规则,暂时不演示, VideoEditor.java中的方法是完全正常的.
 					break;
 				case R.string.demo_id_audiodelaymix:

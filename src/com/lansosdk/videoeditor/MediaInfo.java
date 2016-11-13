@@ -50,6 +50,7 @@ public class MediaInfo {
       *  视频在编码时的高度, 编码是以宏块为单位,默认是16的倍数;
       *  MediaCodec在使用中,也需要视频的宽高是16的倍数, 这两个宽高用来使用到MediaCodec中.   如果视频旋转了90度或270度,则这里等于编码高度和宽度调换
       *  
+      *  如果没有获取到  vCodecHeight或vCodecWidth,说明当前文件中没有视频流, 但能获取vHeight/vWidth说明可能是一个mp3
       */
      public  int vCodecHeight;
      public  int vCodecWidth;    
@@ -199,9 +200,30 @@ public class MediaInfo {
     		 if(aCodecName==null || aCodecName.isEmpty())
     			 return false;
     		 
-    		 return true;
     	 }
-    	 return false;
+    		 return true;
+     }
+     public boolean isHaveVideo()
+     {
+    	 if(vBitRate>0 || vWidth>0 ||vHeight>0)  
+    	 {
+    		 if(vHeight==0 || vWidth==0)
+    		 {
+    			 return false;
+    		 }
+    		 
+    		 if(vCodecHeight==0 || vCodecWidth==0)
+    		 {
+    			 return false;
+    		 }
+    		 
+    		 if(vFrameRate>60) //如果帧率大于60帧, 则不支持.  
+    			 return false;
+    		 
+    		 if(vCodecName==null || vCodecName.isEmpty())
+    			 return false;
+    	 }
+    	 return true;
      }
      /**
       * 传递过来的文件是否支持
@@ -210,27 +232,19 @@ public class MediaInfo {
       */
      public boolean isSupport()
      {
-    	 //既没有音频,又没有视频,则不支持.
-    	 if(vBitRate <=0 && aBitRate<=0)
-    		 return false;
     	 
-    	 if(vBitRate>0)  //有视频,
+    	 if(vBitRate>0 || vWidth>0 ||vHeight>0)  //有视频,
     	 {
     		 if(vHeight==0 || vWidth==0)
     		 {
     			 return false;
     		 }
+    		 
     		 if(vFrameRate>60) //如果帧率大于60帧, 则不支持.  
     			 return false;
     		 
     		 if(vCodecName==null || vCodecName.isEmpty())
     			 return false;
-    		 /**
-    		  * 这里默认视频小于3秒,则认为不支持, 您的视频有小于3秒的需求, 可以修改这里或屏蔽这里.
-    		  */
-//    		 if(vDuration<3)
-//    			 return false;
-    		 
     	 }else if(aBitRate>0)  //有音频
     	 {
     		 if(aChannels==0)
@@ -239,11 +253,6 @@ public class MediaInfo {
     		 if(aCodecName==null || aCodecName.isEmpty())
     			 return false;
     		 
-    		 /**
-    		  * 默认音频小于3秒,则认为不支持, 您的音频有小于3秒的需求, 可以修改这里或屏蔽这里.
-    		  */
-//    		 if(aDuration<3)
-//    			 return false;
     	 }
    
     	 return true;
@@ -309,7 +318,6 @@ public class MediaInfo {
     		 return false;
     	 }
      }
-     
      //-------------------------------文件操作-------------------------
      private static boolean fileExist(String absolutePath)
 	 {

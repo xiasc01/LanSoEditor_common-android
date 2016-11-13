@@ -219,18 +219,18 @@ public class DemoFunctions {
     		return -1;
     	}
 	}
-	/**
-	 *  演示把一张图片转换为视频
-	 */
-	public static int demoOnePicture2Video(Context ctx,VideoEditor editor,String dstVideo)
-	{
-		String imagePath=SDKDir.TMP_DIR+"/threeword.png";
-		
-		CopyFileFromAssets.copy(ctx, "threeword.png", SDKDir.TMP_DIR, "threeword.png");
-		
-		Log.i(TAG,"demoOne picture to video :"+imagePath);
-		return editor.pictureFadeInOut(imagePath,5,0,40,50,75,dstVideo);
-	}
+//	/**
+//	 *  演示把一张图片转换为视频
+//	 */
+//	public static int demoOnePicture2Video(Context ctx,VideoEditor editor,String dstVideo)
+//	{
+//		String imagePath=SDKDir.TMP_DIR+"/threeword.png";
+//		
+//		CopyFileFromAssets.copy(ctx, "threeword.png", SDKDir.TMP_DIR, "threeword.png");
+//		
+//		Log.i(TAG,"demoOne picture to video :"+imagePath);
+//		return editor.pictureFadeInOut(imagePath,5,0,40,50,75,dstVideo);
+//	}
 
 	
 	/**

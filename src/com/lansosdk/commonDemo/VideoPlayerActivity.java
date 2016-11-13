@@ -151,10 +151,10 @@ public class VideoPlayerActivity extends Activity {
     private VPlayer  mVPlayer=null;
     private void VPlayVideo(final Surface surface)
     {
-          if (videoPath != null){
+          if (videoPath != null && mVPlayer==null){
         	  mVPlayer=new VPlayer(this);
         	  mVPlayer.setVideoPath(videoPath);
-        	  mVPlayer.setLooping(true);  //<-------------
+//        	  mVPlayer.setLooping(true);  //<-------------
               mVPlayer.setOnPreparedListener(new OnPlayerPreparedListener() {
     			
     			@Override
@@ -163,8 +163,6 @@ public class VideoPlayerActivity extends Activity {
     						mVPlayer.setSurface(surface);
     					    textureView.setVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
     				        textureView.requestLayout();
-//    				        mVPlayer.setLooping(true);
-    				        
     				        mVPlayer.start();
     					}
     			});
@@ -173,18 +171,17 @@ public class VideoPlayerActivity extends Activity {
 				@Override
 				public void onCompletion(IMediaPlayer mp) {
 					// TODO Auto-generated method stub
-					Log.i(TAG,"播放完毕了------------------->xxx0");
 					Toast.makeText(getApplicationContext(), "视频播放完毕",Toast.LENGTH_LONG).show();
 //					getTimeHandler.removeCallbacks(getTimeRunnable);
 				}
 			});
               mVPlayer.setUseSoftDecoder(true);
-          	Log.i(TAG,"------setUseSoftDecoder---------->xxx0");
         	  mVPlayer.prepareAsync();
-          }else {
-              Log.e("sno", "Null Data Source\n");
-              finish();
-              return;
+          }else if(mVPlayer!=null){
+        	  	mVPlayer.setSurface(surface);
+//              Log.e("sno", "Null Data Source\n");
+//              finish();
+//              return;
           }
     }
    
@@ -209,16 +206,19 @@ public class VideoPlayerActivity extends Activity {
         	mediaPlayer.release();
         	mediaPlayer=null;  
         }
-        if (mVPlayer!=null) {  
-        	mVPlayer.stop();
-        	mVPlayer.release();
-        	mVPlayer=null;  
-        }
+//       
         super.onPause();  
     }  
   
     @Override  
     protected void onDestroy() {  
         super.onDestroy();  
+        
+        if (mVPlayer!=null) {
+        	Log.i(TAG,"onDestroy  -------------->注销了");
+        	mVPlayer.stop();
+        	mVPlayer.release();
+        	mVPlayer=null;  
+        }
     }  
 }

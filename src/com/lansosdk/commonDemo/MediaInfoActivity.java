@@ -30,7 +30,8 @@ public class MediaInfoActivity extends Activity{
 	private String getMediaInfo()
 	{
 		String retStr="";
-		MediaInfo  info=new MediaInfo(videoPath);
+		//MediaInfo  info=new MediaInfo(videoPath);
+		MediaInfo  info=new MediaInfo("/sdcard/2x_hongdou3s.aac");
 	
 		if(info.prepare())
 		{

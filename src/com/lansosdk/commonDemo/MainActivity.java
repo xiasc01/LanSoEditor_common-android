@@ -27,6 +27,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.PermissionChecker;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,7 +63,7 @@ public class MainActivity extends Activity{
 			 new DemoInfo(R.string.demo_id_videoclockwise90,R.string.demo_more_videoclockwise90,true,false),
 			 new DemoInfo(R.string.demo_id_videocounterClockwise90,R.string.demo_more_videocounterClockwise90,true,false),
 			 new DemoInfo(R.string.demo_id_videoaddanglemeta,R.string.demo_more_videoaddanglemeta,true,false),
-			 new DemoInfo(R.string.demo_id_ontpicturevideo,R.string.demo_more_ontpicturevideo,true,false),
+//			 new DemoInfo(R.string.demo_id_ontpicturevideo,R.string.demo_more_ontpicturevideo,true,false),
 			 new DemoInfo(R.string.demo_id_morepicturevideo,R.string.demo_more_morepicturevideo,true,false),
 			 new DemoInfo(R.string.demo_id_audiodelaymix,R.string.demo_more_audiodelaymix,false,true),
 			 new DemoInfo(R.string.demo_id_audiovolumemix,R.string.demo_more_audiovolumemix,false,true),
@@ -139,9 +140,9 @@ public class MainActivity extends Activity{
 					int position, long id) {
 				// TODO Auto-generated method stub
 				if(position==0){
-					
-					startMediaInfoActivity();
-					
+					if(checkPath()){
+						startMediaInfoActivity();
+					}
 				}
 				else if(position==mTestCmdArray.length-2){  //最后两个, 扩展功能
 					
@@ -165,7 +166,26 @@ public class MainActivity extends Activity{
 	        }else{
 	        	isPermissionOk=true;
 	        }
-		 showHintDialog();
+//		 showHintDialog();
+		 
+//		 new Handler().postDelayed(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//					Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
+//					intent.putExtra("videopath", "/sdcard/he_b.ts");
+//					startActivity(intent);
+//				}
+//			}, 1000);
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//only for test. 
+		
+		
 	}
 	@Override
 	protected void onDestroy() {
@@ -175,7 +195,6 @@ public class MainActivity extends Activity{
 	}
 	private void startActivity(int position)
 	{
-		
 			DemoInfo demo = mTestCmdArray[position];
 			
 			if(demo.mHintId==R.string.demo_id_videoscale_hard)

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -25,6 +25,7 @@
         <item name="android:layout_height">60dip</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginTop">20dip</item>
+        <item name="android:background">@color/white</item>
     </style>
     
       <style name="main_item_linearlayout">

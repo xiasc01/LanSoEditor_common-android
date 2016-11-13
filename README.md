@@ -48,7 +48,7 @@
 *  音频aac解码器aac
 *  音频aac编码器 faac
 *  音频pcm编解码器 pcm_s16le
-
+*视频编解码器gif
    
 
 

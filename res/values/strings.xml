@@ -51,7 +51,10 @@
 	<string name="demo_id_videoclockwise90">视频旋转90度</string>
 	<string name="demo_id_videocounterClockwise90">视频旋转270度</string>
 	<string name="demo_id_videoaddanglemeta">视频增加角度数据</string>
+	<!-- 
 	<string name="demo_id_ontpicturevideo">一张图片转视频</string>
+	 -->
+	 
 	<string name="demo_id_morepicturevideo">多张图片转视频</string>
 	<string name="demo_id_audiodelaymix">音频延迟混合</string>
 	<string name="demo_id_audiovolumemix">音频音量控制混合</string>

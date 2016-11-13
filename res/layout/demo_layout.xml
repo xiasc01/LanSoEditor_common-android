@@ -4,18 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white_40">
-
-        <TextView 
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="请选择视频文件"
-	        android:layout_marginLeft="10dip"
-	        android:textColor="@color/red"
-	        android:textStyle="bold"
-	       android:textSize="18sp"/>
-    
-        
-        
     <LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,7 +13,7 @@
              android:id="@+id/id_main_use_default_videobtn"
              android:layout_width="0dip"
              android:layout_weight="5"
-             android:layout_height="60dip"
+             android:layout_height="50dip"
              android:background="@drawable/rect_button_bg"
              android:text="使用默认演示视频"
              />
@@ -33,15 +21,13 @@
              android:id="@+id/id_main_select_video"
              android:layout_width="0dip"
              android:layout_weight="2"
-             android:layout_height="60dip"
+             android:layout_height="50dip"
              android:src="@drawable/ic_menu_archive"
              />
 	</LinearLayout>
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dip"
         android:id="@+id/id_main_tvvideo"
 	    android:textSize="18sp"/>
     
@@ -49,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/red"
-        android:text="一下仅是常用方法的举例, 更多见VideoEditor.java源文件\n如您想扩展另外的功能, 可以自行或联系我们.\n我们的SDK有很多上线的APP在使用,可联系我们,获取信息."/>
+        android:text="以下仅为常用方法的举例,更多见VideoEditor.java源文件"/>
     
     <ListView
         android:id="@+id/id_demo_list"
