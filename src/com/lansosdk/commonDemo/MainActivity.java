@@ -159,7 +159,7 @@ public class MainActivity extends Activity{
 		});
 		 
 		 if(isPermissionOk==false && selfPermissionGranted(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")==false){
-	        	showHintDialog("当前没有读写权限");
+			 showHintDialog("当前没有读写权限,请关闭后,重新打开在弹出框中选中[允许]");
 	        	isPermissionOk=false;
 	        }else{
 	        	isPermissionOk=true;
@@ -272,7 +272,6 @@ public class MainActivity extends Activity{
 	    			MediaInfo info=new MediaInfo(path,false);
 	    			boolean ret=info.prepare();
 	    	        Log.i(TAG,"info:"+info.toString());
-	    	        
 	    			return ret;
 	    		}
 	    	}
