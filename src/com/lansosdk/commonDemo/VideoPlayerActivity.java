@@ -4,55 +4,94 @@ import java.io.IOException;
 
 import com.lansoeditor.demo.R;
 import com.lansosdk.videoeditor.MediaInfo;
-import com.lansosdk.videoeditor.player.IMediaPlayer;
-import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerCompletionListener;
-import com.lansosdk.videoeditor.player.IMediaPlayer.OnPlayerPreparedListener;
-import com.lansosdk.videoeditor.player.TextureRenderView;
-import com.lansosdk.videoeditor.player.VPlayer;
+import com.lansosdk.videoplayer.TextureRenderView;
+import com.lansosdk.videoplayer.VPlayer;
+import com.lansosdk.videoplayer.VideoPlayer;
+import com.lansosdk.videoplayer.VideoPlayer.OnPlayerCompletionListener;
+import com.lansosdk.videoplayer.VideoPlayer.OnPlayerPreparedListener;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
-import android.view.View;
 import android.view.TextureView.SurfaceTextureListener;
-import android.view.View.OnClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
-
+/**
+ * 视频播放 
+ *
+ */
 public class VideoPlayerActivity extends Activity {
 	   
-
-	private TextureRenderView textureView;
-	private TextureRenderView textureView2;
-    private MediaPlayer mediaPlayer=null;  
-    String videoPath=null;
-  
-    private static final boolean VERBOSE = false; 
+   	private static final boolean VERBOSE = true; 
     private static final String TAG = "VideoPlayerActivity";
+    
+	private TextureRenderView textureView;
+    private MediaPlayer mediaPlayer=null;  
+    private VPlayer  vplayer=null;
+    String videoPath=null;
+    private boolean isSupport=false;
+    private int screenWidth,screenHeight;
+    private MediaInfo mInfo;
+    
+    private TextView tvSizeHint;
     
     
     @Override  
     protected void onCreate(Bundle savedInstanceState) {  
         super.onCreate(savedInstanceState);  
         setContentView(R.layout.player_layout);  
-        
-    	
-        videoPath=getIntent().getStringExtra("videopath");
-
-        MediaInfo info=new MediaInfo(videoPath);
-        info.prepare();
-        Log.i(TAG,"info:"+info.toString());
-        
-        
-        
         textureView=(TextureRenderView)findViewById(R.id.surface1);
+        
+        videoPath=getIntent().getStringExtra("videopath");
+        
+        TextView tvScreen=(TextView)findViewById(R.id.id_palyer_screenhinit);
+        TextView tvVideoRatio=(TextView)findViewById(R.id.id_palyer_videoRatio);
+        TextView tvVideoDuration=(TextView)findViewById(R.id.id_palyer_videoduration);
+        
+        tvSizeHint =(TextView)findViewById(R.id.id_palyer_videosizehint);
+        
+        
+        
+        DisplayMetrics dm = new DisplayMetrics();// 获取屏幕密度（方法2）
+        dm = getResources().getDisplayMetrics();
+         screenWidth  = dm.widthPixels;
+         screenHeight =dm.heightPixels;
+         
+         String str="当前屏幕分辨率：";
+         str+=String.valueOf(screenWidth);
+         str+="x";
+         str+=String.valueOf(screenHeight);
+         tvScreen.setText(str);
+
+         mInfo=new MediaInfo(videoPath,false);
+         if(mInfo.prepare()==false){
+        	 showHintDialog();
+        	 isSupport=false;
+         }else{
+        	 isSupport=true;
+        	  str="当前视频分辨率：";
+             str+=String.valueOf(mInfo.vWidth);
+             str+="x";
+             str+=String.valueOf(mInfo.vHeight);
+             tvVideoRatio.setText(str); 
+             
+             str="当前视频时长:";
+             str+=String.valueOf(mInfo.vDuration);
+             tvVideoDuration.setText(str);
+         }
+         
+         
         textureView.setSurfaceTextureListener(new SurfaceTextureListener() {
 			
 			@Override
@@ -78,147 +117,137 @@ public class VideoPlayerActivity extends Activity {
 			public void onSurfaceTextureAvailable(SurfaceTexture surface, int width,
 					int height) {
 				// TODO Auto-generated method stub
-//				play(new Surface(surface));
-				VPlayVideo(new Surface(surface));
+				if(isSupport){
+//					play(new Surface(surface));
+					startVPlayer(new Surface(surface));
+				}
 			}
 		});
-        
-//        findViewById(R.id.id_player_pause).setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				mVPlayer.pause();
-////				 VplayerSeekTo(2000,7000);  //测试seek;
-//			}
-//		});
-//		findViewById(R.id.id_player_start).setOnClickListener(new OnClickListener() {
-//					
-//					@Override
-//					public void onClick(View v) {
-//						// TODO Auto-generated method stub
-//						mVPlayer.start();
-//					}
-//			});
-        
     }  
+    private void showHintDialog(){
+    	   
+    		new AlertDialog.Builder(this)
+		.setTitle("提示")
+		.setMessage("抱歉,暂时不支持当前视频格式")
+        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+			}
+		})
+        .show();
+    
+    }
+    
     public void play(Surface surface)  {  
 
     	if(videoPath==null)
     		return ;
+    	
+    	MediaInfo info=new MediaInfo(videoPath);
+    	if(info.prepare()==false){
+    		return ;
+    	}
+    	Log.i(TAG,"info:"+info.toString());
+    	
         mediaPlayer = new MediaPlayer();  
         mediaPlayer.reset();  
+        
+        
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);  
         mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
 			
 			@Override
 			public void onCompletion(MediaPlayer mp) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "视频播放完毕",Toast.LENGTH_LONG).show();
+				 Toast.makeText(VideoPlayerActivity.this, "视频播放完毕!", Toast.LENGTH_SHORT).show();
 			}
 		});
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);  
+        
         try {
-			mediaPlayer.setDataSource(videoPath);
-			  mediaPlayer.setSurface(surface);  
+				mediaPlayer.setDataSource(videoPath);
+				mediaPlayer.setSurface(surface);  
 		        mediaPlayer.prepare();  
 		        
-		        Log.i(TAG,"测试, 获取到的宽高:"+mediaPlayer.getVideoWidth()+" 高度:"+ mediaPlayer.getVideoHeight());
+		        
+		      //因为是竖屏.宽度小于高度.
+		        if(screenWidth>mInfo.vWidth){
+		        	tvSizeHint.setText(R.string.origal_width);
+		        	textureView.setDispalyRatio(TextureRenderView.AR_ASPECT_WRAP_CONTENT);
+		        	
+		        }else{  //大于屏幕的宽度
+		        	tvSizeHint.setText(R.string.fix_width);
+		        	textureView.setDispalyRatio(TextureRenderView.AR_ASPECT_FIT_PARENT);
+		        }
+		        
 		        
 		        textureView.setVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
 		        textureView.requestLayout();
-		        
 		        mediaPlayer.start();  
-		        
 		}  catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }  
-    private Handler getTimeHandler=new  Handler();
-    private Runnable  getTimeRunnable=new Runnable() {
-		
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			if(mVPlayer!=null){
-				
-				Log.i(TAG,"mVPlayer.getCurrentPosition()===>"+mVPlayer.getCurrentPosition());
-				getTimeHandler.postDelayed(getTimeRunnable, 1000);
-			}
-		}
-	};
-
-    private VPlayer  mVPlayer=null;
-    private void VPlayVideo(final Surface surface)
+  
+    private void startVPlayer(final Surface surface)
     {
-          if (videoPath != null && mVPlayer==null){
-        	  mVPlayer=new VPlayer(this);
-        	  mVPlayer.setVideoPath(videoPath);
-//        	  mVPlayer.setLooping(true);  //<-------------
-              mVPlayer.setOnPreparedListener(new OnPlayerPreparedListener() {
+    	vplayer=new VPlayer(this);
+    	vplayer.setVideoPath(videoPath);
+    	vplayer.setOnPreparedListener(new OnPlayerPreparedListener() {
     			
     			@Override
-    			public void onPrepared(IMediaPlayer mp) {
+    			public void onPrepared(VideoPlayer mp) {
     				// TODO Auto-generated method stub
-    						mVPlayer.setSurface(surface);
-    					    textureView.setVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
-    				        textureView.requestLayout();
-    				        mVPlayer.start();
+    						vplayer.setSurface(surface);
+    					      
+    						  //因为是竖屏.宽度小于高度.
+    					        if(screenWidth>mInfo.vWidth){
+    					        	tvSizeHint.setText(R.string.origal_width);
+    					        	textureView.setDispalyRatio(TextureRenderView.AR_ASPECT_WRAP_CONTENT);
+    					        	
+    					        }else{  //大于屏幕的宽度
+    					        	tvSizeHint.setText(R.string.fix_width);
+    					        	textureView.setDispalyRatio(TextureRenderView.AR_ASPECT_FIT_PARENT);
+    					        }
+    					        
+    					        textureView.setVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
+    					        textureView.requestLayout();
+    					        
+    				        vplayer.start();
     					}
     			});
-              mVPlayer.setOnCompletionListener(new OnPlayerCompletionListener() {
-				
-				@Override
-				public void onCompletion(IMediaPlayer mp) {
-					// TODO Auto-generated method stub
-					Toast.makeText(getApplicationContext(), "视频播放完毕",Toast.LENGTH_LONG).show();
-//					getTimeHandler.removeCallbacks(getTimeRunnable);
-				}
-			});
-              mVPlayer.setUseSoftDecoder(true);
-        	  mVPlayer.prepareAsync();
-          }else if(mVPlayer!=null){
-        	  	mVPlayer.setSurface(surface);
-//              Log.e("sno", "Null Data Source\n");
-//              finish();
-//              return;
-          }
+    	vplayer.setOnCompletionListener(new OnPlayerCompletionListener() {
+			
+			@Override
+			public void onCompletion(VideoPlayer mp) {
+				// TODO Auto-generated method stub
+				Log.i(TAG,"vplayer --------------oncompletion-----!");
+			}
+		});
+    	
+    	vplayer.prepareAsync();
     }
-   
-    private void VplayerSeekTo(int delayMs,final int seekToMS){
-    	   new Handler().postDelayed(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-						if(mVPlayer!=null){
-//							mVPlayer.pause();  //当前不支持先pause;
-							mVPlayer.seekTo(seekToMS);
-							mVPlayer.start();
-						}
-				}
-			}, delayMs);
-    }
+    
     @Override  
     protected void onPause() {  
+        super.onPause();
+        
         if (mediaPlayer!=null) {  
         	mediaPlayer.stop();
         	mediaPlayer.release();
         	mediaPlayer=null;  
-        }
-//       
-        super.onPause();  
+        }  
+        if(vplayer!=null){
+    		vplayer.stop();
+    		vplayer.release();
+    		vplayer=null;
+    	}
     }  
   
     @Override  
     protected void onDestroy() {  
         super.onDestroy();  
-        
-        if (mVPlayer!=null) {
-        	Log.i(TAG,"onDestroy  -------------->注销了");
-        	mVPlayer.stop();
-        	mVPlayer.release();
-        	mVPlayer=null;  
-        }
     }  
 }

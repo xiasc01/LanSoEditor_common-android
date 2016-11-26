@@ -95,7 +95,8 @@ public class MainActivity extends Activity{
 		 LoadLanSongSdk.loadLibraries();
 		 LanSoEditor.initSo(getApplicationContext(),null);
 		 
-			//因为从android6.0系统有各种权限的限制, 这里开始先检查是否有读写的权限,PermissionsManager采用github上开源库,不属于我们sdk的一部分.只是使用而已. 
+			//因为从android6.0系统有各种权限的限制, 这里开始先检查是否有读写的权限,PermissionsManager采用github上开源库,不属于我们sdk的一部分.
+		 //下载地址是:https://github.com/anthonycr/Grant,您也可以使用别的方式来检查app所需权限.
 		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
 	            @Override
 	            public void onGranted() {
@@ -128,6 +129,10 @@ public class MainActivity extends Activity{
 					new com.lansosdk.videoeditor.CopyDefaultVideoAsyncTask(MainActivity.this, tvVideoPath, "ping20s.mp4").execute();
 				}
 			});
+	        
+	       
+//	        tvVideoPath.setText("/sdcard/boxenc3.ts");  
+	        
 		 mListView=(ListView)findViewById(R.id.id_demo_list);
 		 mListView.setAdapter(new SoftApAdapter(MainActivity.this));
 		 
@@ -165,6 +170,7 @@ public class MainActivity extends Activity{
 	        	isPermissionOk=true;
 	        }
 		 showHintDialog();
+		
 	}
 	@Override
 	protected void onResume() {
@@ -196,7 +202,6 @@ public class MainActivity extends Activity{
 				intent.putExtra("outaudio", demo.isOutAudio);
 				intent.putExtra("demoID", demo.mHintId);
 				intent.putExtra("textID", demo.mTextId);
-				
 				startActivity(intent);
 			}
 	}

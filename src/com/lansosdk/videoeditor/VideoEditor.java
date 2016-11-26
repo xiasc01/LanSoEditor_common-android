@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import com.lansosdk.videoeditor.player.CodecInfoKnowed;
 
 
 
@@ -572,7 +571,7 @@ public class VideoEditor {
 				String audioPath=null;
 				if(info.aCodecName.equalsIgnoreCase("aac")){
 					audioPath=SDKFileUtils.createFile(SDKDir.TMP_DIR, ".aac");
-				}else if(info.aCodecName.equalsIgnoreCase("mp4"))
+				}else if(info.aCodecName.equalsIgnoreCase("mp3"))
 					audioPath=SDKFileUtils.createFile(SDKDir.TMP_DIR, ".mp3");
 				
 				if(audioPath!=null){

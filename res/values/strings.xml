@@ -30,6 +30,12 @@
 	<string name="no_free">此SDK为收费版本, 费用为7000元, 单一APP使用,永久授权,提供一年技术支持,普通问题三个工作日内解决.</string>
 	<string name="connect_us">联系我们:\n 电话:0571-89052701 \n 手机:18006716739 \n QQ:\t 1852600324 \n email:\tsupport@lansongtech.com \n 地址:\t杭州市余杭区运通网城软件园6栋428室.</string>
 	
+	
+	<string name="origal_width">提示:\n当前视频宽度小于屏幕宽度, 采取原尺寸显示,您可以在代码中修改为自适应屏幕宽度显示形式</string>
+	<string name="fix_width">提示:\n当前视频宽度大于或等于屏幕宽度, 采取自适应到屏幕宽度,您可以在代码中修改为原尺寸的显示形式</string>
+
+	
+	
 	<!-- =========场景======== -->
 	<string name="cmdwrapper_hint">当前功能已经测试完毕,但还没有编写UI界面,请在VideoEditor.java文件中查看相关的实现方法.如有问题,请联系我们,谢谢!\n\n</string>
 	
@@ -83,7 +89,7 @@
 	<string name="demo_more_videoscale_hard">演示宽高缩小一半,采用硬缩放的形式来做\n流程是硬解码  软件缩放  硬编码</string>
 	<string name="demo_more_videowatermark">增加水印,增加一张demo自动的logo图片到视频中</string>
 	<string name="demo_more_videocropwatermark">裁剪和加水印,裁剪画面的同时增加一张logo图片</string>
-	<string name="demo_more_videogetframes">获取所有帧图片,保存在/sdcard下面</string>
+	<string name="demo_more_videogetframes">获取所有帧图片,保存在/sdcard/lansongBox/下面</string>
 	<string name="demo_more_videogetoneframe">获取一帧图片,保存在/sdcard/lansongbox/下面</string>
 	<string name="demo_more_videozeroangle">视频矫正角度,把原来已经有的视频角度矫正过来.</string>
 	<string name="demo_more_videoclockwise90">视频旋转90度</string>

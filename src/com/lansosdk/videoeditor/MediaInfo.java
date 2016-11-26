@@ -190,6 +190,7 @@ public class MediaInfo {
     	 //TODO nothing 
     	 getSuccess=false;
      }
+     
      public boolean isHaveAudio()
      {
     	 if(aBitRate>0)  //有音频
@@ -200,8 +201,10 @@ public class MediaInfo {
     		 if(aCodecName==null || aCodecName.isEmpty())
     			 return false;
     		 
-    	 }
     		 return true;
+    	 }else{
+    		 return false;
+    	 }
      }
      public boolean isHaveVideo()
      {
@@ -222,8 +225,10 @@ public class MediaInfo {
     		 
     		 if(vCodecName==null || vCodecName.isEmpty())
     			 return false;
+    		 
+    		 return true;
     	 }
-    	 return true;
+    	 return false;
      }
      /**
       * 传递过来的文件是否支持

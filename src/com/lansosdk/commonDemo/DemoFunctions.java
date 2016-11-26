@@ -1,5 +1,7 @@
 package com.lansosdk.commonDemo;
 
+import java.io.File;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -198,7 +200,13 @@ public class DemoFunctions {
 			if(info.prepare())
 			{
 				String imagePath="/sdcard/videoimage.png";
-				CopyFileFromAssets.copy(ctx, "ic_launcher.png", "/sdcard", "videoimage.png");
+				String dir="/sdcard/lansongBox/";
+				File dirFile=new File(dir);
+				
+				if (!dirFile.exists())
+					dirFile.mkdir();
+				
+				CopyFileFromAssets.copy(ctx, "ic_launcher.png", dir, "videoimage.png");
 				return editor.executeAddWaterMark(srcVideo, imagePath, 0, 0, dstVideo, (int)(info.vBitRate*1.2f));
 			}else{
 				return -1;

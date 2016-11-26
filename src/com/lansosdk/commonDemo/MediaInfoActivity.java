@@ -38,7 +38,7 @@ public class MediaInfoActivity extends Activity{
 			retStr+="文件名字: " 	+	info.fileName	+	" \n";
 			retStr+="文件后缀: " 	+	info.fileSuffix	+	" \n";
 			
-			if(info.vBitRate>0)
+			if(info.vCodecHeight>0  && info.vCodecWidth>0)
 			{
 				retStr+="\n视频信息----------------------\n";
 				
@@ -58,6 +58,7 @@ public class MediaInfoActivity extends Activity{
 			
 				if(info.vCodecName.equals("lansoh264_dec"))
 					retStr+="h264,";
+				
 				retStr+=info.vCodecName	+	" \n";
 				
 			}
