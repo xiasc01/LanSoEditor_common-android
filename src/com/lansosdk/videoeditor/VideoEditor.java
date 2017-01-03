@@ -580,7 +580,6 @@ public class VideoEditor {
 				}
 				return audioPath;
 			}
-	
 	/**
 	 * 把原视频文件中的音频部分, 增加到新的视频中,
 	 * 
@@ -875,6 +874,9 @@ public class VideoEditor {
 		  /**
 		   * 
 		   * 剪切mp4文件.(包括视频文件中的音频部分和视频部分),即把mp4文件中的一段剪切成独立的一个视频文件, 比如把一个30分钟的视频,裁剪其中的10秒钟等.
+		   * 
+		   * 注意: 此方法裁剪不是精确裁剪,而是从视频的IDR帧开始裁剪的, 没有精确到您指定的那一帧的时间, 如果您指定的时间不是IDR帧上的时间,则退后到上一个IDR帧开始.
+		   * 
 		   * @param videoFile  原视频文件 文件格式是mp4
 		   * @param dstFile   裁剪后的视频路径， 路径的后缀名是.mp4
 		   * @param startS   开始裁剪位置，单位是秒，
@@ -1097,13 +1099,95 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
-		  
+		  /**
+		   * 把mp3转为aac格式, 需要编解码, 因为是软解后软编码, 会需要一些时间. 
+		   * 
+		   * @param mp3Path
+		   * @param dstAacPath  目标文件路径, 后缀需要是 aac或m4a, 建议用m4a
+		   * @return
+		   */
+		  public int executeConvertMp3ToAAC(String mp3Path,String dstAacPath)
+		  {
+			  if(fileExist(mp3Path)){
+					
+					List<String> cmdList=new ArrayList<String>();
+					
+			    	cmdList.add("-i");
+					cmdList.add(mp3Path);
 
+					cmdList.add("-acodec");
+					cmdList.add("libfaac");
+					
+					cmdList.add("-y");
+					cmdList.add(dstAacPath);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		  /**
+		   * 把视频解码成mjpeg格式的mp4文件.
+		   * 
+		   * 两个都需要时mp4的后缀
+		   * 
+		   * @param srcPath
+		   * @param dstPath  两个都需要时mp4的后缀
+		   * @return
+		   */
+		  public int executeConvertToMJpeg(String srcPath,String dstPath)
+			{
+				if(fileExist(srcPath)){
+					
+					MediaInfo info=new MediaInfo(srcPath,false);
+					if(info.prepare())
+					{
+							List<String> cmdList=new ArrayList<String>();
+							
+							cmdList.add("-vcodec");
+							cmdList.add(info.vCodecName);
+							
+					    	cmdList.add("-i");
+							cmdList.add(srcPath);
+							cmdList.add("-acodec");
+							cmdList.add("copy");
+
+							cmdList.add("-vcodec");
+							cmdList.add("mjpeg");
+							
+							cmdList.add("-q:v");
+							cmdList.add("1");
+							
+							cmdList.add("-b:v");
+							cmdList.add("200m");
+							
+							cmdList.add("-y");
+							cmdList.add(dstPath);
+							String[] command=new String[cmdList.size()];  
+						     for(int i=0;i<cmdList.size();i++){  
+						    	 command[i]=(String)cmdList.get(i);  
+						     }  
+						     return executeVideoEditor(command);
+					}
+			  	}
+				return VIDEO_EDITOR_EXECUTE_FAILED;
+			}
 		  /**
 		   * 把mp4文件转换位TS流，
 		   * 此命令和{＠link #executeConvertTsToMp4}结合,可以实现把多个mp4文件拼接成一个mp4文件。
 		   * 适用在当你需要把录制好的多段视频拼接成一个mp4的场合，或者你先把一个mp4文件裁剪成多段，然后把其中几段视频拼接在一起
 		   * 或者你想把两个视频增加一个转场的效果，
+		   * 
+		   * 注意:如您的操作是:视频拼接,请注意!
+		   * 拼接时一定要注意: 此处拼接不解码, 只是对多媒体重新封装,然后把H264 NAL数据拷贝而已.
+		   * 如不同来源的视频, 视频的编码器可能不同,拼接是正常的, 但拼接后, 目标视频里可能有多个编码格式的画面,某些手机播放器会不支持.(VLC播放器是支持的)
+		   * 建议只是在同一个编码器下产生的多个视频进行拼接, 
+		   * 如一定需要来源不同的视频拼接, 建议先解码成yuv数据,然后yuv拼接后, 再次编码
+		   *  
+		   * 
 		   * @param mp4Path　输入的mp4文件路径
 		   * @param dstTs　转换后保存的ts路径，后缀名需要是.ts
 		   * @return
@@ -1147,6 +1231,13 @@ public class VideoEditor {
 		   * 把多段TS流拼接在一起，然后保存成mp4格式
 		   * 注意:输入的各个流需要编码参数一致,
 		   * 适用于断点拍照,拍照多段视频; 或者想在两段视频中增加一个转场的视频
+		   * 
+		   * 注意:如您的操作是:视频拼接,请注意!
+		   * 拼接时一定要注意: 此处拼接不解码, 只是对多媒体重新封装,然后把H264 NAL数据拷贝而已.
+		   * 如不同来源的视频, 视频的编码器可能不同,拼接是正常的, 但拼接后, 目标视频里可能有多个编码格式的画面,某些手机播放器会不支持.(VLC播放器是支持的)
+		   * 建议只是在同一个编码器下产生的多个视频进行拼接, 
+		   * 如一定需要来源不同的视频拼接, 建议先解码成yuv数据,然后yuv拼接后, 再次编码
+		   * 
 		   * @param tsArray　多段ts流的数组
 		   * @param dstFile　　处理后保存的路径,文件后缀名需要是.mp4
 		   * @return
@@ -1478,7 +1569,7 @@ public class VideoEditor {
 		  /**
 		   * 把多张图片转换为视频
 		   * 注意：　这里的多张图片必须在同一个文件夹下，并且命名需要有规律,比如名字是 r5r_001.jpeg r5r_002.jpeg, r5r_003.jpeg等
-		   * 多张图片，需要统一的分辨率，如分辨率不同，则以第一张图片的分辨率为准，后面的分辨率自动缩放到第一张图片的分辨率带大小
+		   * 多张图片，需要统一的分辨率，如分辨率不同，则以第一张图片的分辨率为准，后面的分辨率自动缩放到第一张图片的分辨率的大小
 		   * @param picDir　保存图片的文件夹
 		   * @param jpgprefix　图片的文件名有规律的前缀
 		   * @param framerate　每秒钟需要显示几张图片
@@ -1614,7 +1705,7 @@ public class VideoEditor {
 							ret=videoAddWatermark(videoFile,"h264",imagePngPath, filter, dstFile, bitrate);
 						}
 						if(ret!=0){	//如果再不行, 就用软解和软编码来做.
-							ret=videoAddWatermarkX264(videoFile, "lansoh264_dec", imagePngPath, filter, dstFile, bitrate);
+							ret=videoAddWatermarkX264(videoFile, "", imagePngPath, filter, dstFile, bitrate);
 						}
 						return ret;
 					
@@ -1737,8 +1828,8 @@ public class VideoEditor {
 		   * @param decCodec  视频用到的解码器, 通过MediaInfo得到.
 		   * @param padWidth  填充成的目标宽度 , 参数需要是16的倍数
 		   * @param padHeight 填充成的目标高度 , 参数需要是16的倍数
-		   * @param padX  原视频的在填充宽高度的X坐标开始位置
-		   * @param padY  原视频的在填充宽宽度的Y坐标开始位置
+		   * @param padX  把视频画面放到填充区时的开始X坐标
+		   * @param padY  把视频画面放到填充区时的开始Y坐标
 		   * @param dstFile  目标文件
 		   * @param bitrate  目标文件的码率, 可以用原视频的MediaInfo.vBitRate的1.2f倍表示即可.
 		   * @return
@@ -1827,7 +1918,7 @@ public class VideoEditor {
 				  
 				  //第一步检测设置填充的高度和宽度是否比原来+坐标的大, 如果小于,则出错.
 				    	int minWidth=cropWidth+padX;
-				    	int minHeight=cropWidth+padY;
+				    	int minHeight=cropHeight+padY;
 				    	if( minWidth>padWidth || minHeight>padHeight)
 				    	{
 				    		Log.e(TAG,"pad set position is error. min Width>pading width.or min height > padding height");
@@ -2491,27 +2582,73 @@ public class VideoEditor {
 		{
 			//ffmpeg -i 2x.mp4 -vf reverse -af areverse reversed.mp4
 			 if(fileExist(srcPath)){
+				 int ret=0;
+				 ret=doAVReverse(srcPath, decoder, bitrate, dstPath, true);
+				 if(ret!=0){
+					 Log.w(TAG,"executeAVReverse use hardware encoder is error,switch to software encoder");
+					 ret=doAVReverse(srcPath, decoder, bitrate, dstPath, false);
+				 }
+				  return ret;
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		}
+		private int doAVReverse( String srcPath,String decoder,int bitrate,String dstPath,boolean isHW)
+		{
+			List<String> cmdList=new ArrayList<String>();
+			
+			cmdList.add("-vcodec");
+			cmdList.add(decoder);
+			
+			cmdList.add("-i");
+			cmdList.add(srcPath);
+			
+			cmdList.add("-vf");
+			cmdList.add("reverse");
+			
+			cmdList.add("-af");
+			cmdList.add("areverse");
+			 
+			
+			cmdList.add("-c:v");
+			if(isHW){
+				cmdList.add("lansoh264_enc");
+				cmdList.add("-pix_fmt");
+				cmdList.add("yuv420p");	
+			}else{
+				cmdList.add("libx264");
+			}
+			cmdList.add("-b:v");
+			cmdList.add(checkBitRate(bitrate)); 
+			
+			cmdList.add("-y");
+			cmdList.add(dstPath);
+			 
+			String[] command=new String[cmdList.size()];  
+		     for(int i=0;i<cmdList.size();i++){  
+		    	 command[i]=(String)cmdList.get(i);  
+		     }  
+		    return  executeVideoEditor(command);
+		}
+		/**
+		 * 把mp4的视频, 转换为yuv格式 转换后, yuv的格式是YUV420P
+		 * @param srcPath  输入的 input.mp4文件
+		 * @param decodeName  输入的解码器, 由MediaInfo获取.
+		 * @param dstPath   得到的yuv数据, 后缀请务必使.yuv
+		 * @return
+		 */
+		public int executeDecodeVideoToYUV( String srcPath,String decodeName,String dstPath) 
+		{
+			//ffmpeg -vcodec xx 
+			 if(fileExist(srcPath)){
 					
 					List<String> cmdList=new ArrayList<String>();
 					
 					cmdList.add("-vcodec");
-					cmdList.add(decoder);
+					cmdList.add(decodeName);
 					
 					cmdList.add("-i");
 					cmdList.add(srcPath);
-					
-					cmdList.add("-vf");
-					cmdList.add("reverse");
-					
-					cmdList.add("-af");
-					cmdList.add("areverse");
-					 
-					cmdList.add("-c:v");
-					cmdList.add("lansoh264_enc");
-					cmdList.add("-pix_fmt");
-					cmdList.add("yuv420p");
-					cmdList.add("-b:v");
-					cmdList.add(checkBitRate(bitrate)); 
 					
 					cmdList.add("-y");
 					cmdList.add(dstPath);
@@ -2526,7 +2663,72 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		}
-		
+		/**
+		 * 把yuv格式的视频, 转换为MP4,并在转换过程中,增加图片叠加
+		 * 
+		 * 注意:这里的yuv格式是YUV402P(如果是NV21或NV12需要转换下)
+		 * 
+		 * @param yuvPath  yuv的路径
+		 * @param width  yuv的宽度
+		 * @param height yuv的高度
+		 * @param imagePngPath  图像路径
+		 * @param x  叠加的x开始坐标 左上角为0,0
+		 * @param y 
+		 * @param dstFile  目标文件
+		 * @param bitrate  视频编码时的码率
+		 * @return
+		 */
+		 public int executeYUVAddWaterMark(String yuvPath,int width,int height,String imagePngPath,int x,int y,String dstFile,int bitrate){
+			  
+			  if(fileExist(yuvPath)){
+				  
+				  String filter=String.format(Locale.getDefault(),"overlay=%d:%d",x,y);
+				  
+
+				  	List<String> cmdList=new ArrayList<String>();
+					
+				  	String size=String.valueOf(width);
+					size+="x";
+					size+=String.valueOf(height);
+					
+					cmdList.add("-f");
+					cmdList.add("rawvideo");
+					
+					cmdList.add("-video_size");
+					cmdList.add(size);
+					
+					cmdList.add("-i");
+					cmdList.add(yuvPath);
+					
+					
+
+					cmdList.add("-i");
+					cmdList.add(imagePngPath);
+
+					cmdList.add("-filter_complex");
+					cmdList.add(filter);
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc"); 
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-y");
+					cmdList.add(dstFile);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+					
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
 		/**
 		 * TODO  没有验证, 只是在PC端测试OK
 		 * 

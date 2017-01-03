@@ -131,7 +131,7 @@ public class MainActivity extends Activity{
 			});
 	        
 	       
-//	        tvVideoPath.setText("/sdcard/boxenc3.ts");  
+//	        tvVideoPath.setText("/sdcard/aum.mp4");  
 	        
 		 mListView=(ListView)findViewById(R.id.id_demo_list);
 		 mListView.setAdapter(new SoftApAdapter(MainActivity.this));
@@ -169,8 +169,7 @@ public class MainActivity extends Activity{
 	        }else{
 	        	isPermissionOk=true;
 	        }
-		 showHintDialog();
-		
+//		 showHintDialog();
 	}
 	@Override
 	protected void onResume() {
@@ -186,6 +185,7 @@ public class MainActivity extends Activity{
 		super.onDestroy();
 		SDKFileUtils.deleteDir(new File(SDKDir.TMP_DIR)); //删除dir
 	}
+	
 	private void startActivity(int position)
 	{
 			DemoInfo demo = mTestCmdArray[position];
@@ -231,7 +231,8 @@ public class MainActivity extends Activity{
 	
 	//-----------------------------------------
 	 private final static int SELECT_FILE_REQUEST_CODE=10;
-	  	private void startSelectVideoActivity()
+	  
+	 private void startSelectVideoActivity()
 	    {
 	    	Intent i = new Intent(this, FileExplorerActivity.class);
 	    	

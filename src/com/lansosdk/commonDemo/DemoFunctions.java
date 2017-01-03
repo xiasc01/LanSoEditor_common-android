@@ -11,7 +11,10 @@ import com.lansosdk.videoeditor.MediaInfo;
 import com.lansosdk.videoeditor.SDKDir;
 import com.lansosdk.videoeditor.SDKFileUtils;
 import com.lansosdk.videoeditor.VideoEditor;
-
+/**
+ * 
+ * 注意: 此代码
+ */
 public class DemoFunctions {
 	
 	public final static String TAG="DemoFunctions";

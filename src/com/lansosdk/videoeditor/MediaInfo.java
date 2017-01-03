@@ -174,7 +174,8 @@ public class MediaInfo {
     			 return isSupport();
     		 }else{   
     			 /**
-    			  * 如果返回的值是-13, 请检查您的手机设备是否是Android6.0以上,并确定是否打开读写文件的授权.//很多客户是因为没有授权而失败.我们提供了PermissionsManager类来检测,可参考使用.
+    			  * 如果返回的值是-13, 请检查您的手机设备是否是Android6.0以上,并确定是否打开读写文件的授权.
+    			  * 很多客户是因为没有授权而失败.我们提供了PermissionsManager类来检测,可参考使用.
     			  * 
     			  */
     			 Log.e(TAG,"mediainfo prepare media is failed:"+filePath);
