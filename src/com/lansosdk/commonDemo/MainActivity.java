@@ -169,7 +169,7 @@ public class MainActivity extends Activity{
 	        }else{
 	        	isPermissionOk=true;
 	        }
-//		 showHintDialog();
+		 showHintDialog();
 	}
 	@Override
 	protected void onResume() {
@@ -177,6 +177,14 @@ public class MainActivity extends Activity{
 		super.onResume();
 		//only for test. 
 		
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+//				testCmd();
+			}
+		}, 1000);
 		
 	}
 	@Override
@@ -184,6 +192,11 @@ public class MainActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		SDKFileUtils.deleteDir(new File(SDKDir.TMP_DIR)); //删除dir
+	}
+	private void testCmd()
+	{
+		 VideoEditor   editor=new VideoEditor();
+		 editor.executeDecodeVideoToYUV("/sdcard/17.mp4", "lansoh264_dec", "/sdcard/172.yuv");
 	}
 	
 	private void startActivity(int position)

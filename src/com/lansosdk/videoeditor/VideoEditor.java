@@ -2639,7 +2639,6 @@ public class VideoEditor {
 		 */
 		public int executeDecodeVideoToYUV( String srcPath,String decodeName,String dstPath) 
 		{
-			//ffmpeg -vcodec xx 
 			 if(fileExist(srcPath)){
 					
 					List<String> cmdList=new ArrayList<String>();
@@ -2649,6 +2648,14 @@ public class VideoEditor {
 					
 					cmdList.add("-i");
 					cmdList.add(srcPath);
+					
+
+					cmdList.add("-f");
+					cmdList.add("rawvideo");
+					
+					cmdList.add("-pix_fmt");
+					cmdList.add("yuv420p");
+					
 					
 					cmdList.add("-y");
 					cmdList.add(dstPath);

@@ -13,7 +13,8 @@ import com.lansosdk.videoeditor.SDKFileUtils;
 import com.lansosdk.videoeditor.VideoEditor;
 /**
  * 
- * 注意: 此代码
+ * 注意: 此代码仅作为视频处理的演示使用, 不属于sdk的一部分. 
+ * 
  */
 public class DemoFunctions {
 	
