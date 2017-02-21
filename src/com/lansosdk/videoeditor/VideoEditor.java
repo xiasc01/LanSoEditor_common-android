@@ -25,7 +25,7 @@ import android.util.Log;
  *
  *  此类的executeXXX的方法，是阻塞性执行， 即调用后，会一直阻塞在这里执行，直到执行完退出后，才执行下一行代码。您可以仿照我们的例子，采用ASynctask的形式或new Thread的形式来做。
  *  
- *  最简单的调用形式是:(easy demo):
+ *  提示二:   最简单的调用形式是:(easy demo):
  *  
  *  在一个线程中,或AsyncTask中执行如下操作:
  *  
@@ -36,6 +36,16 @@ import android.util.Log;
  *  mEditor.executeXXXXX();
  *  
  *
+ *
+ *  提示三:
+ *  这些方法的底层，虽然方法在执行中，处于阻塞状态，但我们已经开启了另一个异步处理线程去执行。
+ *  建议不要用多线程操作, 因为没有意义, 需要用到编解码的方法, 因硬件在大部分的手机SoC中就一个编解码器, 多个线程一样要排队执行.  
+ *  不需要用到编解码器的方法, 耗时很小,基本等于数据拷贝的时间, 也没有意义开多个线程.
+ *
+ *
+ * 提示四:
+ * 以下所有的需要用到filter的方法， 都可以用一条命令来完成， 比如你要同时执行倒叙+裁剪+水印， 可以用一个方法一次性执行完成，不必要执行两三次的编解码操作。 
+ * 可以联系我们， 在合作后为您定制方法。
  */
 public class VideoEditor {
 
@@ -163,32 +173,54 @@ public class VideoEditor {
 //		
 //		
 //	}
-//	/**
-//	 * 把一张图片转换为视频，视频在刚显示时，会有缓慢显示出来的动画效果。适用在视频转场的场合。
-//	 * @param srcPath　　原png或jpg图片
-//	 * @param totalTime　　转换为视频的总时长
-//	 * @param fadeinstart　　从第几帧开始缓慢显示出来，建议从0
-//	 * @param fadeinCnt  缓慢显示出来的帧数，比如效果持续２秒钟，则这里是2x25
-//	 * @param dstPath　　视频保存的路径，后缀需要是.mp4格式
-//	 * @return
-//	 */
-//	public int  pictureFadeIn( String srcPath,int totalTime,int fadeinstart,int fadeinCnt,String dstPath)
-//	{
-//		
-//	}
-//	/**
-//	 * 把一张图片转换为视频，图片在显示结束的时候，有慢慢变暗下去的效果。如果png视频有透明部分，则透明部分转换为黑色
-//	 * @param srcPath　　图片的路径，可以是ｐｎｇ或ｊｐｇ，
-//	 * @param totalTime　　图片转换成视频的总时间
-//	 * @param fadeoutstart　　慢慢变暗下的开始帧，比如从５０帧的地方开始变暗，总帧数等于总时间x25（视频每秒钟25帧）
-//	 * @param fadeoutCnt　　　慢慢变暗效果的帧数，比如效果持续２秒钟，则这里是2x25
-//	 * @param dstPath    　　视频保存的路径，后缀需要是.mp4格式
-//	 * @return
-//	 */
-//	public  int  pictureFadeOut( String srcPath,int totalTime,int fadeoutstart,int fadeoutCnt,String dstPath)
-//	{
-//		
-//	}
+	
+	/**
+	 * 
+	 * @param srcPath
+	 * @param dstPath
+	 * @param duration
+	 * @param bitrate
+	 * @return
+	 */
+	public int executePicture2Video(String srcPath,String dstPath,float duration,int bitrate)
+	{
+		//ffmpeg -loop 1 -i 9.jpg -t 5 -c:v libx264 out.mp4
+		  if(fileExist(srcPath))
+		  {
+				List<String> cmdList=new ArrayList<String>();
+				
+				cmdList.add("-loop");
+				cmdList.add("1");
+				
+				cmdList.add("-i");
+				cmdList.add(srcPath);
+				
+				cmdList.add("-t");
+				cmdList.add(String.valueOf(duration));
+				
+
+				cmdList.add("-vcodec");
+				cmdList.add("lansoh264_enc"); 
+				
+				cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+				cmdList.add("yuv420p");
+				
+				cmdList.add("-b:v");
+				cmdList.add(checkBitRate(bitrate)); 
+				
+				cmdList.add("-y");
+				cmdList.add(dstPath);
+				
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     }  
+			    return  executeVideoEditor(command);
+		  }else{
+			  return VIDEO_EDITOR_EXECUTE_FAILED;
+		  }
+	}
+
 	/**
 	 * 截取一段pcm数据.
 	 * 
@@ -241,18 +273,8 @@ public class VideoEditor {
 	 * @return
 	 */
 	 public static native int copyFile(String srcPath,String dstPath);
-	
-	 /**
-	  * 
-	  * @return
-	  */
 	  public static native int getLimitYear();
-	  /**
-	   * 
-	   * @return
-	   */
 	  public static native int getLimitMonth();
-	  
 	  public static native String getSDKVersion();
 	  
 	  //-------------------------------------------------------------------------------
@@ -873,14 +895,14 @@ public class VideoEditor {
 		  }
 		  /**
 		   * 
-		   * 剪切mp4文件.(包括视频文件中的音频部分和视频部分),即把mp4文件中的一段剪切成独立的一个视频文件, 比如把一个30分钟的视频,裁剪其中的10秒钟等.
+		   * 剪切mp4文件.(包括视频文件中的音频部分和视频部分),即把mp4文件中的一段剪切成独立的一个视频文件, 比如把一个1分钟的视频,裁剪其中的10秒钟等.
 		   * 
 		   * 注意: 此方法裁剪不是精确裁剪,而是从视频的IDR帧开始裁剪的, 没有精确到您指定的那一帧的时间, 如果您指定的时间不是IDR帧上的时间,则退后到上一个IDR帧开始.
 		   * 
 		   * @param videoFile  原视频文件 文件格式是mp4
 		   * @param dstFile   裁剪后的视频路径， 路径的后缀名是.mp4
 		   * @param startS   开始裁剪位置，单位是秒，
-		   * @param durationS  需要裁剪的时长，单位秒，比如您可以从原视频的8.9秒出开始裁剪，裁剪２分钟，则这里的参数是　１２０
+		   * @param durationS  需要裁剪的时长，单位秒，比如您可以从原视频的8.9秒出开始裁剪，裁剪2分钟，则这里的参数是120
 		   * @return
 		   */
 		  public int executeVideoCutOut(String videoFile,String dstFile,float startS,float durationS)
@@ -891,7 +913,6 @@ public class VideoEditor {
 					
 					cmdList.add("-ss");
 					cmdList.add(String.valueOf(startS));
-					
 					
 			    	cmdList.add("-i");
 					cmdList.add(videoFile);
@@ -905,6 +926,125 @@ public class VideoEditor {
 					cmdList.add("copy");
 					cmdList.add("-y");
 					cmdList.add(dstFile);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		  
+		  /**
+		   * 对视频时长进行 精确裁剪， 把mp4文件中的一段剪切成独立的一个视频文件, 比如把一个1分钟的视频,裁剪其中的10秒钟等.
+		   * 
+		   * 因为视频编码原理是根据IDR来裁剪, 要做到精确裁剪到指定时间, 则有可能指定的时间不是IDR帧的时间戳, 这时就需要先解码,然后编码的操作.
+		   * 这里的精确裁剪是先解码然后编码来统一完成精确裁剪.
+		   * 
+		   * 举例: 
+		   *editor.executeVideoCutExact(srcVideo, info.vCodecName, dstVideo, 0.6f, 1.0f, (int)((float)info.vBitRate*1.2f));
+		   * 
+		   * @param videoFile 原视频
+		   * @param dstFile  裁剪后目标文件路径，
+		   * @param startS    开始裁剪位置，单位是秒，
+		   * @param durationS 需要裁剪的时长，单位秒，比如您可以从原视频的8.9秒出开始裁剪，裁剪2分钟，则这里的参数是120
+		   * @param bitrate  因为需要编码， 设置编码的码率。 建议用MediaInfo中的vbitrate*1.2f
+		   * 
+		   * @return
+		   */
+		  public int executeVideoCutExact(String videoFile,String decoder,String dstFile,float startS,float durationS,int bitrate)
+		  {
+			  if(fileExist(videoFile)){
+				
+					List<String> cmdList=new ArrayList<String>();
+					
+					cmdList.add("-vcodec");
+					cmdList.add(decoder);
+					
+			    	cmdList.add("-i");
+					cmdList.add(videoFile);
+
+					cmdList.add("-ss");
+					cmdList.add(String.valueOf(startS));
+					
+					cmdList.add("-t");
+					cmdList.add(String.valueOf(durationS));
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc"); 
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-pix_fmt");  
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-acodec");
+					cmdList.add("copy");
+					
+					cmdList.add("-y");
+					cmdList.add(dstFile);
+					
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+				  
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		  /**
+		   * 
+		   * 对视频时长进行 精确裁剪， 并在对视频精确编码的同时,对音频进行编码.
+		   * 
+		   * 把mp4文件中的一段剪切成独立的一个视频文件, 比如把一个30分钟的视频,裁剪其中的10秒钟等.
+		   * 
+		   * @param videoFile 原视频
+		   * @param dstFile  裁剪后目标文件路径，
+		   * @param startS    开始裁剪位置，单位是秒，
+		   * @param durationS 需要裁剪的时长，单位秒，比如您可以从原视频的8.9秒出开始裁剪，裁剪2分钟，则这里的参数是120
+		   * @param bitrate  因为需要编码， 设置编码的码率。 建议用MediaInfo中的vbitrate*1.2f
+		   * @param encodeAudio 是否对音频进行编码.
+		   * @return
+		   */
+		  public int executeVideoExactCut(String videoFile,String dstFile,float startS,float durationS,int bitrate,boolean encodeAudio)
+		  {
+			  if(fileExist(videoFile)){
+				
+					List<String> cmdList=new ArrayList<String>();
+					
+			    	cmdList.add("-i");
+					cmdList.add(videoFile);
+
+					cmdList.add("-ss");
+					cmdList.add(String.valueOf(startS));
+					
+					cmdList.add("-t");
+					cmdList.add(String.valueOf(durationS));
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc"); 
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-pix_fmt");  
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-acodec");
+					if(encodeAudio){
+						cmdList.add("libfaac");
+					}else{
+						cmdList.add("copy");
+					}
+					
+					cmdList.add("-y");
+					cmdList.add(dstFile);
+					
 					String[] command=new String[cmdList.size()];  
 				     for(int i=0;i<cmdList.size();i++){  
 				    	 command[i]=(String)cmdList.get(i);  
@@ -1277,7 +1417,39 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
-		  
+		  /**
+		   * 把多段mp4文件拼接 在一起. 
+		   * 注意:这里的多段mp4文件, 需要是同一段代码录制而成,分辨率,码率一致的情况下, 如果多段mp4文件中的视频来源不同, 则合成是可以的,但有些播放器不支持播放(VLC可以播放)
+		   * 如果您视频分辨率在720P一下, 每段比较小,建议您不用采用录制后合并的方法, 可采用先保存原始YUV数据,再需要拼接的时候,再次拼接在一起.
+		   * @param mp4Array 多段mp4文件
+		   * 
+		   * @param dstVideo  合成后的文件路径
+		   */
+		  public void executeConcatMP4(String[] mp4Array,String dstVideo)
+			{
+				
+				//第一步,先把所有的mp4转换为ts流
+				ArrayList<String>  tsPathArray=new ArrayList<String>();
+				for(int i=0;i<mp4Array.length;i++)
+				{
+					String segTs1=SDKFileUtils.createFileInBox("ts");
+					executeConvertMp4toTs(mp4Array[i], segTs1);
+					tsPathArray.add(segTs1);
+				}
+				
+				//第二步: 把ts流拼接成mp4
+				String[] tsPaths=new String[tsPathArray.size()];  
+			     for(int i=0;i<tsPathArray.size();i++){  
+			    	 tsPaths[i]=(String)tsPathArray.get(i);  
+			     }  
+			     executeConvertTsToMp4(tsPaths , dstVideo);
+			     
+				  //第三步:删除临时生成的ts文件.
+			     for(int i=0;i<tsPathArray.size();i++)
+					{
+			    	 	SDKFileUtils.deleteFile(tsPathArray.get(i));
+					}
+			}
 		  /**
 		   * 裁剪一个mp4分辨率，把视频画面的某一部分裁剪下来，
 		   * 
@@ -1421,7 +1593,7 @@ public class VideoEditor {
 		   */
 		  public int executeCropOverlay(String videoFile,String decCodec, String pngPath,int cropX,int cropY,int cropWidth,int cropHeight,int overX,int overY,String dstFile,int bitrate)
 		  {
-			  ////ffmpeg -i test_720p.mp4 -i watermark.png -filter_complex "[0:v]crop=640:640:0:40 [crop];[crop][1:v] overlay=0:0" -acodec copy -y xx.mp4
+			  //ffmpeg -i test_720p.mp4 -i watermark.png -filter_complex "[0:v]crop=640:640:0:40 [crop];[crop][1:v] overlay=0:0" -acodec copy -y xx.mp4
 			  if(fileExist(videoFile))
 			  {
 					String filter=String.format(Locale.getDefault(),"[0:v]crop=%d:%d:%d:%d [crop];[crop][1:v] overlay=%d:%d",cropWidth,cropHeight,cropX,cropY,overX,overY);
@@ -1708,11 +1880,11 @@ public class VideoEditor {
 							ret=videoAddWatermarkX264(videoFile, "", imagePngPath, filter, dstFile, bitrate);
 						}
 						return ret;
-					
 			  }else{
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
+		  
 		 /**
 		  * 为视频增加图片，图片可以是带透明的png类型，也可以是jpg类型;
 		  * 适用在为视频增加logo，或增加一些好玩的图片的场合，
@@ -2078,7 +2250,6 @@ public class VideoEditor {
 		  public int executeSetVideoMetaAngle(String srcPath,int angle,String dstPath)
 		  {
 			  //ffmpeg -i input.mp4 -c copy -metadata:s:v:0 rotate=90 output.mp4
-			  
 			  if(fileExist(srcPath)){
 					
 					List<String> cmdList=new ArrayList<String>();
@@ -2140,13 +2311,15 @@ public class VideoEditor {
 		 * 调整视频的播放速度，　可以把视频加快速度，或放慢速度。适用在希望缩短视频中不重要的部分的场景，比如走路等
 		 * @param srcPath　　源视频
 		 * @param decoder　　指定视频的解码器名字
-		 * @param speed　　　　源视频中　　画面和音频同时改变的倍数，比如放慢一倍，则这里是0.5;加快一倍，这里是２；建议速度在0.5--2.0之间。
+		 * @param speed　　　　源视频中　　画面和音频同时改变的倍数，比如放慢一倍，则这里是0.5;加快一倍，这里是2；建议速度在0.5--2.0之间。
 		 * @param dstPath　　处理后的视频存放路径，后缀需要是.mp4
 		 * @return
 		 */
 		public int  executeVideoAdjustSpeed( String srcPath,String decoder,float speed,int bitrate,String dstPath)
 		{
 			//./ffmpeg -i 2x.mp4 -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
+			//ffmpeg -i 2x.mp4 -i watermark.png -filter_complex "[0:v][1:v] overlay=0:0[overlay]; [overlay]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
+			
 			if(fileExist(srcPath)){
 				
 				  String filter=String.format(Locale.getDefault(),"[0:v]setpts=%f*PTS[v];[0:a]atempo=%f[a]",1/speed,speed);
@@ -2379,7 +2552,7 @@ public class VideoEditor {
 			  }
 		}
 		/**
-		 * 视频顺时针旋转９０度
+		 * 视频顺时针旋转90度
 		 * @param srcPath 原视频
 		 * @param decoder 视频的解码器名字
 		 * @param bitrate 希望目标视频的码率. 一般为原视频码率的1.2f为好.
@@ -2873,6 +3046,70 @@ public class VideoEditor {
 		}
 		
 		/**
+		 * 把yuv的视频文件, 增加图片上去, 这里仅仅是增加图片,转换视频部分, 没有音频部分, 您如果需要音频部分,需要另外merge
+		 * 
+		 *  为客户测试使用.
+		 * @param yuvPath
+		 * @param width
+		 * @param height
+		 * @param imagePngPath
+		 * @param x
+		 * @param y
+		 * @param dstFile
+		 * @param bitrate
+		 * @return
+		 */
+		public int executeYuvAddWaterMark(String yuvPath,int width,int height,String imagePngPath,int x,int y,String dstFile,int bitrate){
+			  //ffmpeg -f rawvideo -video_size 1280x720 -pix_fmt nv21 -i cachevideo.yuv vv.mp4
+			  if(fileExist(yuvPath)){
+				  
+				  String filter=String.format(Locale.getDefault(),"overlay=%d:%d",x,y);
+				  String size=String.format(Locale.getDefault(),"%dx%d",width,height);
+				  
+				  List<String> cmdList=new ArrayList<String>();
+					cmdList.add("-f");
+					cmdList.add("rawvideo");
+					
+					cmdList.add("-video_size");
+					cmdList.add(size);
+
+					cmdList.add("-pix_fmt");
+					cmdList.add("nv21");
+
+					cmdList.add("-i");
+					cmdList.add(yuvPath);
+					
+					cmdList.add("-i");
+					cmdList.add(imagePngPath);
+					
+					cmdList.add("-filter_complex");
+					cmdList.add(filter);
+					
+					cmdList.add("-acodec");
+					cmdList.add("copy");
+					
+					cmdList.add("-vcodec");
+					cmdList.add("lansoh264_enc"); 
+					
+					cmdList.add("-b:v");
+					cmdList.add(checkBitRate(bitrate)); 
+					
+					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+					cmdList.add("yuv420p");
+					
+					cmdList.add("-y");
+					cmdList.add(dstFile);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+		
+		/**
 		 * 仅仅测试gif的编码。
 		 * @return
 		 */
@@ -2918,5 +3155,90 @@ public class VideoEditor {
 	    	return String.valueOf(bitrate);	
 		}
 		
-		
+		/**
+		 * 临时测试
+		 * @param tsFile
+		 * @param dstFile
+		 * @return
+		 */
+		 public int executeTsTextToMp4(String tsFile,String dstFile)
+		  {
+				
+			
+					List<String> cmdList=new ArrayList<String>();
+					
+			    	cmdList.add("-f");
+					cmdList.add("concat");
+					
+					cmdList.add("-i");
+					cmdList.add(tsFile);
+
+					cmdList.add("-c");
+					cmdList.add("copy");
+					
+					cmdList.add("-bsf:a");
+					cmdList.add("aac_adtstoasc");
+					
+					cmdList.add("-y");
+					
+					cmdList.add(dstFile);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+			
+		  }
+		 
+		 public int  executeAddMarkAdjustSpeed( String srcPath,String decoder,String  pngPath,int xpos,int ypos, float speed,int bitrate,String dstPath)
+			{
+//ffmpeg -i 2x.mp4 -i watermark.png -filter_complex "[0:v][1:v] overlay=0:0[overlay]; [overlay]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
+				
+				if(fileExist(srcPath)){
+					
+					  String filter=String.format(Locale.getDefault(),"[0:v][1:v] overlay=%d:%d[overlay]; [overlay]setpts=%f*PTS[v];[0:a]atempo=%f[a]",xpos,ypos,1/speed,speed);
+					  
+						List<String> cmdList=new ArrayList<String>();
+						
+						cmdList.add("-vcodec");
+						cmdList.add(decoder);
+						
+						cmdList.add("-i");
+						cmdList.add(srcPath);
+						
+						cmdList.add("-i");
+						cmdList.add(pngPath);
+						
+						cmdList.add("-filter_complex");
+						cmdList.add(filter);
+						
+						cmdList.add("-map");
+						cmdList.add("[v]");
+						cmdList.add("-map");
+						cmdList.add("[a]");
+						
+//						cmdList.add("-acodec");  //音频采用默认编码.
+//						cmdList.add("copy");
+						
+						cmdList.add("-vcodec");
+						cmdList.add("lansoh264_enc");
+						cmdList.add("-b:v");
+						cmdList.add(checkBitRate(bitrate)); 
+						cmdList.add("-pix_fmt");
+						cmdList.add("yuv420p");
+						
+						cmdList.add("-y");
+						cmdList.add(dstPath);
+						 
+						String[] command=new String[cmdList.size()];  
+					     for(int i=0;i<cmdList.size();i++){  
+					    	 command[i]=(String)cmdList.get(i);  
+					     }  
+					    return  executeVideoEditor(command);
+					  
+				  }else{
+					  return VIDEO_EDITOR_EXECUTE_FAILED;
+				  }
+			}
+		 
 }

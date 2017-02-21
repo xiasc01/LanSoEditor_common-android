@@ -46,6 +46,7 @@ public class MainActivity extends Activity{
 	private DemoInfo[] mTestCmdArray={ 
 			
 			 new DemoInfo(R.string.demo_id_mediainfo,R.string.demo_id_mediainfo,true,false),
+			 new DemoInfo(R.string.demo_id_segmentrecord,R.string.demo_id_segmentrecord,true,false),
 			 new DemoInfo(R.string.demo_id_avsplit,R.string.demo_more_avsplit,true,true),//是否视频输出, 是否音频输出
 			 new DemoInfo(R.string.demo_id_avmerge,R.string.demo_more_avmerge,true,false),
 			 new DemoInfo(R.string.demo_id_cutaudio,R.string.demo_more_cutaudio,false,true),
@@ -63,7 +64,7 @@ public class MainActivity extends Activity{
 			 new DemoInfo(R.string.demo_id_videoclockwise90,R.string.demo_more_videoclockwise90,true,false),
 			 new DemoInfo(R.string.demo_id_videocounterClockwise90,R.string.demo_more_videocounterClockwise90,true,false),
 			 new DemoInfo(R.string.demo_id_videoaddanglemeta,R.string.demo_more_videoaddanglemeta,true,false),
-//			 new DemoInfo(R.string.demo_id_ontpicturevideo,R.string.demo_more_ontpicturevideo,true,false),
+			 new DemoInfo(R.string.demo_id_ontpicturevideo,R.string.demo_more_ontpicturevideo,true,false),
 			 new DemoInfo(R.string.demo_id_morepicturevideo,R.string.demo_more_morepicturevideo,true,false),
 			 new DemoInfo(R.string.demo_id_audiodelaymix,R.string.demo_more_audiodelaymix,false,true),
 			 new DemoInfo(R.string.demo_id_audiovolumemix,R.string.demo_more_audiovolumemix,false,true),
@@ -77,7 +78,10 @@ public class MainActivity extends Activity{
 
 			 new DemoInfo(R.string.demo_id_avreverse,R.string.demo_more_avreverse,true,false),
 			 
+			 new DemoInfo(R.string.direct_play_video,R.string.direct_play_video,false,false),
 			 new DemoInfo(R.string.demo_id_expend_cmd,R.string.demo_more_avsplit,false,false),
+			 
+			 
 			 new DemoInfo(R.string.demo_id_connet_us,R.string.demo_more_avsplit,false,false),			 
 	};
 	private ListView  mListView=null;
@@ -129,10 +133,6 @@ public class MainActivity extends Activity{
 					new com.lansosdk.videoeditor.CopyDefaultVideoAsyncTask(MainActivity.this, tvVideoPath, "ping20s.mp4").execute();
 				}
 			});
-	        
-	       
-//	        tvVideoPath.setText("/sdcard/aum.mp4");  
-	        
 		 mListView=(ListView)findViewById(R.id.id_demo_list);
 		 mListView.setAdapter(new SoftApAdapter(MainActivity.this));
 		 
@@ -146,15 +146,18 @@ public class MainActivity extends Activity{
 					if(checkPath()){
 						startMediaInfoActivity();
 					}
-				}
-				else if(position==mTestCmdArray.length-2){  //最后两个, 扩展功能
+				}else if(position==1){  //分段录制
+				
+					startSegmentRecord();
 					
+					
+				}else if(position==mTestCmdArray.length-2){  //最后两个, 扩展功能
 					startCustomFunctionActivity();
-					
 				}else if(position==mTestCmdArray.length-1){  //最后一个, 联系我们
 					
 					startBusynessActivity();
-					
+				}else if(position==mTestCmdArray.length-3){  //直接视频播放
+					startVideoPlayer();
 				}else {
 					if(checkPath()){
 						startActivity(position);	
@@ -182,10 +185,9 @@ public class MainActivity extends Activity{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-//				testCmd();
+				testCmd();
 			}
 		}, 1000);
-		
 	}
 	@Override
 	protected void onDestroy() {
@@ -193,10 +195,27 @@ public class MainActivity extends Activity{
 		super.onDestroy();
 		SDKFileUtils.deleteDir(new File(SDKDir.TMP_DIR)); //删除dir
 	}
+	//
 	private void testCmd()
 	{
-		 VideoEditor   editor=new VideoEditor();
-		 editor.executeDecodeVideoToYUV("/sdcard/17.mp4", "lansoh264_dec", "/sdcard/172.yuv");
+		
+//		startVideoPlayer();
+//		 VideoEditor   editor=new VideoEditor();
+//		 String video="/sdcard/pcm.MOV";
+//		
+//		 video=SDKFileUtils.createFileInBox("mov");
+//		 
+//		 MediaInfo info=new MediaInfo(video);
+//		 if(info.prepare()){
+//			 editor.executeDeleteVideo(video, "/sdcard.pcm.wav");
+//		 }
+//		// editor.executeTsTextToMp4("/sdcard/concat.txt", "/sdcard/outTxt.mp4");
+//		 String path="/sdcard/parper.mp4";
+//		 MediaInfo info=new MediaInfo(path);
+//		 if(info.prepare()){
+//			 editor.executeVideoRotate90Clockwise(path, info.vCodecName, (int)(info.vBitRate*1.2f), "/sdcard/pppAnd.mp4");
+//		 }
+		// editor.executeConcatMP4(new String[]{"/sdcard/1.mp4","/sdcard/2.mp4"}, "/sdcard/12And.mp4");
 	}
 	
 	private void startActivity(int position)
@@ -241,16 +260,26 @@ public class MainActivity extends Activity{
 	    	intent.putExtra("videopath", tvVideoPath.getText().toString());
 	    	startActivity(intent);
 	  }
-	
+	  private void startSegmentRecord()
+	  {
+		    	Intent intent=new Intent(MainActivity.this,SegmentRecorderActivity.class);
+		    	startActivity(intent);
+	  }
+	  
+	  //直接播放视频.
+	  private void startVideoPlayer()
+	  {
+		    	Intent intent=new Intent(MainActivity.this,VideoPlayerActivity.class);
+		    	intent.putExtra("videopath", tvVideoPath.getText().toString());
+		    	startActivity(intent);
+	  }
 	//-----------------------------------------
 	 private final static int SELECT_FILE_REQUEST_CODE=10;
 	  
 	 private void startSelectVideoActivity()
 	    {
 	    	Intent i = new Intent(this, FileExplorerActivity.class);
-	    	
 	    	i.putExtra("SELECT_MODE", "video");
-	    	
 		    startActivityForResult(i,SELECT_FILE_REQUEST_CODE);
 	    }
 	    @Override

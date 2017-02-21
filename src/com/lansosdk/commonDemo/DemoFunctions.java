@@ -72,10 +72,11 @@ public class DemoFunctions {
 			MediaInfo   info=new MediaInfo(srcVideo);
 	    	if(info.prepare())
 	    	{
-	    		if(info.vDuration>20)
-	    		 return	editor.executeVideoCutOut(srcVideo,dstVideo,0,20);
-				else
-					return	editor.executeVideoCutOut(srcVideo,dstVideo,0,info.aDuration/2);
+//	    		if(info.vDuration>20)
+//	    		 return	editor.executeVideoCutOut(srcVideo,dstVideo,0,20);
+//				else
+					return editor.executeVideoCutExact(srcVideo, info.vCodecName, dstVideo, 0.6f, 1.0f, (int)((float)info.vBitRate*1.2f));
+//					return	editor.executeVideoCutOut(srcVideo,dstVideo,0,info.vDuration/2);
 	    	}
 	    	return -1;
 	}
@@ -141,7 +142,7 @@ public class DemoFunctions {
 	/**
 	 *  演示视频压缩, 硬件实现 
 	 *  
-	 *  视频压缩转码:\n调整视频的码率,让视频文件大小变小一些,方便传输.注意:如调整的小太多,则会导致画面下降.这里演示把码率降低为70%\n
+	 *  视频压缩转码:\n调整视频的码率,让视频文件大小变小一些,方便传输.注意:如调整的小太多,则会导致画面下降.这里演示把码率)降低为70%\n
 	 */
 	public static int demoVideoCompress(VideoEditor editor,String srcVideo,String dstVideo)
 	{
@@ -203,14 +204,14 @@ public class DemoFunctions {
 			MediaInfo info=new MediaInfo(srcVideo);
 			if(info.prepare())
 			{
-				String imagePath="/sdcard/videoimage.png";
+				String imagePath="/sdcard/lansongBox/watermark.png";
 				String dir="/sdcard/lansongBox/";
 				File dirFile=new File(dir);
 				
 				if (!dirFile.exists())
 					dirFile.mkdir();
 				
-				CopyFileFromAssets.copy(ctx, "ic_launcher.png", dir, "videoimage.png");
+				CopyFileFromAssets.copy(ctx, "watermark.png", dir, "watermark.png");
 				return editor.executeAddWaterMark(srcVideo, imagePath, 0, 0, dstVideo, (int)(info.vBitRate*1.2f));
 			}else{
 				return -1;
@@ -231,18 +232,18 @@ public class DemoFunctions {
     		return -1;
     	}
 	}
-//	/**
-//	 *  演示把一张图片转换为视频
-//	 */
-//	public static int demoOnePicture2Video(Context ctx,VideoEditor editor,String dstVideo)
-//	{
-//		String imagePath=SDKDir.TMP_DIR+"/threeword.png";
-//		
-//		CopyFileFromAssets.copy(ctx, "threeword.png", SDKDir.TMP_DIR, "threeword.png");
-//		
-//		Log.i(TAG,"demoOne picture to video :"+imagePath);
-//		return editor.pictureFadeInOut(imagePath,5,0,40,50,75,dstVideo);
-//	}
+	/**
+	 *  演示把一张图片转换为视频
+	 */
+	public static int demoOnePicture2Video(Context ctx,VideoEditor editor,String dstVideo)
+	{
+		String imagePath=SDKDir.TMP_DIR+"/threeword.png";
+		
+		CopyFileFromAssets.copy(ctx, "threeword.png", SDKDir.TMP_DIR, "threeword.png");
+		
+		Log.i(TAG,"demoOne picture to video :"+imagePath);
+		return editor.executePicture2Video(imagePath,dstVideo,5,2000);
+	}
 
 	
 	/**

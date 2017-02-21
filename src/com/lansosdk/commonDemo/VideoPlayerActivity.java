@@ -1,5 +1,6 @@
 package com.lansosdk.commonDemo;
 
+import java.io.File;
 import java.io.IOException;
 
 import com.lansoeditor.demo.R;
@@ -88,10 +89,9 @@ public class VideoPlayerActivity extends Activity {
              
              str="当前视频时长:";
              str+=String.valueOf(mInfo.vDuration);
+             str +="\n文件大小:"+ new File(videoPath).length();
              tvVideoDuration.setText(str);
          }
-         
-         
         textureView.setSurfaceTextureListener(new SurfaceTextureListener() {
 			
 			@Override
@@ -118,8 +118,8 @@ public class VideoPlayerActivity extends Activity {
 					int height) {
 				// TODO Auto-generated method stub
 				if(isSupport){
-//					play(new Surface(surface));
-					startVPlayer(new Surface(surface));
+					play(new Surface(surface));
+//					startVPlayer(new Surface(surface));
 				}
 			}
 		});
@@ -211,10 +211,8 @@ public class VideoPlayerActivity extends Activity {
     					        	tvSizeHint.setText(R.string.fix_width);
     					        	textureView.setDispalyRatio(TextureRenderView.AR_ASPECT_FIT_PARENT);
     					        }
-    					        
     					        textureView.setVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
     					        textureView.requestLayout();
-    					        
     				        vplayer.start();
     					}
     			});
@@ -224,6 +222,7 @@ public class VideoPlayerActivity extends Activity {
 			public void onCompletion(VideoPlayer mp) {
 				// TODO Auto-generated method stub
 				Log.i(TAG,"vplayer --------------oncompletion-----!");
+				 Toast.makeText(VideoPlayerActivity.this, "视频播放完毕!", Toast.LENGTH_SHORT).show();
 			}
 		});
     	

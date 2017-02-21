@@ -40,6 +40,9 @@
 	<string name="cmdwrapper_hint">当前功能已经测试完毕,但还没有编写UI界面,请在VideoEditor.java文件中查看相关的实现方法.如有问题,请联系我们,谢谢!\n\n</string>
 	
 	<string name="demo_id_mediainfo">获取视频信息</string>
+	<string name="demo_id_segmentrecord">【新】分段录制(支持回删)</string>
+	
+	
 	<string name="demo_id_avsplit">音视频分离</string>
 	<string name="demo_id_avmerge">合成音频/替换音频</string>
 	<string name="demo_id_cutaudio">音频剪切</string>
@@ -57,9 +60,7 @@
 	<string name="demo_id_videoclockwise90">视频旋转90度</string>
 	<string name="demo_id_videocounterClockwise90">视频旋转270度</string>
 	<string name="demo_id_videoaddanglemeta">视频增加角度数据</string>
-	<!-- 
 	<string name="demo_id_ontpicturevideo">一张图片转视频</string>
-	 -->
 	 
 	<string name="demo_id_morepicturevideo">多张图片转视频</string>
 	<string name="demo_id_audiodelaymix">音频延迟混合</string>
@@ -74,6 +75,7 @@
 	<string name="demo_id_avreverse">音视频倒序</string>
 	
 	
+	<string name="direct_play_video">直接视频播放</string>
 	<string name="demo_id_expend_cmd">自定义扩展功能</string>
 	<string name="demo_id_connet_us">联系我们</string>
   
