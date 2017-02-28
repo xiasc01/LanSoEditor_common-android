@@ -238,30 +238,7 @@ public class MediaInfo {
       */
      public boolean isSupport()
      {
-    	 
-    	 if(vBitRate>0 || vWidth>0 ||vHeight>0)  //有视频,
-    	 {
-    		 if(vHeight==0 || vWidth==0)
-    		 {
-    			 return false;
-    		 }
-    		 
-    		 if(vFrameRate>60) //如果帧率大于60帧, 则不支持.  
-    			 return false;
-    		 
-    		 if(vCodecName==null || vCodecName.isEmpty())
-    			 return false;
-    	 }else if(aBitRate>0)  //有音频
-    	 {
-    		 if(aChannels==0)
-    			 return false;
-    		 
-    		 if(aCodecName==null || aCodecName.isEmpty())
-    			 return false;
-    		 
-    	 }
-   
-    	 return true;
+    	 return isHaveAudio() || isHaveVideo(); 
      }
      @Override
     public String toString() {
@@ -290,10 +267,10 @@ public class MediaInfo {
     	 info+= "aDuration:"+aDuration+"\n";
     	 info+= "aCodecName:"+aCodecName+"\n";
     	 
-    	if(getSuccess)
+    	//if(getSuccess)  //直接返回,更直接, 如果执行错误, 更要返回
     		return info;
-    	else
-    	 return "MediaInfo is not ready.or call failed";
+    	//else
+    	// return "MediaInfo is not ready.or call failed";
     }
      public native int nativePrepare(String filepath,boolean checkCodec);
      
@@ -312,6 +289,11 @@ public class MediaInfo {
      {
     	 this.aCodecName=name;
      }
+     /**
+      * 是否支持.
+      * @param videoPath
+      * @return
+      */
      public static boolean isSupport(String videoPath)
      {
     	 if(fileExist(videoPath))
@@ -322,6 +304,22 @@ public class MediaInfo {
     		 if(VERBOSE)
     			 Log.i(TAG,"video:"+videoPath+" not support");
     		 return false;
+    	 }
+     }
+     /**
+      * 如果在调试中遇到问题了, 首先应该
+      * @param videoPath
+      * @return
+      */
+     public static String checkFile(String videoPath)
+     {
+    	 if(fileExist(videoPath))
+    	 {
+    		 MediaInfo  info=new MediaInfo(videoPath,false);
+    		 info.prepare();  
+        	 return  info.toString();
+    	 }else{
+    		 return "video:"+videoPath+" not support";
     	 }
      }
      //-------------------------------文件操作-------------------------

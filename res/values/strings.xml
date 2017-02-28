@@ -27,8 +27,8 @@
 		    
 	<string name="libs_codecs">本SDK的编解码器有:\n\n软编解码器gif\n软解码器MPEG4\n软解码器H264\n硬件加速解码器lansoh264_dec\n软编码器libx264\n硬件加速编码器lansoh264_enc\n音频mp3解码器mp3\n音频mp3编码器libmp3lame\n音频aac解码器aac\n音频aac编码器 faac\n音频pcm编解码器 pcm_s16le</string>
 	<string name="advance_version_hint">我们有高级版本,可以实现视频的任意实时处理,涂鸦,标记,写字甚至可以把一个View增加到视频上, 欢迎向我们索取demo</string>
-	<string name="no_free">此SDK为收费版本, 费用为7000元, 单一APP使用,永久授权,提供一年技术支持,普通问题三个工作日内解决.</string>
-	<string name="connect_us">联系我们:\n 电话:0571-89052701 \n 手机:18006716739 \n QQ:\t 1852600324 \n email:\tsupport@lansongtech.com \n 地址:\t杭州市余杭区运通网城软件园6栋428室.</string>
+	<string name="no_free">此SDK为收费版本,价格可联系我们,提供的服务是有:单一APP使用,永久授权,提供一年技术支持,普通问题三个工作日内解决.</string>
+	<string name="connect_us">联系我们:\n 电话:0571-89052701 \n 手机:18067947233 \n QQ:\t 1852600324 \n email:\tsupport@lansongtech.com \n 地址:\t杭州市余杭区运通网城软件园6栋428室.</string>
 	
 	
 	<string name="origal_width">提示:\n当前视频宽度小于屏幕宽度, 采取原尺寸显示,您可以在代码中修改为自适应屏幕宽度显示形式</string>
@@ -40,7 +40,7 @@
 	<string name="cmdwrapper_hint">当前功能已经测试完毕,但还没有编写UI界面,请在VideoEditor.java文件中查看相关的实现方法.如有问题,请联系我们,谢谢!\n\n</string>
 	
 	<string name="demo_id_mediainfo">获取视频信息</string>
-	<string name="demo_id_segmentrecord">【新】分段录制(支持回删)</string>
+	<string name="demo_id_segmentrecord">【新】分段录制(支持回删/开源)</string>
 	
 	
 	<string name="demo_id_avsplit">音视频分离</string>

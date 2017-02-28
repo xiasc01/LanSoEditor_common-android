@@ -1,7 +1,17 @@
 package com.lansosdk.commonDemo;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -29,6 +39,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.PermissionChecker;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,6 +110,7 @@ public class MainActivity extends Activity{
 		 LoadLanSongSdk.loadLibraries();
 		 LanSoEditor.initSo(getApplicationContext(),null);
 		 
+		 
 			//因为从android6.0系统有各种权限的限制, 这里开始先检查是否有读写的权限,PermissionsManager采用github上开源库,不属于我们sdk的一部分.
 		 //下载地址是:https://github.com/anthonycr/Grant,您也可以使用别的方式来检查app所需权限.
 		 PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
@@ -117,6 +129,10 @@ public class MainActivity extends Activity{
 	        });
 		 
 		  tvVideoPath=(TextView)findViewById(R.id.id_main_tvvideo);
+		  
+		  
+		  
+		  
 		  findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -178,16 +194,6 @@ public class MainActivity extends Activity{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		//only for test. 
-		
-		new Handler().postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				testCmd();
-			}
-		}, 1000);
 	}
 	@Override
 	protected void onDestroy() {
@@ -198,7 +204,6 @@ public class MainActivity extends Activity{
 	//
 	private void testCmd()
 	{
-		
 //		startVideoPlayer();
 //		 VideoEditor   editor=new VideoEditor();
 //		 String video="/sdcard/pcm.MOV";

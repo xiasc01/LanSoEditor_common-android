@@ -3240,5 +3240,53 @@ public class VideoEditor {
 					  return VIDEO_EDITOR_EXECUTE_FAILED;
 				  }
 			}
+		 public int  executeAddMarkAdjustSpeed2( String srcPath,String decoder,String  pngPath,int xpos,int ypos, float speed,int bitrate,String dstPath)
+			{
+//ffmpeg -i 2x.mp4 -i watermark.png -filter_complex "[0:v][1:v] overlay=0:0[overlay]; [overlay]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
+				
+				if(fileExist(srcPath)){
+					
+					  String filter=String.format(Locale.getDefault(),"[0:v][1:v] overlay=%d:%d[overlay]; [overlay]setpts=%f*PTS[v];[0:a]atempo=%f[a]",xpos,ypos,1/speed,speed);
+					  
+						List<String> cmdList=new ArrayList<String>();
+						
+						cmdList.add("-vcodec");
+						cmdList.add(decoder);
+						
+						cmdList.add("-i");
+						cmdList.add(srcPath);
+						
+						cmdList.add("-i");
+						cmdList.add(pngPath);
+						
+						cmdList.add("-filter_complex");
+						cmdList.add(filter);
+						
+						cmdList.add("-map");
+						cmdList.add("[v]");
+						cmdList.add("-map");
+						cmdList.add("[a]");
+						
+//						cmdList.add("-acodec");  //音频采用默认编码.
+//						cmdList.add("copy");
+						
+						cmdList.add("-vcodec");
+						cmdList.add("libx264");
+						cmdList.add("-b:v");
+						cmdList.add(checkBitRate(bitrate)); 
+
+						cmdList.add("-y");
+						cmdList.add(dstPath);
+						 
+						String[] command=new String[cmdList.size()];  
+					     for(int i=0;i<cmdList.size();i++){  
+					    	 command[i]=(String)cmdList.get(i);  
+					     }  
+					    return  executeVideoEditor(command);
+					  
+				  }else{
+					  return VIDEO_EDITOR_EXECUTE_FAILED;
+				  }
+			}
 		 
 }

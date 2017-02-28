@@ -398,6 +398,13 @@ public class AVEncoder {
 	
 	private  native int  encoderWriteVideoFrame(long handle,byte[] yuv420sp,long pts);
 	
+	
+	
+	
+	
+
+	
+	
 	//每次读取的数据.
 	/**
 	 * 

@@ -213,6 +213,9 @@ public class DemoFunctions {
 				
 				CopyFileFromAssets.copy(ctx, "watermark.png", dir, "watermark.png");
 				return editor.executeAddWaterMark(srcVideo, imagePath, 0, 0, dstVideo, (int)(info.vBitRate*1.2f));
+				
+//				return editor.executeAddMarkAdjustSpeed2(srcVideo,info.vCodecName,imagePath,0,0,0.5f,(int)(info.vBitRate*1.2f),dstVideo);
+				
 			}else{
 				return -1;
 			}
