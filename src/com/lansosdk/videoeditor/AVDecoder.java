@@ -5,10 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 import android.util.Log;
 
+/**
+ *  注意: 此类采用的ffmpeg中的软解码来做的, 
+ *  如果您感觉软解有点慢, 我们提供了异步线程解码的形式, 可以加速解码处理,请联系我们.
+ *
+ */
 public class AVDecoder {
 
 //	
@@ -64,9 +70,11 @@ public class AVDecoder {
 		 * 
 		 * @param seekUs  是否要seek, 大于等于0说明要seek, 
 		 * 
-		 * @param out  输出.
+		 * @param out  输出. 数组由外部创建, 创建时的大小应等于 视频的宽度*高度*4;
 		 * 
-		 * @return  返回的是当前帧的时间戳.单位是秒.
+		 *  注意: 此类采用的ffmpeg中的软解码来做的, 
+		 *  如果您感觉软解有点慢, 我们提供了异步线程解码的形式, 可以加速解码处理,请联系我们.
+		 * @return  返回的是当前帧的时间戳.单位是US  微秒
 		 */
 		public static native long decoderFrame(long handle,long seekUs,int[] out);
 		
@@ -83,4 +91,52 @@ public class AVDecoder {
 		 * @return
 		 */
 		public static native boolean decoderIsEnd(long handle);
+		
+		/**
+		 * 代码测试.
+		 *
+		 *测试证明, 是可以多个线程同时解码的.
+		 *private void testDecoder()
+		{
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					testDecoder2("/sdcard/480x480.mp4","/sdcard/480x480.yuv");
+				}
+			}).start();
+			
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					testDecoder2("/sdcard/ping20s.mp4","/sdcard/ping20s.yuv");
+				}
+			}).start();
+		}
+		private void testDecoder2(String src,String dst)
+		{
+			   long decoderHandler;
+			   IntBuffer  mGLRgbBuffer;
+			   String gifPath=src;
+			   MediaInfo  gifInfo=new MediaInfo(gifPath);
+			       if(gifInfo.prepare())
+			       {
+			    	   decoderHandler=AVDecoder.decoderInit(gifPath);
+			    	   FileWriteUtls  write=new FileWriteUtls(dst);
+			    	   mGLRgbBuffer = IntBuffer.allocate(gifInfo.vWidth * gifInfo.vHeight);
+			    	   while(AVDecoder.decoderIsEnd(decoderHandler)==false)
+			    	   {
+			    			mGLRgbBuffer.position(0);
+		    				AVDecoder.decoderFrame(decoderHandler, -1, mGLRgbBuffer.array());
+		    				mGLRgbBuffer.position(0);
+		    				write.writeFile(mGLRgbBuffer);
+			    	   }
+			    	   write.closeWriteFile();
+			    	   Log.i(TAG,"write closeEEEE!");
+			       }
+			}
+		 */
 }

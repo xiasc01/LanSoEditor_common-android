@@ -38,13 +38,14 @@
         android:layout_height="wrap_content"
         android:textColor="@color/red"
         android:text="以下仅为常用方法的举例,更多见VideoEditor.java源文件"/>
-    
+
     <ListView
         android:id="@+id/id_demo_list"
-        android:layout_marginTop="6dip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dip"
         android:dividerHeight="15dip"
         android:fadeScrollbars="false" >
     </ListView>
+
 </LinearLayout>

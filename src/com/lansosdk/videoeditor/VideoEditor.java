@@ -11,12 +11,9 @@ import java.util.Locale;
 
 
 
-import android.media.MediaCodecInfo;
-import android.media.MediaCodecList;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 
 
@@ -113,7 +110,7 @@ public class VideoEditor {
 	            mWeakExtract = new WeakReference<VideoEditor>(mp);
 	        }
 
-	        @Override
+	        @Override 
 	        public void handleMessage(Message msg) {
 	        	VideoEditor videoextract = mWeakExtract.get();
 	        	if(videoextract==null){
@@ -153,26 +150,7 @@ public class VideoEditor {
 	     */
 	    private native int execute(Object cmdArray);
 	
-//	/**
-//	 * 把一张图片转换为视频,并有淡入淡出的效果.
-//	 * 适用于视频转场的场合,比如两个视频AB之间需要转场,中间需要"五分钟过去了..."这样的文字,可以用这个命令来生成一个提示的视频,然后把这个转场和两个视频拼接起来即可.
-//	 * 注意:这里图片生成的视频的宽高等于图片的宽高,如果用在转场的场合,需要前后两个视频的宽高一直,比如都是480x480等.
-//	 * 
-//	 * @param srcPath  输入的图片文件路径
-//	 * @param totalTime  转换为视频的时长,一般3--5秒为易,生成的图片每秒钟是25帧.
-//	 * @param fadeinstart 从第几帧开始有淡入的效果 
-//	 * @param fadeinCnt   淡入的效果持续多少帧
-//	 * @param fadeoutstart 淡出开始的帧数.
-//	 * @param fadeoutCnt  淡出效果持续多少帧
-//	 * @param dstPath  视频保存的路径.
-//	 * @return
-//	 */
-//	public  int  pictureFadeInOut( String srcPath,int totalTime,int fadeinstart,int fadeinCnt,int fadeoutstart,int fadeoutCnt,
-//		   String dstPath)
-//	{
-//		
-//		
-//	}
+
 	
 	/**
 	 * 
@@ -222,51 +200,6 @@ public class VideoEditor {
 	}
 
 	/**
-	 * 截取一段pcm数据.
-	 * 
-	 * 截取一段音频,,精度是100ms
-	 * @param srcPath    原音频裸数据, pcm格式
-	 * @param sampleRate   pcm的采样率
-	 * @param channel    通道数
-	 * @param pcmBytes  每个采样点是几个字节,
-	 * @param startTimeMs   截取开始时间,单位毫秒
-	 * @param endTimeMs  静音的结束时间, 单位毫秒
-	 * @param dstPath    截取处理后的保存路径.
-	 * @return
-	 */
-	public static native int audioPcmCut(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
-	/**
-	 * 合并两个音频数据,精度是100ms
-	 *  
-	 *  一般是一小段的声音合并到主声音中的场景.
-	 *  
-	 * 注意:需要两个pcm的 bitrate等参数需要一直,保持一致.
-	 * 
-	 * @param srcMainPath  源pcm的音频, 主音频
-	 * @param srcSubPath   合并的pcm音频, 
-	 * @param sampleRate   两个pcm相同的采样率
-	 * @param channel    相同的通道数
-	 * @param pcmBytes  相同的采样点字节数
-	 * @param startTimeMs  srcSubPath的pcm数据 开始合并的时间, 默认是把srcSubPath全部的数据合并到srcMainPath中.
-	 * @param dstPath  合并后保存的路径.
-	 * @return
-	 */
-	public static native int audioPcmReplace(String srcMainPath,String srcSubPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,String dstPath);
-	/**
-	 * 把音频中的一种一段声音静音.精度是100ms
-	 * 
-	 * @param srcPath  原音频裸数据, pcm格式
-	 * @param sampleRate  pcm的采样率
-	 * @param channel  通道数
-	 * @param pcmBytes  每个采样点是几个字节,
-	 * @param startTimeMs  静音开始时间,单位毫秒
-	 * @param endTimeMs    静音的结束时间, 单位毫秒
-	 * @param dstPath   静音处理后的保存路径.
-	 * @return
-	 */
-	public static native int audioPcmMute(String srcPath,int sampleRate,int channel,int pcmBytes,int startTimeMs,int endTimeMs,String dstPath);
-	
-	/**
 	 * 拷贝文件, 成功返回0,失败返回-1;
 	 * @param srcPath
 	 * @param dstPath
@@ -289,7 +222,7 @@ public class VideoEditor {
 	   * @param channel2  次音频通道数
 	   * @param value1    主音频的音量
 	   * @param value2 次音频的音量
-	   * @param dstPath  输出文件.输出也是pcm格式的音频文件.
+	   * @param dstPath  输出文件.输出也是pcm格式的音频文件. 默认采样率为44100,双通道.
 	   * @return
 	   */
 	public int executePcmMix(String srcPach1,int samplerate,int channel,String srcPach2,int samplerate2,int channel2,
@@ -528,7 +461,7 @@ public class VideoEditor {
 	 * 视频转码.
 	 * 通过调整视频的bitrate来对视频文件大小的压缩,降低视频文件的大小, 注意:压缩可能导致视频画质下降.
 	 * 
-	 * 此命令为单纯压缩命令, 如需对视频进行裁剪/增加水印/增加文字等需要编解码的场合, 可以在执行的方法中直接压缩,这样节省一倍的时间, 没有必要等其他命令执行完后,再执行此方法. 
+	 * 此命令为单纯压缩命令, 如需对视频进行裁剪/增加水印等需要编解码的场合, 可以在执行的方法中直接压缩,这样节省一倍的时间, 没有必要等其他命令执行完后,再执行此方法. 
 	 * 比如如下方法: 
 	 * {@link #executeCropOverlay(String, String, String, int, int, int, int, int, int, String, int)}
 	 * {@link #executeVideoCutCropOverlay(String, String, String, float, float, int, int, int, int, int, int, String, int)}
@@ -1122,8 +1055,8 @@ public class VideoEditor {
 			    	cmdList.add("-i");
 					cmdList.add(videoFile);
 
-					cmdList.add("-qscale:v");
-					cmdList.add("2");
+//					cmdList.add("-qscale:v");
+//					cmdList.add("2");
 					
 					cmdList.add("-vsync");
 					cmdList.add("1");
@@ -1131,8 +1064,8 @@ public class VideoEditor {
 					cmdList.add("-r");
 					cmdList.add(String.valueOf(sampeRate));
 					
-					cmdList.add("-f");
-					cmdList.add("image2");
+//					cmdList.add("-f");
+//					cmdList.add("image2");
 					
 					cmdList.add("-y");
 					
@@ -1147,6 +1080,48 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
+		  /**
+		   *  读取视频中的关键帧(IDR帧), 并把关键帧保存图片. 因是IDR帧, 在编码时没有起帧做参考,故提取的最快. 
+		   * 
+		   * 经过我们SDK编码后的视频, 是一秒钟一个帧,如果您视频大小是30秒,则大约会提取30张图片.
+		   * 
+		   * @param videoFile  视频文件
+		   * @param dstDir  保持的文件夹
+		   * @param jpgPrefix  文件前缀.
+		   * @return
+		   */
+		  public int executeGetKeyFrames(String videoFile,String dstDir,String jpgPrefix)
+		  {
+				//	  ffmpeg -i 22.MP4 -vf "select=eq(pict_type\,I)" -vsync vfr FF%04d.jpg
+			  String dstPath=dstDir+"/"+jpgPrefix+"_%3d.png";
+			  if(fileExist(videoFile)){
+				  
+					List<String> cmdList=new ArrayList<String>();
+					
+			    	cmdList.add("-i");
+					cmdList.add(videoFile);
+
+					cmdList.add("-vf");
+					cmdList.add("select=eq(pict_type\\,I)");
+					
+					cmdList.add("-vsync");
+					cmdList.add("vfr");
+					
+					Log.i(TAG," vsync is vfr");
+					
+					cmdList.add("-y");
+					
+					cmdList.add(dstPath);
+					String[] command=new String[cmdList.size()];  
+				     for(int i=0;i<cmdList.size();i++){  
+				    	 command[i]=(String)cmdList.get(i);  
+				     }  
+				    return  executeVideoEditor(command);
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
+
 		  /**
 		   * 从视频的指定位置中获取一帧图片. 因为这个是精确提取视频的一帧, 不建议作为提取缩略图来使用,用mediametadataRetriever最好.
 		   * 
@@ -1427,7 +1402,7 @@ public class VideoEditor {
 		   */
 		  public void executeConcatMP4(String[] mp4Array,String dstVideo)
 			{
-				
+				//executeConcatMP4(new String[]{"/sdcard/hi1.mp4","/sdcard/hi2.mp4"},"/sdcard/hi12.mp4");
 				//第一步,先把所有的mp4转换为ts流
 				ArrayList<String>  tsPathArray=new ArrayList<String>();
 				for(int i=0;i<mp4Array.length;i++)
@@ -1784,75 +1759,11 @@ public class VideoEditor {
 				     }  
 				    return  executeVideoEditor(command);
 		  }
-		  
-		 /*
-		  * 同时叠加多个图片.
-		  * ffmpeg -i Text.mp4 -i qzone.png -i qq2.png -i phiz5.png -i send.png -i cancel.png -i download.png  -filter_complex "overlay=25:25,overlay=0:0,overlay=35:35,overlay=45:45,overlay=55:55,overlay=65:65" -pix_fmt yuv420p -c:a copy HeT.mp4
-		  * */
-		  /**
-		   * 同时增加两个图片的水印.
-		   * @param videoFile
-		   * @param decName
-		   * @param imagePngPath1
-		   * @param imagePngPath2
-		   * @param X1
-		   * @param Y1
-		   * @param X2
-		   * @param Y2
-		   * @param dstFile
-		   * @param bitrate
-		   * @return
-		   */
-		  public int executeAddWaterMark(String videoFile,String decName,String imagePngPath1,String imagePngPath2,int X1,int Y1,int X2,int Y2,String dstFile,int bitrate){
-			  
-			  if(fileExist(videoFile)){
-				  
-				  String filter=String.format(Locale.getDefault(),"overlay=%d:%d,overlay=%d:%d",X1,Y1,X2,Y2);
-				  
-				  List<String> cmdList=new ArrayList<String>();
-					cmdList.add("-vcodec");
-					cmdList.add(decName);
-					
-					cmdList.add("-i");
-					cmdList.add(videoFile);
-
-					cmdList.add("-i");
-					cmdList.add(imagePngPath1);
-					
-					cmdList.add("-i");
-					cmdList.add(imagePngPath2);
-
-					cmdList.add("-filter_complex");
-					cmdList.add(filter);
-					
-					cmdList.add("-acodec");
-					cmdList.add("copy");
-					
-					cmdList.add("-vcodec");
-					cmdList.add("lansoh264_enc"); 
-					
-					cmdList.add("-b:v");
-					cmdList.add(checkBitRate(bitrate)); 
-					
-					cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
-					cmdList.add("yuv420p");
-					
-					cmdList.add("-y");
-					cmdList.add(dstFile);
-					String[] command=new String[cmdList.size()];  
-				     for(int i=0;i<cmdList.size();i++){  
-				    	 command[i]=(String)cmdList.get(i);  
-				     }  
-				    return  executeVideoEditor(command);
-			  }else{
-				  return VIDEO_EDITOR_EXECUTE_FAILED;
-			  }
-		  }
 		  /**
 		   * 为视频增加图片，图片可以是带透明的png类型，也可以是jpg类型;
 		   * 适用在为视频增加logo，或增加一些好玩的图片的场合，
 		   * 以下两条方法，也是叠加图片，不同的是可以指定叠加时间段
-		   * 我们有另外的视频叠加图片，视频叠加视频的类，可以实现视频或图片的缩放，移动，旋转等动作，请联系我们
+		   * 我们的高级版本可以实现 在任意时刻叠加图片，叠加视频的类，可以实现视频或图片的缩放，移动，旋转等动作
 		   * @param videoFile　原视频
 		   * @param imagePngPath　　png图片的路径
 		   * @param x　　叠加图片相对于视频的Ｘ坐标，视频的左上角为坐标原点0.0
@@ -1920,6 +1831,17 @@ public class VideoEditor {
 				  return VIDEO_EDITOR_EXECUTE_FAILED;
 			  }
 		  }
+		  public int executeAddWaterMark(String videoFile,String decName,String imagePngPath,float startTimeS,float endTimeS,int x,int y,String dstFile,int bitrate)
+		  {
+			  if(fileExist(videoFile)){
+				  
+				  String filter=String.format(Locale.getDefault(),"overlay=%d:%d:enable='between(t,%f,%f)",x,y,startTimeS,endTimeS);
+				  		int ret=videoAddWatermark(videoFile,decName,imagePngPath, filter, dstFile, bitrate);
+						return ret;
+			  }else{
+				  return VIDEO_EDITOR_EXECUTE_FAILED;
+			  }
+		  }
 		  //内部使用, 视频上增加水印.
 		  private int videoAddWatermark(String videoFile,String decName,String imagePngPath,String filter,String dstFile,int bitrate)
 		  {
@@ -1933,6 +1855,43 @@ public class VideoEditor {
 				cmdList.add("-i");
 				cmdList.add(imagePngPath);
 
+				cmdList.add("-filter_complex");
+				cmdList.add(filter);
+				
+				cmdList.add("-acodec");
+				cmdList.add("copy");
+				
+				cmdList.add("-vcodec");
+				cmdList.add("lansoh264_enc"); 
+				
+				cmdList.add("-b:v");
+				cmdList.add(checkBitRate(bitrate)); 
+				
+				cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+				cmdList.add("yuv420p");
+				
+				cmdList.add("-y");
+				cmdList.add(dstFile);
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     }  
+			    return  executeVideoEditor(command);
+		  }
+		  
+		  
+		  public int watermarkAddView(String videoFile,String decName,String imagePngPath,String filter,String dstFile,int bitrate)
+		  {
+			  	List<String> cmdList=new ArrayList<String>();
+				cmdList.add("-i");
+				cmdList.add(imagePngPath);
+
+				cmdList.add("-vcodec");
+				cmdList.add(decName);
+				
+				cmdList.add("-i");
+				cmdList.add(videoFile);
+				
 				cmdList.add("-filter_complex");
 				cmdList.add(filter);
 				
@@ -1992,6 +1951,69 @@ public class VideoEditor {
 			     }  
 			    return  executeVideoEditor(command);
 		  }
+		  /*
+			  * 同时叠加多个图片.
+			  * ffmpeg -i Text.mp4 -i qzone.png -i qq2.png -i phiz5.png -i send.png -i cancel.png -i download.png  -filter_complex "overlay=25:25,overlay=0:0,overlay=35:35,overlay=45:45,overlay=55:55,overlay=65:65" -pix_fmt yuv420p -c:a copy HeT.mp4
+			  * */
+			  /**
+			   * 同时增加两个图片的水印.
+			   * @param videoFile
+			   * @param decName
+			   * @param imagePngPath1
+			   * @param imagePngPath2
+			   * @param X1
+			   * @param Y1
+			   * @param X2
+			   * @param Y2
+			   * @param dstFile
+			   * @param bitrate
+			   * @return
+			   */
+			  public int executeAddWaterMark(String videoFile,String decName,String imagePngPath1,String imagePngPath2,int X1,int Y1,int X2,int Y2,String dstFile,int bitrate){
+				  
+				  if(fileExist(videoFile)){
+					  
+					  String filter=String.format(Locale.getDefault(),"overlay=%d:%d,overlay=%d:%d",X1,Y1,X2,Y2);
+					  
+					  List<String> cmdList=new ArrayList<String>();
+						cmdList.add("-vcodec");
+						cmdList.add(decName);
+						
+						cmdList.add("-i");
+						cmdList.add(videoFile);
+
+						cmdList.add("-i");
+						cmdList.add(imagePngPath1);
+						
+						cmdList.add("-i");
+						cmdList.add(imagePngPath2);
+
+						cmdList.add("-filter_complex");
+						cmdList.add(filter);
+						
+						cmdList.add("-acodec");
+						cmdList.add("copy");
+						
+						cmdList.add("-vcodec");
+						cmdList.add("lansoh264_enc"); 
+						
+						cmdList.add("-b:v");
+						cmdList.add(checkBitRate(bitrate)); 
+						
+						cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+						cmdList.add("yuv420p");
+						
+						cmdList.add("-y");
+						cmdList.add(dstFile);
+						String[] command=new String[cmdList.size()];  
+					     for(int i=0;i<cmdList.size();i++){  
+					    	 command[i]=(String)cmdList.get(i);  
+					     }  
+					    return  executeVideoEditor(command);
+				  }else{
+					  return VIDEO_EDITOR_EXECUTE_FAILED;
+				  }
+			  }
 		  
 		  /**
 		   * 把视频填充成指定大小的画面, 比视频的宽高大的部分用黑色来填充.
@@ -2910,8 +2932,6 @@ public class VideoEditor {
 			  }
 		  }
 		/**
-		 * TODO  没有验证, 只是在PC端测试OK
-		 * 
 		 * 把yuv420p格式的yuv视频文件, 编码成MP4
 		 * @param srcPath  原文件
 		 * @param width  yuv视频的宽度
@@ -2943,6 +2963,7 @@ public class VideoEditor {
 					
 					cmdList.add("-c:v");
 					cmdList.add("lansoh264_enc");
+					
 					cmdList.add("-pix_fmt");
 					cmdList.add("yuv420p");
 					cmdList.add("-b:v");
@@ -3009,8 +3030,15 @@ public class VideoEditor {
 		    return  executeVideoEditor(command);
 		}
 		
-		// -vf drawtext="fontfile=/usr/share/fonts/truetype/freefont/FreeSerif.ttf: text='Test Text'"
-		public int testVideoAddText(String videoPath,String decoder,int bitrate,String dstPath)
+		/**
+		 * 增加文字. 因为文字和字体有关系, 不建议用基本版本来增加文字, 您可以用高级版本来做.
+		 * @param videoPath
+		 * @param decoder
+		 * @param bitrate
+		 * @param dstPath
+		 * @return
+		 */
+		public int executeAddWord(String videoPath,String decoder,int bitrate,String dstPath)
 		{
 			//参考代码://ffmpeg -i 2x.mp4 -vf "subtitles=tenSub.srt" -y out3.mp4
 			List<String> cmdList=new ArrayList<String>();
@@ -3023,7 +3051,7 @@ public class VideoEditor {
 			cmdList.add(videoPath);
 			
 			cmdList.add("-vf");
-			cmdList.add("drawtext=fontfile=/system/fonts/DroidSansFallback.ttf: text='杭州蓝松科技001abc'");
+			cmdList.add("drawtext=fontfile=/system/fonts/DroidSansFallback.ttf: text='蓝松科技123abc'");
 			
 			cmdList.add("-acodec");
 			cmdList.add("copy");
@@ -3163,8 +3191,6 @@ public class VideoEditor {
 		 */
 		 public int executeTsTextToMp4(String tsFile,String dstFile)
 		  {
-				
-			
 					List<String> cmdList=new ArrayList<String>();
 					
 			    	cmdList.add("-f");
@@ -3288,5 +3314,100 @@ public class VideoEditor {
 					  return VIDEO_EDITOR_EXECUTE_FAILED;
 				  }
 			}
+		 
+		 public int testWatermark(String videoFile,String imagePngPath,String dstFile,int bitrate)
+		  {
+			  String filter=String.format(Locale.getDefault(),"overlay=0:0");
+			  	List<String> cmdList=new ArrayList<String>();
+				cmdList.add("-i");
+				cmdList.add(videoFile);
+
+				cmdList.add("-i");
+				cmdList.add(imagePngPath);
+
+				cmdList.add("-filter_complex");
+				cmdList.add(filter);
+				
+				cmdList.add("-acodec");
+				cmdList.add("copy");
+				
+				cmdList.add("-vcodec");
+				cmdList.add("lansoh264_enc"); 
+				
+				cmdList.add("-b:v");
+				cmdList.add(checkBitRate(bitrate)); 
+				
+				cmdList.add("-pix_fmt");   //<========请注意, 使用lansoh264_enc编码器编码的时候,请务必指定格式,因为底层设计只支持yuv420p的输出.
+				cmdList.add("yuv420p");
+				
+				cmdList.add("-y");
+				cmdList.add(dstFile);
+				String[] command=new String[cmdList.size()];  
+			     for(int i=0;i<cmdList.size();i++){  
+			    	 command[i]=(String)cmdList.get(i);  
+			     }  
+			    return  executeVideoEditor(command);
+		  }
+		 	/**
+		 	 *  给已经存在的视频增加一个背景音乐, 
+		 	 *  
+		 	 * @param oldMp4 已经存在的视频, 里面有音频部分, (如果没有音频部分, 建议用@ {@link #executeVideoMergeAudio(String, String, String)}
+		 	 * @param bgAudio  增加的背景音乐.
+		 	 * @param oldVolume 设置已经存在的视频的在合成的时候音量.
+		 	 * @param bgVolume  设置背景音乐的音量.
+		 	 * @return  合成后的输出视频完整路径.
+		 	 */
+			public static  String videoAddBackGroundMusic(String oldMp4,String bgAudio, float oldVolume,float bgVolume)
+			{
+					MediaInfo info=new MediaInfo(oldMp4,false);
+					MediaInfo bginfo=new MediaInfo(bgAudio,false);
+					
+					if(info.prepare() && bginfo.prepare()) 
+					{
+						
+						String audioPath=null;
+						String audioPcmPath=null;
+						String bgPcmPath = null;
+						String dstPcmAudioPath = null;
+						
+						if(info.aCodecName!=null && bginfo.aCodecName != null)
+						{
+							if(info.aCodecName.equalsIgnoreCase("aac")){
+								audioPath= SDKFileUtils.createFileInBox(".aac");
+							}else if(info.aCodecName.equalsIgnoreCase("mp3"))
+								audioPath= SDKFileUtils.createFileInBox(".mp3");
+								
+							audioPcmPath = SDKFileUtils.createFileInBox( ".pcm");
+							bgPcmPath = SDKFileUtils.createFileInBox(".pcm");
+							dstPcmAudioPath = SDKFileUtils.createFileInBox(".pcm");
+							
+						    VideoEditor  et=new VideoEditor();
+						    String newMp4=SDKFileUtils.createMp4FileInBox();
+						    String dstMp4=SDKFileUtils.createMp4FileInBox();
+						    et.executeDeleteAudio(oldMp4, newMp4);  
+						    
+						    et.executeDeleteVideo(oldMp4, audioPath);  //获得音频
+						    
+							AudioEncodeDecode.decodeAudio(audioPath,audioPcmPath);
+							AudioEncodeDecode.decodeAudio(bgAudio,bgPcmPath);
+							
+								et.executePcmMix(audioPcmPath,info.aSampleRate,info.aChannels,
+										bgPcmPath,bginfo.aSampleRate,bginfo.aChannels,oldVolume,bgVolume,dstPcmAudioPath);
+								et.executePcmComposeVideo(dstPcmAudioPath,44100,2,newMp4,dstMp4);
+								
+					
+							SDKFileUtils.deleteFile(audioPath);
+							SDKFileUtils.deleteFile(audioPcmPath);
+							SDKFileUtils.deleteFile(bgPcmPath);
+							SDKFileUtils.deleteFile(dstPcmAudioPath);
+							return dstMp4;
+						}else{
+							Log.w(TAG,"old mp4 file no audio . do not add audio");
+						}
+					}else{
+						Log.w(TAG,"old mp4 file prepare error!!,do not add audio");
+					}
+					return null;
+				}
 		 
 }

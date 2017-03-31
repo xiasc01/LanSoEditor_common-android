@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">视频编辑基本版本</string>
+    <string name="app_name">蓝松短视频基本版本</string>
          <string name="message_granted">All permissions have been granted.</string>
     <string name="message_denied">Permission \"%1$s\" has been denied.</string>
     
@@ -33,6 +33,8 @@
 	
 	<string name="origal_width">提示:\n当前视频宽度小于屏幕宽度, 采取原尺寸显示,您可以在代码中修改为自适应屏幕宽度显示形式</string>
 	<string name="fix_width">提示:\n当前视频宽度大于或等于屏幕宽度, 采取自适应到屏幕宽度,您可以在代码中修改为原尺寸的显示形式</string>
+
+	<string name="sdk_checkerror">检查SDK错误,当前可能不是我们的演示Demo,或SDK已过期.请联系我们!</string>
 
 	
 	

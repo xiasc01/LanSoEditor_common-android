@@ -1,14 +1,16 @@
 # LanSoEditor_common  ---android平台的视频编辑SDK
 
-###我们有可以实现类似秒拍,快手,美拍等APP的大部分功能的高级版本
+### 我们有可以实现类似秒拍,快手,美拍等APP的大部分功能的高级版本
  https://github.com/LanSoSdk/LanSoEditor_advance
  欢迎您的使用,高级版本采用类似photoshop一样的图层架构， 各种视频， 图片，文字， UI等都被处理成一个个的图层 增加到DrawPad（工作区）中。可以实现滤镜, 叠加,混合,标记,涂鸦,贴纸等各种视频编辑效果.
 
-####工程为Eclipse,修改为Android Studio的步骤
+### 工程为Eclipse,修改为Android Studio的步骤
 *  选择AS中的file--->import project ,选择项目的路径名，（注意，一定要是当前项目的根文件夹），点击Ok，会弹出对话框，让您选择需要保存的路径， 选择后点击Next,会弹出3个按钮都选中的对话框，直接点击Finish，导入完成。
 *  可联系我们,为您转换成Android Studio版本工程, 并提供技术支持(联系方式见下面). 
 
-###当前版本是LanSoEditor-2.0.0
+### 当前版本是LanSoEditor-2.2.3
+增加了SDK的限制条件: SDK如果没有授权, 则APP名字一定要是我们demo的名字, 请注意.
+### 功能介绍
 *  主要使用在音视频的: 裁剪,剪切,分离,合并,转换,拼接,水印,叠加,混合,转码等场合;
 *  
 *  我们是针对android平台对ffmpeg做了硬件加速优化,经过多款手机的测试,优化性能大概提升4倍左右
@@ -23,27 +25,25 @@
 *  
 *  此SDK采用低价收费授权,公司性质的合作,为了您项目更好的进行,欢迎和我们联系.谢谢!
 
-###可给我们发邮件,获取测试机型报告.
-
-###我们的高级版本下载地址：
+### 我们的高级版本下载地址：
 *	https://github.com/LanSoSdk/LanSoEditor_advance
 
-###举例功能的界面展示
+### 举例功能的界面展示
 ![](https://github.com/LanSoSdk/LanSoEditor_common/blob/master/editor_common_main.jpg)
 
-###下载地址: 
+### 下载地址: 
 *  https://github.com/LanSoSdk/LanSoEditor_common
 
-###联系方式:
+### 联系方式:
 *   QQ 1852600324 
 *   Email:support@lansongtech.com
 *   Phone:0571-89052701
 *   网址:www.lansongtech.com
 
-###直接下载获取APK:
+### 直接下载获取APK:
    下载整个项目后, 在bin文件下有apk, 直接安装后即可演示.
 
-###本SDK的编解码有:
+### 本SDK的编解码有:
 *  软解码器H264
 *  硬件加速解码器lansoh264_dec
 *  软编码器libx264

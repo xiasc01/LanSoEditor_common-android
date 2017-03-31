@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lansoeditor.demo"
-    android:versionCode="2000"
-    android:versionName="2.0.0" >
+    android:versionCode="2200"
+    android:versionName="2.2.0" >
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -38,37 +38,34 @@
         android:theme="@style/AppTheme" >
         
             
-         <activity android:name="com.lansosdk.commonDemo.startActivity"
+         <activity android:name="com.example.commonDemo.startActivity"
              android:theme="@style/startTheme"
             android:label="@string/app_name" >
-              <intent-filter>
+             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>  
-            
-            
-                   
+             
+             
          </activity>
          
         <activity
-            android:name="com.lansosdk.commonDemo.MainActivity">
+            android:name="com.example.commonDemo.MainActivity">
             
-            
-            
-            
+           
         </activity>
          
-         <activity android:name="com.lansosdk.commonDemo.VideoPlayerActivity"></activity>
-         <activity android:name="com.lansosdk.commonDemo.FileExplorerActivity"></activity>
-         <activity android:name="com.lansosdk.commonDemo.MediaInfoActivity"></activity>
-         <activity android:name="com.lansosdk.commonDemo.CustomFunctionActivity"/>
-         <activity android:name="com.lansosdk.commonDemo.BusynessActivity"/>
-         <activity android:name="com.lansosdk.commonDemo.AVEditorDemoActivity"/>
-         <activity android:name="com.lansosdk.commonDemo.ScaleExecuteDemoActivity"/>
+         <activity android:name="com.example.commonDemo.VideoPlayerActivity"></activity>
+         <activity android:name="com.example.commonDemo.FileExplorerActivity"></activity>
+         <activity android:name="com.example.commonDemo.MediaInfoActivity"></activity>
+         <activity android:name="com.example.commonDemo.CustomFunctionActivity"/>
+         <activity android:name="com.example.commonDemo.BusynessActivity"/>
+         <activity android:name="com.example.commonDemo.AVEditorDemoActivity"/>
+         <activity android:name="com.example.commonDemo.ScaleExecuteDemoActivity"/>
          
-         <activity android:name="com.lansosdk.commonDemo.OnlyTestCmdActivity"/>
-          <activity android:name="com.lansosdk.commonDemo.SegmentRecorderActivity"
+         <activity android:name="com.example.commonDemo.OnlyTestCmdActivity"/>
+          <activity android:name="com.example.commonDemo.SegmentRecorderActivity"
                   android:theme="@style/AppTheme2">
              </activity>
     </application>
