@@ -98,7 +98,7 @@ public class ScaleExecuteDemoActivity extends Activity{
 			}
 		});
 
-       //在手机的/sdcard/lansongBox/路径下创建一个文件名,用来保存生成的视频文件,(在onDestroy中删除)
+       //在手机的默认路径下创建一个文件名,用来保存生成的视频文件,(在onDestroy中删除)
        editTmpPath=SDKFileUtils.newMp4PathInBox();
        dstPath=SDKFileUtils.newMp4PathInBox();
 	}
@@ -164,6 +164,7 @@ public class ScaleExecuteDemoActivity extends Activity{
 			@Override
 			public void onProgress(ScaleExecute v, long currentTimeUS) {
 				// TODO Auto-generated method stub
+				//currentTimeUS:处理当前帧的时间戳.可以用这个和总时长整除, 从而得到 进度百分比.
 				tvProgressHint.setText(String.valueOf(currentTimeUS));
 			}
 		});

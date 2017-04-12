@@ -84,8 +84,8 @@
 	<!-- ========================================================================== -->
 	<string name="demo_more_avsplit">把多媒体文件如mp4,flv等中的的音频和视频分离开,形成独立的音频文件和视频文件 </string>
 	<string name="demo_more_avmerge">合成音频/替换音频\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
-	<string name="demo_more_cutaudio">演示截取音频的前20秒或时长的一半,形成新的音频文件\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
-	<string name="demo_more_cutvideo">这里演示截取视频的前20秒或时长的一半,形成新的视频文件.</string>
+	<string name="demo_more_cutaudio">演示截取音频的前15秒或时长的一半,形成新的音频文件\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
+	<string name="demo_more_cutvideo">演示截取视频的前15秒或时长的一半,形成新的视频文件.</string>
 	<string name="demo_more_concatvideo">为了方便演示,需要您的视频大于20秒(或用默认视频).\n先把原视频从(0到1/3处)和(2/3到结束)截取成两段,然后拼接</string>
 	<string name="demo_more_videocompress">调整的小太多,则会导致画面下降.这里演示把码率降低为70%</string>
 	<string name="demo_more_videocrop">演示从左上角裁剪视频高度和宽度为原来的一半保存为新的视频</string>
@@ -93,7 +93,7 @@
 	<string name="demo_more_videoscale_hard">演示宽高缩小一半,采用硬缩放的形式来做\n流程是硬解码  软件缩放  硬编码</string>
 	<string name="demo_more_videowatermark">增加水印,增加一张demo自动的logo图片到视频中</string>
 	<string name="demo_more_videocropwatermark">裁剪和加水印,裁剪画面的同时增加一张logo图片</string>
-	<string name="demo_more_videogetframes">获取所有帧图片,保存在/sdcard/lansongBox/下面</string>
+	<string name="demo_more_videogetframes">获取所有帧图片,保存在/sdcard/lansongBox/下面,我们的高级版本有ExtractVideoFrameDemoActivity, 更快速获取所有视频帧, 并返回bitmap类型的数据.</string>
 	<string name="demo_more_videogetoneframe">获取一帧图片,保存在/sdcard/lansongbox/下面</string>
 	<string name="demo_more_videozeroangle">视频矫正角度,把原来已经有的视频角度矫正过来.</string>
 	<string name="demo_more_videoclockwise90">视频旋转90度</string>

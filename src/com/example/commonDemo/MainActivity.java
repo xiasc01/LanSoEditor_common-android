@@ -101,7 +101,6 @@ public class MainActivity extends Activity{
 			 new DemoInfo(R.string.direct_play_video,R.string.direct_play_video,false,false),
 			 new DemoInfo(R.string.demo_id_expend_cmd,R.string.demo_more_avsplit,false,false),
 			 
-			 
 			 new DemoInfo(R.string.demo_id_connet_us,R.string.demo_more_avsplit,false,false),			 
 	};
 	private ListView  mListView=null;
@@ -168,10 +167,7 @@ public class MainActivity extends Activity{
 						startMediaInfoActivity();
 					}
 				}else if(position==1){  //分段录制
-				
 					startSegmentRecord();
-					
-					
 				}else if(position==mTestCmdArray.length-2){  //最后两个, 扩展功能
 					startCustomFunctionActivity();
 				}else if(position==mTestCmdArray.length-1){  //最后一个, 联系我们
@@ -192,7 +188,20 @@ public class MainActivity extends Activity{
 	        }else{
 	        	isPermissionOk=true;
 	        }
-		 showHintDialog();
+//		 showHintDialog();
+		 
+		 new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				test();
+			}
+		}, 500);
+	}
+	private void test()
+	{
+		//VideoEditor  et=new VideoEditor();
 	}
 	@Override
 	protected void onResume() {
@@ -439,7 +448,6 @@ public class MainActivity extends Activity{
 			            LayoutInflater inflater = mActivity.getLayoutInflater();
 			            convertView = inflater.inflate(R.layout.test_cmd_item, parent, false);
 			        }
-			        
 			        TextView tvNumber = (TextView)convertView.findViewById(R.id.id_test_cmditem_cnt);
 			        
 			        TextView tvName = (TextView)convertView.findViewById(R.id.id_test_cmditem_tv);
@@ -458,4 +466,5 @@ public class MainActivity extends Activity{
 		}
 		
 		//---------------------------------------------
+	
 }

@@ -91,9 +91,9 @@ public class SegmentRecorderActivity extends Activity implements Handler.Callbac
 		//第一步:初始化 断点录制. 
 		//最后三个参数是:视频编码宽度,视频编码高度,视频编码码率,因为是竖屏拍照, 录制的视频宽度和高度对调了,故这里设置480和640等.
 		segmentRecorder = new OpenSegmentsRecorder(this, cameraTextureView.getHolder(),480,480,1000*1000); //建议采用这个
-//		segmentRecorder = new SegmentsRecorder(this, cameraTextureView.getHolder(),480,640,1200*1000);
-		//segmentRecorder = new SegmentsRecorder(this, cameraTextureView.getHolder(),720,1280,1500*1000);
-//		segmentRecorder = new SegmentsRecorder(this, cameraTextureView.getHolder(),1088,1920,2000*1000);
+//		segmentRecorder = new OpenSegmentsRecorder(this, cameraTextureView.getHolder(),480,640,1500*1000);
+//		segmentRecorder = new OpenSegmentsRecorder(this, cameraTextureView.getHolder(),720,1280,2000*1000);
+//		segmentRecorder = new OpenSegmentsRecorder(this, cameraTextureView.getHolder(),1088,1920,3000*1000);
 		
 		//第二步:设置断点回调的各种方法.
 		segmentRecorder.setSegmentsRecordListener(new OpenSegmentsRecordListener() {
@@ -103,7 +103,6 @@ public class SegmentRecorderActivity extends Activity implements Handler.Callbac
 				// TODO Auto-generated method stub
 				progressView.setCurrentState(VideoProgressView.State.START);
 			}
-			
 			
 			 // 当前段录制停止了, timeMS  当前在暂停时的录制总时间. 
 			//  segmentIdx segmnet的总数也是当前文件的索引, 等于 getSegmentSize();

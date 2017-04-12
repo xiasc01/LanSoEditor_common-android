@@ -86,12 +86,6 @@ public class OnlyTestCmdActivity extends Activity{
 					//videoPath= CopyDefaultVideoAsyncTask.copyFile(getApplicationContext(),"ping20s.mp4");
 					
 					
-//					videoPath="/sdcard/Ke270.mp4"; 
-//					videoPath="/sdcard/VIDEO_90du.mp4"; 
-//					videoPath="/sdcard/VIDEO_270du.mp4"; 
-//					videoPath="/sdcard/V720P_90du.mp4";
-//					videoPath="/sdcard/peirui_1.mp4";
-					
 //					 mInfo=new MediaInfo(videoPath,true);
 //					 mInfo.prepare();
 //					 Log.i(TAG,"info true:"+mInfo.toString());

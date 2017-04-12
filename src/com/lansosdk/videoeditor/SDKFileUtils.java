@@ -21,8 +21,6 @@ public class SDKFileUtils {
 	public static final boolean VERBOSE = false;  
 	 /**
     * 在指定的文件夹里创建一个文件名字, 名字是当前时间,指定后缀.
-    * @param dir   "/sdcard/"
-    * @param suffix  ".mp4", 或"mp4",或info.aCodecName/info.vCodecName;
     * @return
     */
 	public static String createFile(String dir,String suffix){
@@ -112,7 +110,6 @@ public class SDKFileUtils {
 	 /**
 	    * 在指定的文件夹里 定义一个文件名字, 名字是当前时间,指定后缀.
 	    * 注意: 和 {@link #createFile(String, String)}的区别是,这里不生成文件,只是生成这个路径的字符串.
-	    * @param dir   "/sdcard/"
 	    * @param suffix  ".mp4"
 	    * @return
 	    */

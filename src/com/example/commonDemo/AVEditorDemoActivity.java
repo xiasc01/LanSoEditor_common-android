@@ -102,7 +102,6 @@ public class AVEditorDemoActivity extends Activity implements OnClickListener{
 					}
 				}
 			});
-	        
 	        dstVideo=SDKFileUtils.newMp4PathInBox();
 	        dstAudio=SDKFileUtils.newMp4PathInBox();
 	  } 

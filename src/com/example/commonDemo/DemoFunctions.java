@@ -72,11 +72,10 @@ public class DemoFunctions {
 			MediaInfo   info=new MediaInfo(srcVideo);
 	    	if(info.prepare())
 	    	{
-//	    		if(info.vDuration>20)
-//	    		 return	editor.executeVideoCutOut(srcVideo,dstVideo,0,20);
-//				else
-					return editor.executeVideoCutExact(srcVideo, info.vCodecName, dstVideo, 0.6f, 1.0f, (int)((float)info.vBitRate*1.2f));
-//					return	editor.executeVideoCutOut(srcVideo,dstVideo,0,info.vDuration/2);
+	    		if(info.vDuration>20)
+	    		 return	editor.executeVideoCutOut(srcVideo,dstVideo,0,20);
+				else
+					return	editor.executeVideoCutOut(srcVideo,dstVideo,0,info.vDuration/2);
 	    	}
 	    	return -1;
 	}
@@ -91,8 +90,8 @@ public class DemoFunctions {
 			MediaInfo   info=new MediaInfo(srcAudio);
 	    	if(info.prepare() && info.aCodecName!=null)
 	    	{
-	    		if(info.aDuration>20)
-	    			return 	editor.executeAudioCutOut(srcAudio,dstAudio,0,20);
+	    		if(info.aDuration>15)
+	    			return 	editor.executeAudioCutOut(srcAudio,dstAudio,0,15);
 				else
 					return 	editor.executeAudioCutOut(srcAudio,dstAudio,0,info.aDuration/2);
 	    	}else{
@@ -170,8 +169,8 @@ public class DemoFunctions {
     			width=info.vCodecHeight;
     			height=info.vCodecWidth;
     		}
-    		
     		return editor.executeVideoFrameCrop(srcVideo, width/2, height/2, 0, 0, dstVideo, info.vCodecName,dstBr2);
+//    		return editor.executeVideoFrameCrop(srcVideo, width, height, 0, 0, dstVideo, info.vCodecName,dstBr2);  //测试.
 		}else{
 			return -1;
 		}
@@ -202,28 +201,18 @@ public class DemoFunctions {
 	 */	
 	public static int demoAddPicture(Context ctx,VideoEditor editor,String srcVideo,String dstVideo)
 	{
-//		     Log.i(TAG,"mediainfo ===>"+MediaInfo.checkFile(srcVideo));
 			MediaInfo info=new MediaInfo(srcVideo);
 			if(info.prepare())
 			{
-				String imagePath="/sdcard/lansongBox/watermark.png";
-				String dir="/sdcard/lansongBox/";
-				File dirFile=new File(dir);
-				
-				if (!dirFile.exists())
-					dirFile.mkdir();
-				
-				CopyFileFromAssets.copy(ctx, "watermark.png", dir, "watermark.png");
-				return editor.executeAddWaterMark(srcVideo, imagePath, 0, 0, dstVideo, (int)(info.vBitRate*1.2f));
-				
-//				return editor.executeAddMarkAdjustSpeed2(srcVideo,info.vCodecName,imagePath,0,0,0.5f,(int)(info.vBitRate*1.2f),dstVideo);
-				
+				String imagePath=CopyDefaultVideoAsyncTask.copyFile(ctx, "watermark.png");
+				return editor.executeAddWaterMark(srcVideo, imagePath, 0, 0, dstVideo, (int)(info.vBitRate*1.5f));
 			}else{
 				return -1;
 			}
 	}
 	/**
-	 * 演示获得图片,保存到/sdcard下面.
+	 * 演示获得图片,保存到/sdcard/lansongBox下面.
+	 * 我们的高级版本有ExtractVideoFrameDemoActivity, 更快速获取所有视频帧, 并返回bitmap类型的数据.
 	 * 
 	 * 视频提取图片:\n把视频中的画面转换为图片, 可以全部指定图片,也可以每秒钟提取一帧,可以设置开始和结束时间
 	 */
@@ -232,7 +221,7 @@ public class DemoFunctions {
 		MediaInfo   info=new MediaInfo(srcVideo);
     	if(info.prepare())
     	{
-    		return editor.executeGetAllFrames(srcVideo,info.vCodecName,"/sdcard/","img");
+    		return editor.executeGetAllFrames(srcVideo,info.vCodecName,SDKDir.getPath(),"img");
     	}else{
     		return -1;
     	}
@@ -259,10 +248,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			String imagePath="/sdcard/videoimage.png";
-			if(SDKFileUtils.fileExist(imagePath)==false){
-				CopyFileFromAssets.copy(ctx, "ic_launcher.png", "/sdcard", "videoimage.png");	
-			}
+			String imagePath=CopyDefaultVideoAsyncTask.copyFile(ctx, "ic_launcher.png");
 			 int cropW=240;
 	    	 int cropH=240;
 	    	 int max=Math.max(info.vWidth,info.vHeight);
@@ -273,7 +259,7 @@ public class DemoFunctions {
 	    	 float ratio=(float)cropMax/(float)max;
 	    	 
 	    	 dstBr*=ratio;  //得到恒定码率的等比例值.
-	    	 dstBr*=0.8f; //再压缩20%.
+	    	 dstBr*=1.5f; 
 	    	 
 	    	return  editor.executeCropOverlay(srcVideo, info.vCodecName, imagePath, 20, 20, cropW, cropH, 0, 0, dstVideo, (int)dstBr);
 		}else{
@@ -308,7 +294,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
@@ -325,7 +311,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
@@ -342,7 +328,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
@@ -360,14 +346,14 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
 			int width=info.vCodecWidth+32;  //向外padding32个像素
 			int height=info.vCodecHeight+32;
 			
-			return editor.executePadingVideo(srcVideo, info.vCodecName, width, height, 0, 0, dstVideo, (int)(info.vBitRate*1.2f));
+			return editor.executePadingVideo(srcVideo, info.vCodecName, width, height, 0, 0, dstVideo, (int)(info.vBitRate*1.5f));
 		}else{
 			return -1;
 		}
@@ -396,11 +382,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
-			if(bitrate>2000*1000)
-				bitrate=2000*1000; //2M
-			
-			return editor.executeVideoRotateVertically(srcVideo, info.vCodecName, (int)(info.vBitRate*1.2f), dstVideo);
+			return editor.executeVideoRotateVertically(srcVideo, info.vCodecName, (int)(info.vBitRate*1.5f), dstVideo);
 		}else{
 			return -1;
 		}
@@ -413,11 +395,11 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
-			return editor.executeVideoRotateHorizontally(srcVideo, info.vCodecName, (int)(info.vBitRate*1.2f), dstVideo);
+			return editor.executeVideoRotateHorizontally(srcVideo, info.vCodecName, (int)(info.vBitRate*1.5f), dstVideo);
 		}else{
 			return -1;
 		}
@@ -430,7 +412,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
@@ -447,7 +429,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
@@ -464,7 +446,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
@@ -481,7 +463,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare())
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			
@@ -498,7 +480,7 @@ public class DemoFunctions {
 		MediaInfo info=new MediaInfo(srcVideo);
 		if(info.prepare() &&info.vRotateAngle!=0)
 		{
-			int bitrate=(int)(info.vBitRate*1.2f);
+			int bitrate=(int)(info.vBitRate*1.5f);
 			if(bitrate>2000*1000)
 				bitrate=2000*1000; //2M
 			

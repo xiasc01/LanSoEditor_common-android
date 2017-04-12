@@ -18,6 +18,10 @@ public class AVEncoder {
 	private int dataWidth,dataHeight;
 
 	/**
+	 * 在视频录制完成后, 对合成后的视频旋转角度.
+	 */
+	public int mediaRorateDegree=0; 
+	/**
 	 * 使用在段录制的场合
 	 * 
 	 * @param fileName 
@@ -31,7 +35,13 @@ public class AVEncoder {
 	 */
 	public boolean init(String fileName,int degree,int encW,int encH,int vfps,int bitrate,int asampleRate,int abitrate)  //一定是ts的后缀
 	{
-		mHandler=encoderInit(fileName,encW,encH, vfps, bitrate,1, asampleRate, abitrate);
+		if(encH>encW && encH>640)  //如果是竖屏录制, 高度过高,则横屏编码
+		{
+			mediaRorateDegree=degree;
+			mHandler=encoderInit(fileName,encH,encW, vfps, bitrate,1, asampleRate, abitrate);
+		}else{
+			mHandler=encoderInit(fileName,encW,encH, vfps, bitrate,1, asampleRate, abitrate);
+		}
 		
 		if(degree==90 || degree==270){  //竖屏,用户设置的是宽高对调了,但图像没有对调,故这里还原到图像没有对调的宽高.
 			dataWidth=encH;
@@ -91,24 +101,21 @@ public class AVEncoder {
 				bb=data;
 			}
 			
-			
 			byte[] byteArray=null;
 			
-			if(	degree==90)  //不是后置,就是前置.
-			{
-//				Log.i(TAG,"当前preview: rotateYUV420Degree90");
-				byteArray=rotateYUV420Degree90(bb,dataWidth,dataHeight);  //应该在这里实时的检测当前是后置还是前置,后置,应旋转90, 前置270;
+			if(mediaRorateDegree==0){
+				if(	degree==90)  //不是后置,就是前置.
+				{
+					byteArray=rotateYUV420Degree90(bb,dataWidth,dataHeight);  //应该在这里实时的检测当前是后置还是前置,后置,应旋转90, 前置270;
+				}else{
+					byteArray=rotateYUV420Degree270(bb,dataWidth,dataHeight);
+				}
+				encoderWriteVideoFrame(mHandler, byteArray, ptsMS); 
 			}else{
-//				Log.i(TAG,"当前preview: rotateYUV420Degree270");
-				byteArray=rotateYUV420Degree270(bb,dataWidth,dataHeight);
+				encoderWriteVideoFrame(mHandler, bb, ptsMS); 
 			}
-				
-			
 //			byte[]  byte3=convertNV21ToYUV420P(byte2,480,480,480,480);  //放到底层实现了.
 			
-//			int number=(int)Math.round(ptsMS * 25 / 1000L);
-//			Log.i(TAG,"得到的number 是:"+number+" ptsMS is:"+ ptsMS);
-			encoderWriteVideoFrame(mHandler, byteArray, ptsMS); 
 		}
 	}
 	private     FileInputStream stream=null;
@@ -397,15 +404,6 @@ public class AVEncoder {
 	private  native long encoderRelease(long handle);
 	
 	private  native int  encoderWriteVideoFrame(long handle,byte[] yuv420sp,long pts);
-	
-	
-	
-	
-	
-
-	
-	
-	//每次读取的数据.
 	/**
 	 * 
 	 * 这里暂时没有返回长度, 实际注意, audiodata的长度要等于 采样点 *通道数 *2
@@ -416,5 +414,11 @@ public class AVEncoder {
 	 * @return
 	 */
 	private  native int  encoderWriteAudioFrame(long handle,byte[] audiodata,long pts);
+	
+	/**
+	 * 2017年4月8日:
+	 * 增加当时竖屏录制的时候, 如果高度大于640,则采用横屏录制, 然后在录制后, 通过旋转meta角度的形式来实现竖屏播放.
+	 * 
+	 */
 	
 }

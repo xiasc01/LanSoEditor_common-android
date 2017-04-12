@@ -17,30 +17,20 @@ import android.util.Log;
  */
 public class AVDecoder {
 
-//	
-//	private void saveBitmap(int width,int height) {
-	
-//	 Bitmap stitchBmp = Bitmap.createBitmap(480, 360, Bitmap.Config.ARGB_8888);
+//	private static void saveBitmap(Bitmap stitchBmp) {
+//		//Bitmap stitchBmp = Bitmap.createBitmap(480, 360, Bitmap.Config.ARGB_8888);
 //// stitchBmp.copyPixelsFromBuffer(mGLRgbBuffer);
-//// 
-//// mGLRgbBuffer.position(0);
-//// 
-//// String str=mSuffix+cnt+".png";
-//// cnt++;
-//// saveBitmap(stitchBmp,str);
-	 
-	 
-//		  Log.e(TAG, "保存图片");
-//		  File f = new File("/sdcard/", picName);
+//	 		String str="png"+"YYY2.png";
+//		  File f = new File("/sdcard/", str);
 //		  if (f.exists()) {
 //		   f.delete();
 //		  }
 //		  try {
-//		   FileOutputStream out = new FileOutputStream(f);
-//		   bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-//		   out.flush();
-//		   out.close();
-//		   Log.i(TAG, "已经保存");
+//			   FileOutputStream out = new FileOutputStream(f);
+//			   stitchBmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+//			   out.flush();
+//			   out.close();
+//		   Log.i("TAG", "已经保存到"+f.getPath());
 //		  } catch (FileNotFoundException e) {
 //		   // TODO Auto-generated catch block
 //		   e.printStackTrace();
@@ -48,8 +38,7 @@ public class AVDecoder {
 //		   // TODO Auto-generated catch block
 //		   e.printStackTrace();
 //		  }
-//
-//		 }
+//	}
 	
 	/**
 	 * 
@@ -92,6 +81,38 @@ public class AVDecoder {
 		 */
 		public static native boolean decoderIsEnd(long handle);
 		
+		/**
+		 * 临时为了获取一个bitmap图片,临时测试.
+		 * @param src
+		 */
+		public static void testGetFirstOnekey(String src)
+		{
+			  	long decoderHandler=0;
+			  	IntBuffer  mGLRgbBuffer;
+			  	MediaInfo  info=new MediaInfo(src);
+			  	if(info.prepare())
+			    {
+			    	   decoderHandler=AVDecoder.decoderInit(src);
+			    	   if(decoderHandler!=0)
+			    	   {
+			    		   mGLRgbBuffer = IntBuffer.allocate(info.vWidth * info.vHeight);
+			    			long  beforeDraw=System.currentTimeMillis();
+			    			mGLRgbBuffer.position(0);
+		    				AVDecoder.decoderFrame(decoderHandler, -1, mGLRgbBuffer.array());
+		    				Log.i("TIME","draw comsume time is :"+ (System.currentTimeMillis() - beforeDraw));
+		    				AVDecoder.decoderRelease(decoderHandler);
+		    				
+		    				//转换为bitmap
+//		    				Bitmap stitchBmp = Bitmap.createBitmap(info.vWidth , info.vHeight, Bitmap.Config.ARGB_8888);
+//		    				 stitchBmp.copyPixelsFromBuffer(mGLRgbBuffer);
+//		    				 saveBitmap(stitchBmp); //您可以修改下, 然后返回bitmap
+		    				//这里得到的图像在mGLRgbBuffer中, 可以用来返回一张图片.
+		    				decoderHandler=0;
+			    	   }
+			 }else{
+				 Log.e("TAG","get first one key error!");
+			 }
+		}
 		/**
 		 * 代码测试.
 		 *

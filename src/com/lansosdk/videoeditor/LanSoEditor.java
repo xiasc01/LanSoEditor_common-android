@@ -12,9 +12,9 @@ import android.util.Log;
 
 public class LanSoEditor {
 
-		  public static void initSo(Context context,String keyfile)
+		  public static void initSo(Context context,String argv)
 		  {
-		    	    nativeInit(context,context.getAssets(),keyfile);
+		    	    nativeInit(context,context.getAssets(),argv);
 		  }
 	    public static void unInitSo()
 	    {

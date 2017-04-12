@@ -150,7 +150,15 @@ public class VideoEditor {
 	     */
 	    private native int execute(Object cmdArray);
 	
-
+	    /**
+	     * 新增 在执行过程中取消的方法.
+	     * 如果在执行中调用了这个方法, 则会直接终止当前的操作.
+	     * 
+	     * 此方法底层仅仅是设置一个标志位, 让处理的循环体退出,因为execute是阻塞执行, 从而execute会执行结束.可以在execute执行完毕, 认为处理结束.
+	     * 
+	     * 您可以在任意线程中调用.
+	     */
+	    public native void cancel();
 	
 	/**
 	 * 
@@ -162,7 +170,6 @@ public class VideoEditor {
 	 */
 	public int executePicture2Video(String srcPath,String dstPath,float duration,int bitrate)
 	{
-		//ffmpeg -loop 1 -i 9.jpg -t 5 -c:v libx264 out.mp4
 		  if(fileExist(srcPath))
 		  {
 				List<String> cmdList=new ArrayList<String>();
@@ -647,6 +654,8 @@ public class VideoEditor {
 		  }
 		  /**
 		   * 音频和视频合成为多媒体文件，等于给视频增加一个音频。
+		   * 
+		   * 2017年4月5日 增加: 默认以视频的时长为最终目标视频的长度.
 		   * @param videoFile 输入的视频文件,需视频文件中不存储音频部分. 如有音频部分, 建议用 {@link #executeDeleteAudio(String, String)}把音频删除后的目标文件作为当前的输入.
 		   * @param audioFile 输入的音频文件
 		   * @param dstFile  合成后的输出，文件名的后缀是.mp4
@@ -657,17 +666,23 @@ public class VideoEditor {
 		  {
 			  boolean isAAC=false;
 			  
-			  if(fileExist(videoFile) && fileExist(audioFile)){
+			  MediaInfo vInfo=new MediaInfo(videoFile,false);
+			  MediaInfo aInfo=new MediaInfo(audioFile,false);
+			  if(vInfo.prepare() && aInfo.prepare()){
 				  
-					  if(audioFile.endsWith(".aac")){
+					  if(aInfo.aCodecName.equals("aac")){
 						  isAAC=true;
 					  }
-				  
+					  
 					List<String> cmdList=new ArrayList<String>();
 			    	cmdList.add("-i");
 					cmdList.add(videoFile);
 					cmdList.add("-i");
 					cmdList.add(audioFile);
+
+					cmdList.add("-t");
+					cmdList.add(String.valueOf(vInfo.vDuration));
+					
 					cmdList.add("-vcodec");
 					cmdList.add("copy");
 					cmdList.add("-acodec");
@@ -999,7 +1014,6 @@ public class VideoEditor {
 		   * @param jpgPrefix   保存图片文件的前缀，可以是png或jpg
 		   * @return
 		   * 
-		   * ./ffmpeg -i tenSecond.mp4 -qscale:v 2 output_%03d.jpg
 		   */
 		  public int executeGetAllFrames(String videoFile,String decoder,String dstDir,String jpgPrefix)
 		  {
@@ -1040,7 +1054,6 @@ public class VideoEditor {
 		   * @param sampeRate  一秒钟采样几张图片. 可以是小数.
 		   * @return
 		   * 
-		   * ./ffmpeg -i 2x.mp4 -qscale:v 2 -vsync 1 -r 5/32 -f image2 r5r-%03d.jpeg
 		   */
 		  public int executeGetSomeFrames(String videoFile,String dstDir,String jpgPrefix,float sampeRate)
 		  {
@@ -1092,7 +1105,6 @@ public class VideoEditor {
 		   */
 		  public int executeGetKeyFrames(String videoFile,String dstDir,String jpgPrefix)
 		  {
-				//	  ffmpeg -i 22.MP4 -vf "select=eq(pict_type\,I)" -vsync vfr FF%04d.jpg
 			  String dstPath=dstDir+"/"+jpgPrefix+"_%3d.png";
 			  if(fileExist(videoFile)){
 				  
@@ -1133,7 +1145,6 @@ public class VideoEditor {
 		   */
 		  public int executeGetOneFrame(String videoSrcPath,String decodeName,float postionS,String dstPng)
 		  {
-			  //参考命令:ffmpeg -i input.mp4 -ss 10 -vframes 1 out.png 
 			  if(fileExist(videoSrcPath)){
 				
 					List<String> cmdList=new ArrayList<String>();
@@ -1176,7 +1187,6 @@ public class VideoEditor {
 		   */
 		  public int executeGetOneFrame(String videoSrcPath,String decodeName,float postionS,int pngWidth,int pngHeight,String dstPng)
 		  {
-			  //参考命令:ffmpeg -i input.mp4 -ss 10 -s 480x480 -vframes 1 out.png 
 			  if(fileExist(videoSrcPath)){
 				
 					List<String> cmdList=new ArrayList<String>();
@@ -1309,12 +1319,6 @@ public class VideoEditor {
 		   */
 		  public int executeConvertMp4toTs(String mp4Path,String dstTs)
 		  {
-		  	//./ffmpeg -i 0.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts0.ts
-//		  ./ffmpeg -i 1.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts1.ts
-//		  ./ffmpeg -i 2.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts2.ts
-//		  ./ffmpeg -i 3.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts ts3.ts
-//		  ./ffmpeg -i "concat:ts0.ts|ts1.ts|ts2.ts|ts3.ts" -c copy -bsf:a aac_adtstoasc out2.mp4
-
 			  if(fileExist(mp4Path)){
 				
 					List<String> cmdList=new ArrayList<String>();
@@ -1356,7 +1360,6 @@ public class VideoEditor {
 		   * @param tsArray　多段ts流的数组
 		   * @param dstFile　　处理后保存的路径,文件后缀名需要是.mp4
 		   * @return
-		   * ./ffmpeg -i "concat:ts0.ts|ts1.ts|ts2.ts|ts3.ts" -c copy -bsf:a aac_adtstoasc out2.mp4
 		   */
 		  public int executeConvertTsToMp4(String[] tsArray,String dstFile)
 		  {
@@ -1402,7 +1405,6 @@ public class VideoEditor {
 		   */
 		  public void executeConcatMP4(String[] mp4Array,String dstVideo)
 			{
-				//executeConcatMP4(new String[]{"/sdcard/hi1.mp4","/sdcard/hi2.mp4"},"/sdcard/hi12.mp4");
 				//第一步,先把所有的mp4转换为ts流
 				ArrayList<String>  tsPathArray=new ArrayList<String>();
 				for(int i=0;i<mp4Array.length;i++)
@@ -1568,7 +1570,6 @@ public class VideoEditor {
 		   */
 		  public int executeCropOverlay(String videoFile,String decCodec, String pngPath,int cropX,int cropY,int cropWidth,int cropHeight,int overX,int overY,String dstFile,int bitrate)
 		  {
-			  //ffmpeg -i test_720p.mp4 -i watermark.png -filter_complex "[0:v]crop=640:640:0:40 [crop];[crop][1:v] overlay=0:0" -acodec copy -y xx.mp4
 			  if(fileExist(videoFile))
 			  {
 					String filter=String.format(Locale.getDefault(),"[0:v]crop=%d:%d:%d:%d [crop];[crop][1:v] overlay=%d:%d",cropWidth,cropHeight,cropX,cropY,overX,overY);
@@ -1655,7 +1656,6 @@ public class VideoEditor {
 		   */
 		  public int executeVideoCutCropOverlay(String videoFile,String decCodec, String pngPath,float startTimeS,float duationS,int cropX,int cropY,int cropWidth,int cropHeight,int overX,int overY,String dstFile,int bitrate)
 		  {
-			  ////ffmpeg -i test_720p.mp4 -i watermark.png -filter_complex "[0:v]crop=640:640:0:40 [crop];[crop][1:v] overlay=0:0" -acodec copy -y xx.mp4
 			  if(fileExist(videoFile))
 			  {
 					String filter=String.format(Locale.getDefault(),"[0:v]crop=%d:%d:%d:%d [crop];[crop][1:v] overlay=%d:%d",cropWidth,cropHeight,cropX,cropY,overX,overY);
@@ -1725,7 +1725,6 @@ public class VideoEditor {
 		   * 因为原有的视频大部分是动态码率VBR,可以认为通过{@link MediaInfo} 得到的 {@link MediaInfo#vBitRate}是平均码率,这里要设置,推荐是1.5倍为好.
 		   * @return
 		   */
-		  //./ffmpeg -framerate 1 -i r5r-%03d.jpeg -c:v libx264 -r 25 -pix_fmt yuv420p out33.mp4
 		  public int executeConvertPictureToVideo(String picDir,String jpgprefix,float framerate,String dstPath,int bitrate){
 					
 			  		String picSet=picDir+jpgprefix+"_%3d.jpeg";
@@ -1951,10 +1950,6 @@ public class VideoEditor {
 			     }  
 			    return  executeVideoEditor(command);
 		  }
-		  /*
-			  * 同时叠加多个图片.
-			  * ffmpeg -i Text.mp4 -i qzone.png -i qq2.png -i phiz5.png -i send.png -i cancel.png -i download.png  -filter_complex "overlay=25:25,overlay=0:0,overlay=35:35,overlay=45:45,overlay=55:55,overlay=65:65" -pix_fmt yuv420p -c:a copy HeT.mp4
-			  * */
 			  /**
 			   * 同时增加两个图片的水印.
 			   * @param videoFile
@@ -2030,7 +2025,6 @@ public class VideoEditor {
 		   */
 		  public int executePadingVideo(String videoFile,String decCodec,int padWidth,int padHeight,int padX,int padY,String dstFile,int bitrate)
 		  {
-			  //ffmpeg -i ping20s.mp4 -vf "pad=480:480:50:50:black" -y ping_pad3.mp4
 			  if(fileExist(videoFile))
 			  {
 				  //第一步检测设置填充的高度和宽度是否比原来+坐标的大, 如果小于,则出错.
@@ -2105,7 +2099,6 @@ public class VideoEditor {
 		  public int executeCropPaddingVideo(String videoFile,String decCodec,int cropWidth,int cropHeight,int cropX,int cropY,
 				  int padWidth,int padHeight,int padX,int padY,String dstFile,int bitrate)
 		  {
-			//ffmpeg -i ping20s.mp4 -vf "crop=300:300:0:0,pad=480:480:50:50:black" -y ping_pad3.mp4
 			  if(fileExist(videoFile))
 			  {
 				  //这里没有检测裁剪的坐标是否有效. 注意!!!
@@ -2166,7 +2159,6 @@ public class VideoEditor {
 			 */
 		  public int executeRotateAngle(String srcPath,String decoder,float angle,int bitrate,String dstPath)
 		  {
-			  ////ffmpeg -i INPUT -vf "rotate=45*(PI/180),format=yuv420p" -metadata:s:v rotate=0 -codec:v libx264 -codec:a copy output.mp4
 			  if(fileExist(srcPath)){
 					
 				  String filter=String.format(Locale.getDefault(),"rotate=%f*(PI/180),format=yuv420p",angle);
@@ -2271,7 +2263,6 @@ public class VideoEditor {
 		   */
 		  public int executeSetVideoMetaAngle(String srcPath,int angle,String dstPath)
 		  {
-			  //ffmpeg -i input.mp4 -c copy -metadata:s:v:0 rotate=90 output.mp4
 			  if(fileExist(srcPath)){
 					
 					List<String> cmdList=new ArrayList<String>();
@@ -2339,9 +2330,6 @@ public class VideoEditor {
 		 */
 		public int  executeVideoAdjustSpeed( String srcPath,String decoder,float speed,int bitrate,String dstPath)
 		{
-			//./ffmpeg -i 2x.mp4 -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
-			//ffmpeg -i 2x.mp4 -i watermark.png -filter_complex "[0:v][1:v] overlay=0:0[overlay]; [overlay]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
-			
 			if(fileExist(srcPath)){
 				
 				  String filter=String.format(Locale.getDefault(),"[0:v]setpts=%f*PTS[v];[0:a]atempo=%f[a]",1/speed,speed);
@@ -2394,7 +2382,6 @@ public class VideoEditor {
 		 */
 		public int  executeVideoMirrorH( String srcPath,String decoder,int bitrate,String dstPath)
 		{
-			//ffmpeg -i 2x.mp4 -vf "crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack" -acodec copy 2x_hmirror.mp4
 			 if(fileExist(srcPath)){
 					
 				  String filter=String.format(Locale.getDefault(),"crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack");
@@ -2442,7 +2429,6 @@ public class VideoEditor {
 		 */
 		public int  executeVideoMirrorV( String srcPath,String decoder,int bitrate,String dstPath)
 		{
-			//ffmpeg -i 2x.mp4 -vf "crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack" -acodec copy 2x_hmirror.mp4
 			 if(fileExist(srcPath)){
 					
 				  String filter=String.format(Locale.getDefault(),"crop=iw:ih/2:0:0,split[top][tmp];[tmp]vflip[bottom];[top][bottom] vstack");
@@ -2490,7 +2476,6 @@ public class VideoEditor {
 		 */
 		public int executeVideoRotateVertically( String srcPath,String decoder,int bitrate,String dstPath)
 		{
-			//./ffmpeg -i input.mp4 -vf vflip -c:a copy output_v.mp4  //<----垂直方向上反转
 				if(fileExist(srcPath)){
 					
 					List<String> cmdList=new ArrayList<String>();
@@ -2536,7 +2521,6 @@ public class VideoEditor {
 		 */
 		public int executeVideoRotateHorizontally( String srcPath,String decoder,int bitrate,String dstPath)
 		{
-			//./ffmpeg -i input.mp4 -vf hflip -c:a copy output_v.mp4  //<----水平方向上反转
 				if(fileExist(srcPath)){
 					
 					List<String> cmdList=new ArrayList<String>();
@@ -2583,7 +2567,6 @@ public class VideoEditor {
 		 */
 		public int executeVideoRotate90Clockwise( String srcPath,String decoder,int bitrate,String dstPath)
 		{
-			//ffmpeg -i INPUT -vf transpose=1 -c:a copy output.mp4  //<----顺时针旋转视频90度
 			if(fileExist(srcPath)){
 				
 				List<String> cmdList=new ArrayList<String>();
@@ -2630,8 +2613,6 @@ public class VideoEditor {
 		 */
 		public int executeVideoRotate90CounterClockwise( String srcPath,String decoder,int bitrate,String dstPath)
 		{
-			//ffmpeg -i INPUT -vf transpose=2 -c:a copy OUTPUT //---逆时针旋转视频90度
-			
 				if(fileExist(srcPath)){
 					
 					List<String> cmdList=new ArrayList<String>();
@@ -2775,7 +2756,6 @@ public class VideoEditor {
 		 */
 		public int executeAVReverse( String srcPath,String decoder,int bitrate,String dstPath) 
 		{
-			//ffmpeg -i 2x.mp4 -vf reverse -af areverse reversed.mp4
 			 if(fileExist(srcPath)){
 				 int ret=0;
 				 ret=doAVReverse(srcPath, decoder, bitrate, dstPath, true);
@@ -2942,7 +2922,6 @@ public class VideoEditor {
 		 */
 		public int executeEncodeYUV2MP4( String srcPath,int width,int height,int bitrate,String dstPath) 
 		{
-			//ffmpeg -f rawvideo -video_size 1920x1080 -i xs.yuv -vcodec libx264 xs1.mp4
 			 if(fileExist(srcPath)){
 					
 					List<String> cmdList=new ArrayList<String>();
@@ -2995,7 +2974,6 @@ public class VideoEditor {
 		 */
 		public int testAddSubtitle2Video(String videoPath,String decoder,String subtilePath,int bitrate,String dstPath)
 		{
-			//参考代码://ffmpeg -i 2x.mp4 -vf "subtitles=tenSub.srt" -y out3.mp4
 			List<String> cmdList=new ArrayList<String>();
 			
 			String filter="subtitles=";
@@ -3040,7 +3018,6 @@ public class VideoEditor {
 		 */
 		public int executeAddWord(String videoPath,String decoder,int bitrate,String dstPath)
 		{
-			//参考代码://ffmpeg -i 2x.mp4 -vf "subtitles=tenSub.srt" -y out3.mp4
 			List<String> cmdList=new ArrayList<String>();
 			
 					
@@ -3088,7 +3065,6 @@ public class VideoEditor {
 		 * @return
 		 */
 		public int executeYuvAddWaterMark(String yuvPath,int width,int height,String imagePngPath,int x,int y,String dstFile,int bitrate){
-			  //ffmpeg -f rawvideo -video_size 1280x720 -pix_fmt nv21 -i cachevideo.yuv vv.mp4
 			  if(fileExist(yuvPath)){
 				  
 				  String filter=String.format(Locale.getDefault(),"overlay=%d:%d",x,y);
@@ -3137,34 +3113,33 @@ public class VideoEditor {
 			  }
 		  }
 		
-		/**
-		 * 仅仅测试gif的编码。
-		 * @return
-		 */
-		public int executeImage2Gif() 
-		{
-			//ffmpeg -f image2 -framerate 10 -i gif_%03d.jpg neat.gif 参考代码。
-					List<String> cmdList=new ArrayList<String>();
-					
-					cmdList.add("-f");
-					cmdList.add("image2");
-					
-					cmdList.add("-framerate");
-					cmdList.add("10");
-
-					cmdList.add("-i");
-					cmdList.add("/sdcard/test_gif/gif_%03d.jpg");
-					
-					
-					cmdList.add("-y");
-					cmdList.add("/sdcard/test_gif/m7_gif.gif");
-					 
-					String[] command=new String[cmdList.size()];  
-				     for(int i=0;i<cmdList.size();i++){  
-				    	 command[i]=(String)cmdList.get(i);  
-				     }  
-				    return  executeVideoEditor(command);
-		}
+//		/**
+//		 * 仅仅测试gif的编码。
+//		 * @return
+//		 */
+//		public int executeImage2Gif() 
+//		{
+//					List<String> cmdList=new ArrayList<String>();
+//					
+//					cmdList.add("-f");
+//					cmdList.add("image2");
+//					
+//					cmdList.add("-framerate");
+//					cmdList.add("10");
+//
+//					cmdList.add("-i");
+//					cmdList.add("/sdcard/test_gif/gif_%03d.jpg");
+//					
+//					
+//					cmdList.add("-y");
+//					cmdList.add("/sdcard/test_gif/m7_gif.gif");
+//					 
+//					String[] command=new String[cmdList.size()];  
+//				     for(int i=0;i<cmdList.size();i++){  
+//				    	 command[i]=(String)cmdList.get(i);  
+//				     }  
+//				    return  executeVideoEditor(command);
+//		}
 		
 		/**
 		 * 校对一下 bitrate, 因为一些2013年左右的SoC中的硬件编码器如果码率大于2000*1000(2M)的话, 则会崩溃, 故这里限制在2M范围内.
@@ -3175,8 +3150,8 @@ public class VideoEditor {
 		{
 			int bitrate=srcBitRate;
 	    		
-			if(bitrate>2500*1000)
-	    		bitrate=2500*1000; //2.5M
+			if(bitrate>3000*1000)
+	    		bitrate=3000*1000; //3M
 			else if(bitrate<500)
 				bitrate=500;
 			
@@ -3218,8 +3193,6 @@ public class VideoEditor {
 		 
 		 public int  executeAddMarkAdjustSpeed( String srcPath,String decoder,String  pngPath,int xpos,int ypos, float speed,int bitrate,String dstPath)
 			{
-//ffmpeg -i 2x.mp4 -i watermark.png -filter_complex "[0:v][1:v] overlay=0:0[overlay]; [overlay]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
-				
 				if(fileExist(srcPath)){
 					
 					  String filter=String.format(Locale.getDefault(),"[0:v][1:v] overlay=%d:%d[overlay]; [overlay]setpts=%f*PTS[v];[0:a]atempo=%f[a]",xpos,ypos,1/speed,speed);
@@ -3268,8 +3241,6 @@ public class VideoEditor {
 			}
 		 public int  executeAddMarkAdjustSpeed2( String srcPath,String decoder,String  pngPath,int xpos,int ypos, float speed,int bitrate,String dstPath)
 			{
-//ffmpeg -i 2x.mp4 -i watermark.png -filter_complex "[0:v][1:v] overlay=0:0[overlay]; [overlay]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output3.mp4
-				
 				if(fileExist(srcPath)){
 					
 					  String filter=String.format(Locale.getDefault(),"[0:v][1:v] overlay=%d:%d[overlay]; [overlay]setpts=%f*PTS[v];[0:a]atempo=%f[a]",xpos,ypos,1/speed,speed);

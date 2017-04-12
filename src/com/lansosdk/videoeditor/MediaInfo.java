@@ -313,14 +313,64 @@ public class MediaInfo {
       */
      public static String checkFile(String videoPath)
      {
-    	 if(fileExist(videoPath))
+    	 String ret=" ";
+    	 if(videoPath==null)
     	 {
-    		 MediaInfo  info=new MediaInfo(videoPath,false);
-    		 info.prepare();  
-        	 return  info.toString();
+    		 ret="文件名为空指针, null";
     	 }else{
-    		 return "video:"+videoPath+" not support";
+    		 File file=new File(videoPath);
+    		 if(file.exists()==false){
+    			 ret="文件不存在,"+videoPath;
+    		 }else if(file.isDirectory()){  //如果在这里崩溃, 则请确认下您文件路径是否正确或文件是否是空.
+    			 ret="您设置的路径是一个文件夹,"+videoPath;
+    		 }else if(file.length()==0){
+    			 ret="文件存在,但文件的大小为0字节(可能您只创建文件,但没有进行各种调用设置导致的.)."+videoPath;
+    		 }else{
+    			 MediaInfo  info=new MediaInfo(videoPath,false);
+    			 if(info.fileSuffix.equals("pcm") || info.fileSuffix.equals("yuv")){
+    				  String str="文件路径:"+info.filePath+"\n";
+        			  str+= "文件名:"+info.fileName+"\n";
+        			  str+= "文件后缀:"+info.fileSuffix+"\n";
+        			  str+= "文件大小(字节):"+file.length()+"\n";
+        			  ret="文件存在,但文件的后缀可能表示是裸数据,我们的SDK需要多媒体格式的后缀是mp4/mp3/aac/m4a/mov/gif等常见格式";
+        			  ret+=str;
+    			 }
+    			 else if(info.prepare()){
+        			   ret="文件内的信息是:\n";
+        			   String str="文件路径:"+info.filePath+"\n";
+	        			  str+= "文件名:"+info.fileName+"\n";
+	        			  str+= "文件后缀:"+info.fileSuffix+"\n";
+	        			  str+= "文件大小(字节):"+file.length()+"\n";
+        			  if(info.isHaveVideo()){
+        				  str+="视频信息-----:\n";
+	        			  str+= "宽度:"+info.vHeight+"\n";
+	        			  str+= "高度:"+info.vWidth+"\n";
+	        			  str+= "时长:"+info.vDuration+"\n";
+	        			  str+= "帧率:"+info.vFrameRate+"\n";
+	        			  str+= "码率:"+info.vBitRate+"\n";
+	        			  str+= "旋转角度:"+info.vRotateAngle+"\n";
+        			  }else{
+        				  str+="<无视频信息>\n";
+        			  }
+        			  
+        			  if(info.isHaveAudio()){
+        				  str+= "音频信息-----:\n";
+	        			  str+= "采样率:"+info.aSampleRate+"\n";
+	        			  str+= "通道数:"+info.aChannels+"\n";
+	        			  str+= "码率:"+info.aBitRate+"\n";
+	        			  str+= "时长:"+info.aDuration+"\n";
+        			  }else{
+        				  str+="<无音频信息>\n";
+        			  }
+	        		    ret+=str;
+        		 }else{
+        			 ret="文件存在, 但获取文件媒体信息错误,请查看下 文件是否 是音频或视频, 或许是文本或裸数据."+videoPath;
+        		 }
+        		 
+    		 }
+    			 
     	 }
+    	 return ret;
      }
      //-------------------------------文件操作-------------------------
      private static boolean fileExist(String absolutePath)
@@ -357,7 +407,7 @@ public class MediaInfo {
 //			@Override
 //			public void run() {
 //				// TODO Auto-generated method stub
-//				MediaInfo mif=new MediaInfo("/sdcard/2x.mp4"); //这里是我们的测试视频地址, 如您测试, 则需要修改视频地址.
+//				MediaInfo mif=new MediaInfo("/sdcard/2x.mp4"); 
 //				mif.prepare();
 //				Log.i(TAG,"mif is:"+ mif.toString());
 //				mif.release();
@@ -368,7 +418,7 @@ public class MediaInfo {
 //			@Override
 //			public void run() {
 //				// TODO Auto-generated method stub
-//				MediaInfo mif=new MediaInfo("/sdcard/2x.mp4");//这里是我们的测试视频地址, 如您测试, 则需要修改视频地址.
+//				MediaInfo mif=new MediaInfo("/sdcard/2x.mp4");
 //				mif.prepare();
 //				Log.i(TAG,"mif is:"+ mif.toString());
 //				mif.release();

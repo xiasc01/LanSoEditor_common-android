@@ -140,7 +140,7 @@ public class VideoPlayerActivity extends Activity {
     
     }
     
-    public void play(Surface surface)  {  
+    private void play(Surface surface)  {  
 
     	if(videoPath==null)
     		return ;

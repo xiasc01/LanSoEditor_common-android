@@ -12,7 +12,13 @@ public class CopyDefaultVideoAsyncTask extends AsyncTask<Object, Object, Boolean
 		private Context  mContext=null;
 		private TextView tvHint;
 		private String fileName;
-		
+	
+		/**
+		 * 同步拷贝, 阻塞执行.
+		 * @param ctx
+		 * @param fileName
+		 * @return
+		 */
 	public static String copyFile(Context ctx,String fileName)
 	{
 		 String str=SDKDir.TMP_DIR+fileName;

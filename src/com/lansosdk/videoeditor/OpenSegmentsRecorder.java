@@ -75,7 +75,7 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 
 	private SurfaceHolder mSurfaceHolder = null;	
 
-	private AVEncoder  mBoxEnc=null;
+	private AVEncoder  mEncoder=null;
 	private Activity mActivity;
 	private OpenSegmentsRecordListener segmentRecordListener = null;
 	private int[] previewSize;
@@ -95,7 +95,7 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 		cameraManager = new OpenCameraManager(activity,encWidth,encHeight);
 		mSurfaceHolder = holder;
 		mSurfaceHolder.addCallback(this);
-		mBoxEnc=new AVEncoder();
+		mEncoder=new AVEncoder();
 		
 		this.mEncWidth=encWidth;
 		this.mEncHeight=encHeight;  //需要视频的分辨率
@@ -117,7 +117,7 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 		if(cameraManager!=null && cameraManager.isPreviewing()){
 			currentSegVideoFile = 	SDKFileUtils.createFileInBox("ts");
 			
-			mBoxEnc.init(currentSegVideoFile,cameraManager.getRotateDegree(),mEncWidth,mEncHeight,25,mEncBitrate,44100,64000);
+			mEncoder.init(currentSegVideoFile,cameraManager.getRotateDegree(),mEncWidth,mEncHeight,25,mEncBitrate,44100,64000);
 			
 			
 			videoEncodeThread = new VideoEncodeThread();  //视频编码		
@@ -171,8 +171,8 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 					audioEncodeThread=null;
 				}
 				
-				if(mBoxEnc!=null){
-					mBoxEnc.release(); //这里mBoxEnc不能=null,因为后面还需要用到.
+				if(mEncoder!=null){
+					mEncoder.release(); //这里mBoxEnc不能=null,因为后面还需要用到.
 				}
 				
 				lastSegmentsTotalTime+=currentSegDuration;
@@ -206,18 +206,26 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 		if(SDKFileUtils.fileExist(finalVideoFile)){  //如果已经创建,则删除之前的.
 			SDKFileUtils.deleteFile(finalVideoFile);
 		}
-		
-		finalVideoFile =SDKFileUtils.createMp4FileInBox();
+		String cancatFile =SDKFileUtils.createMp4FileInBox();
 		VideoEditor editor=new VideoEditor();
 		String[] tsArray=new String[recorderFiles.size()];  
 		for (int i=0;i<recorderFiles.size();i++) {
 			VideoSegment item=recorderFiles.get(i);
 			tsArray[i]=item.getName();
 		}
-		editor.executeConvertTsToMp4(tsArray, finalVideoFile);
+		editor.executeConvertTsToMp4(tsArray, cancatFile);
 		
-		if(SDKFileUtils.fileExist(finalVideoFile))
+		
+		if(SDKFileUtils.fileExist(cancatFile))
+		{
+			if(mEncoder.mediaRorateDegree!=0){
+				finalVideoFile =SDKFileUtils.createMp4FileInBox();
+				editor.executeSetVideoMetaAngle(cancatFile, mEncoder.mediaRorateDegree, finalVideoFile);
+			}else{
+				finalVideoFile=cancatFile;
+			}
 			return finalVideoFile;
+		}
 		else
 			return null;
 	}
@@ -361,7 +369,7 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 				while (mIsRecording.get()) {
 					
 					audioData.position(0).limit(0);
-					int bufferReadResult = audioRecorder.read(audioData.array(), 0, 2048); //每次读取2048个字节. 因为 ffmpeg的AAC规定一帧是1024个采样点, 一个采样点是2个字节,故2048个字节.
+					int bufferReadResult = audioRecorder.read(audioData.array(), 0, 2048); 
 					
 					audioData.limit(bufferReadResult);
 					
@@ -371,7 +379,7 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 						
 						byte[] dataCopy = new byte[bufferReadResult];
 						
-						System.arraycopy(audioData.array(), 0, dataCopy, 0, bufferReadResult);  //这里一定要拷贝出去,不然可能被再次采集的音频覆盖.
+						System.arraycopy(audioData.array(), 0, dataCopy, 0, bufferReadResult);  
 						
 						audioFrameQ.add(new OpenFrame(ts, dataCopy));
 					}
@@ -396,13 +404,13 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 				if (mIsRecording.get()) {
 					if (!audioFrameQ.isEmpty()) {
 						OpenFrame v = audioFrameQ.poll();
-						mBoxEnc.pushAudioData(v.data,v.ts);
+						mEncoder.pushAudioData(v.data,v.ts);
 					}
 				}
 				if (mIsStopRecord.get()) {
 					if (!audioFrameQ.isEmpty()) {
 						OpenFrame v = audioFrameQ.poll();
-						mBoxEnc.pushAudioData(v.data,v.ts);
+						mEncoder.pushAudioData(v.data,v.ts);
 					} else {
 						break;
 					}
@@ -422,17 +430,16 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 						
 						OpenFrame v = videoFrameQ.poll();
 						int degree=cameraManager.isUseBackCamera()?90:270;
-						mBoxEnc.pushVideoData(v.data,previewSize[0],previewSize[1],degree,v.ts);
 						
+						mEncoder.pushVideoData(v.data,previewSize[0],previewSize[1],degree,v.ts);
 					}
 				}
 				
 				if (mIsStopRecord.get()) {
 					if (!videoFrameQ.isEmpty()) {
-						
 						OpenFrame v = videoFrameQ.poll();
 						int degree=cameraManager.isUseBackCamera()?90:270;
-						mBoxEnc.pushVideoData(v.data,previewSize[0],previewSize[1],degree,v.ts);
+						mEncoder.pushVideoData(v.data,previewSize[0],previewSize[1],degree,v.ts);
 						
 					} else {
 						break;
@@ -467,8 +474,8 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 			cameraManager.closeCamera();  //这里不要等于null
 		}
 		
-		if(mBoxEnc!=null){
-			mBoxEnc.release();  //这里	mBoxEnc不能等于null, 可能后面还会用到.
+		if(mEncoder!=null){
+			mEncoder.release();  //这里	mBoxEnc不能等于null, 可能后面还会用到.
 		}
 	}
 
