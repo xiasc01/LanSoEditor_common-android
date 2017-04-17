@@ -43,7 +43,7 @@
 *   网址:www.lansongtech.com
 
 ### 直接下载获取APK:
-   下载整个项目后, 在bin文件下有apk, 直接安装后即可演示.
+   下载整个项目后, app\build\outputs\apk文件夹下后apk, 直接安装后即可演示.
 
 ### 本SDK的编解码有:
 *  软解码器H264
@@ -55,7 +55,7 @@
 *  音频aac解码器aac
 *  音频aac编码器 faac
 *  音频pcm编解码器 pcm_s16le
-*  视频编解码器 gif
+*  编解码器 gif
 
    
 
