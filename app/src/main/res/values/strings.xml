@@ -42,7 +42,7 @@
 	<string name="cmdwrapper_hint">当前功能已经测试完毕,但还没有编写UI界面,请在VideoEditor.java文件中查看相关的实现方法.如有问题,请联系我们,谢谢!\n\n</string>
 	
 	<string name="demo_id_mediainfo">获取视频信息</string>
-	<string name="demo_id_segmentrecord">【新】分段录制(支持回删/开源)</string>
+	<string name="demo_id_segmentrecord">分段录制(支持回删/开源)</string>
 	
 	
 	<string name="demo_id_avsplit">音视频分离</string>

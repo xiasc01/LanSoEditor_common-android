@@ -220,7 +220,7 @@
     <string name="demo_id_mediainfo">获取视频信息</string>
     <string name="demo_id_morepicturevideo">多张图片转视频</string>
     <string name="demo_id_ontpicturevideo">一张图片转视频</string>
-    <string name="demo_id_segmentrecord">【新】分段录制(支持回删/开源)</string>
+    <string name="demo_id_segmentrecord">分段录制(支持回删/开源)</string>
     <string name="demo_id_videoaddanglemeta">视频增加角度数据</string>
     <string name="demo_id_videoadjustspeed">视频加减速度</string>
     <string name="demo_id_videoclockwise90">视频旋转90度</string>

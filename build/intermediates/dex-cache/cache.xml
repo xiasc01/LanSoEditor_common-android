@@ -2,58 +2,40 @@
 <items version="2" >
 
     <item
-        is-multidex="false"
-        jar="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\libs\PermissionsManager.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="6a1cc3def4753b22dc2c0ee55fcf533d2f456474">
-        <dex dex="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\pre-dexed\debug\PermissionsManager_df3f9f472fefdb40209a341ae98c280dad96daf2.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\libs\videoscalesdk_hx.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d0e943e4690bfc8c1b45a6e16e743c10f1775ee2">
-        <dex dex="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\pre-dexed\debug\videoscalesdk_hx_4c00761b57f2f174675e8003a093559cb441a1d7.jar" />
-    </item>
-    <item
         is-multidex="true"
-        jar="C:\Users\Administrator\Desktop\LanSoEditor_common-masterAS\app\libs\videoscalesdk_hx.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d0e943e4690bfc8c1b45a6e16e743c10f1775ee2">
-        <dex dex="C:\Users\Administrator\Desktop\LanSoEditor_common-masterAS\app\build\intermediates\transforms\dex\debug\folders\1000\2\videoscalesdk_hx_76d027e94087041edec4e23d6f2618c62bcc988f\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\Desktop\LanSoEditor_common-masterAS\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="bdbbe32c810d59773ec852d7945aa605aa70fa60">
-        <dex dex="C:\Users\Administrator\Desktop\LanSoEditor_common-masterAS\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_dc06ef236ac9e77dd5a2eac9fb427d8fc31f108e\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\Desktop\LanSoEditor_common-masterAS\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jar="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
-        <dex dex="C:\Users\Administrator\Desktop\LanSoEditor_common-masterAS\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_34a9175054e34e9f164f3fa4b3d495abcbf8c671\classes.dex" />
+        <dex dex="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_375ceeb5edaac6404f2a650f76b382c8ea77cd71\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\Administrator\Desktop\LanSoEditor_common-masterAS\app\libs\PermissionsManager.jar"
+        jar="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="25ac6f610eac068f5d108e07880292e132927bf6">
+        <dex dex="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_c8a8dbfca159ce631c5ed54321245bd38693a9df\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\libs\videoscalesdk_hx.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d0e943e4690bfc8c1b45a6e16e743c10f1775ee2">
+        <dex dex="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\transforms\dex\debug\folders\1000\2\videoscalesdk_hx_4c00761b57f2f174675e8003a093559cb441a1d7\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\libs\PermissionsManager.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="6a1cc3def4753b22dc2c0ee55fcf533d2f456474">
-        <dex dex="C:\Users\Administrator\Desktop\LanSoEditor_common-masterAS\app\build\intermediates\transforms\dex\debug\folders\1000\2\PermissionsManager_31db914ef9af335f2a668529be56aca39141e57e\classes.dex" />
+        <dex dex="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\transforms\dex\debug\folders\1000\2\PermissionsManager_df3f9f472fefdb40209a341ae98c280dad96daf2\classes.dex" />
     </item>
 
 </items>

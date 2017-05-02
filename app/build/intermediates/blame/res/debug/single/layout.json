@@ -1,5 +1,9 @@
 [
     {
+        "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\layout2.xml",
+        "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\layout2.xml"
+    },
+    {
         "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\mediainfo_layout.xml",
         "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\mediainfo_layout.xml"
     },
