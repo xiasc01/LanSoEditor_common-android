@@ -136,7 +136,7 @@ public class MainActivity extends Activity{
 	        });
 		 
 		  tvVideoPath=(TextView)findViewById(R.id.id_main_tvvideo);
-		  
+		
 		  findViewById(R.id.id_main_select_video).setOnClickListener(new OnClickListener() {
 				
 				@Override
