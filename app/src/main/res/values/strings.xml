@@ -50,15 +50,19 @@
 	<string name="demo_id_cutaudio">音频剪切</string>
 	<string name="demo_id_cutvideo">视频剪切</string>
 	<string name="demo_id_concatvideo">视频拼接</string>
-	<string name="demo_id_videocompress">视频压缩</string>
 	<string name="demo_id_videocrop">画面裁剪</string>
-	<string name="demo_id_videoscale_soft">视频缩放[软件实现]</string>
-	<string name="demo_id_videoscale_hard">视频缩放[GPU实现]</string>
+	<string name="demo_id_videocompress">码率压缩视频</string>
+	<string name="demo_id_videoscale_soft">  缩放压缩一[软件实现]</string>
+	<string name="demo_id_videoscale_hard">  缩放压缩二[GPU实现]</string>
 	<string name="demo_id_videowatermark">增加水印</string>
 	<string name="demo_id_videocropwatermark">裁剪和加水印</string>
 	<string name="demo_id_videogetframes">获取所有帧图片</string>
 	<string name="demo_id_videogetoneframe">获取一帧图片</string>
-	<string name="demo_id_videozeroangle">视频矫正角度</string>
+	<!--
+	 <string name="demo_id_videozeroangle">视频矫正角度</string>
+	-->
+
+
 	<string name="demo_id_videoclockwise90">视频旋转90度</string>
 	<string name="demo_id_videocounterClockwise90">视频旋转270度</string>
 	<string name="demo_id_videoaddanglemeta">视频增加角度数据</string>

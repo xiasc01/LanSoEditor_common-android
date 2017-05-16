@@ -224,7 +224,7 @@
     <string name="demo_id_videoaddanglemeta">视频增加角度数据</string>
     <string name="demo_id_videoadjustspeed">视频加减速度</string>
     <string name="demo_id_videoclockwise90">视频旋转90度</string>
-    <string name="demo_id_videocompress">视频压缩</string>
+    <string name="demo_id_videocompress">码率压缩视频</string>
     <string name="demo_id_videocounterClockwise90">视频旋转270度</string>
     <string name="demo_id_videocrop">画面裁剪</string>
     <string name="demo_id_videocropwatermark">裁剪和加水印</string>
@@ -236,10 +236,9 @@
     <string name="demo_id_videoreverse">视频倒序</string>
     <string name="demo_id_videorotateh">视频垂直反转</string>
     <string name="demo_id_videorotatev">视频水平反转</string>
-    <string name="demo_id_videoscale_hard">视频缩放[GPU实现]</string>
-    <string name="demo_id_videoscale_soft">视频缩放[软件实现]</string>
+    <string name="demo_id_videoscale_hard">  缩放压缩二[GPU实现]</string>
+    <string name="demo_id_videoscale_soft">  缩放压缩一[软件实现]</string>
     <string name="demo_id_videowatermark">增加水印</string>
-    <string name="demo_id_videozeroangle">视频矫正角度</string>
     <string name="demo_more_audiodelaymix">两个音频在混合时,第二个延时一定时间.\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
     <string name="demo_more_audiovolumemix">两个音频在混合时,调整每个音频的音量.\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>
     <string name="demo_more_avmerge">合成音频/替换音频\n(为代码清晰,方便演示,使用默认音频,此代码开放,您可以自行更改测试)</string>

@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
-    abi="arm64-v8a,armeabi-v7a,armeabi"
-    api-level="24"
+    abi="armeabi-v7a,armeabi"
+    api-level="23"
     build-mode="FULL"
-    density="xxhdpi"
+    density="xhdpi"
     format="10"
-    plugin-version="2.3.1"
-    timestamp="1493793947749"
+    plugin-version="2.3.2"
+    timestamp="1494918339260"
     token="-372282828762341864"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="798" />
+        duration="0" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="607" />
+        duration="0" />
     <task
         name="verifier"
-        duration="88" />
+        duration="0" />
 
-    <artifact
-        location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
-        type="SPLIT" />
-    <artifact
-        location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
-        type="SPLIT" />
     <artifact
         location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
         type="SPLIT" />
@@ -43,6 +37,12 @@
         type="SPLIT" />
     <artifact
         location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
+        type="SPLIT" />
+    <artifact
+        location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
+        type="SPLIT" />
+    <artifact
+        location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
         type="SPLIT" />
     <artifact
         location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
@@ -62,14 +62,8 @@
 
     <build
         build-mode="FULL"
-        timestamp="1493793947749"
+        timestamp="1494918339260"
         verifier="FULL_BUILD_REQUESTED" >
-        <artifact
-            location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
-            type="SPLIT" />
-        <artifact
-            location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
-            type="SPLIT" />
         <artifact
             location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
             type="SPLIT" />
@@ -84,6 +78,12 @@
             type="SPLIT" />
         <artifact
             location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
+            type="SPLIT" />
+        <artifact
+            location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
+            type="SPLIT" />
+        <artifact
+            location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
             type="SPLIT" />
         <artifact
             location="E:\0000Coodec\publish_sdk\LanSoEditor_commonAS_github\LanSoEditor_common\app\build\intermediates\split-apk\debug\slices\slice_3.apk"

@@ -72,15 +72,14 @@ public class MainActivity extends Activity{
 			 new DemoInfo(R.string.demo_id_cutaudio,R.string.demo_more_cutaudio,false,true),
 			 new DemoInfo(R.string.demo_id_cutvideo,R.string.demo_more_cutvideo,true,false),
 			 new DemoInfo(R.string.demo_id_concatvideo,R.string.demo_more_concatvideo,true,false),
-			 new DemoInfo(R.string.demo_id_videocompress,R.string.demo_more_videocompress,true,false),
 			 new DemoInfo(R.string.demo_id_videocrop,R.string.demo_more_videocrop,true,false),
+			new DemoInfo(R.string.demo_id_videocompress,R.string.demo_more_videocompress,true,false),
 			 new DemoInfo(R.string.demo_id_videoscale_soft,R.string.demo_more_videoscale_soft,true,false),
 			 new DemoInfo(R.string.demo_id_videoscale_hard,R.string.demo_more_videoscale_hard,false,false),
 			 new DemoInfo(R.string.demo_id_videowatermark,R.string.demo_more_videowatermark,true,false),
 			 new DemoInfo(R.string.demo_id_videocropwatermark,R.string.demo_more_videocropwatermark,true,false),
 			 new DemoInfo(R.string.demo_id_videogetframes,R.string.demo_more_videogetframes,false,false),
 			 new DemoInfo(R.string.demo_id_videogetoneframe,R.string.demo_more_videogetoneframe,false,false),
-			 new DemoInfo(R.string.demo_id_videozeroangle,R.string.demo_more_videozeroangle,true,false),
 			 new DemoInfo(R.string.demo_id_videoclockwise90,R.string.demo_more_videoclockwise90,true,false),
 			 new DemoInfo(R.string.demo_id_videocounterClockwise90,R.string.demo_more_videocounterClockwise90,true,false),
 			 new DemoInfo(R.string.demo_id_videoaddanglemeta,R.string.demo_more_videoaddanglemeta,true,false),
@@ -95,9 +94,7 @@ public class MainActivity extends Activity{
 			 new DemoInfo(R.string.demo_id_videorotateh,R.string.demo_more_videorotateh,true,false),
 			 new DemoInfo(R.string.demo_id_videorotatev,R.string.demo_more_videorotatev,true,false),
 			 new DemoInfo(R.string.demo_id_videoreverse,R.string.demo_more_videoreverse,true,false),
-
 			 new DemoInfo(R.string.demo_id_avreverse,R.string.demo_more_avreverse,true,false),
-			 
 			 new DemoInfo(R.string.direct_play_video,R.string.direct_play_video,false,false),
 			 new DemoInfo(R.string.demo_id_expend_cmd,R.string.demo_more_avsplit,false,false),
 			 

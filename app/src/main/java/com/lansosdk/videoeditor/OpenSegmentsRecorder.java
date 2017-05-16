@@ -19,8 +19,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.lansosdk.videoeditor.SDKFileUtils;
-import com.lansosdk.videoeditor.VideoEditor;
 
 
 
@@ -54,7 +52,6 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 	
 
 	private volatile AtomicBoolean mIsRecording = new AtomicBoolean(false);
-	private volatile AtomicBoolean mIsStopRecord = new AtomicBoolean(false);
 
 	private AudioRecord audioRecorder;
 
@@ -117,7 +114,8 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 		if(cameraManager!=null && cameraManager.isPreviewing()){
 			currentSegVideoFile = 	SDKFileUtils.createFileInBox("ts");
 			
-			mEncoder.init(currentSegVideoFile,cameraManager.getRotateDegree(),mEncWidth,mEncHeight,25,mEncBitrate,44100,64000);
+			
+			mEncoder.init(currentSegVideoFile,cameraManager.getPreviewDataDegress(),mEncWidth,mEncHeight,25,mEncBitrate,44100,64000);
 			
 			
 			videoEncodeThread = new VideoEncodeThread();  //视频编码		
@@ -138,7 +136,6 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 			e.printStackTrace();
 		}
 		mIsRecording.set(true);
-		mIsStopRecord.set(false);
 		
 		initRecorder();
 		
@@ -152,23 +149,23 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 
 	public void pauseRecord() {
 
-		if (mIsRecording.get() && !mIsStopRecord.get()) {
+		if (mIsRecording.get()) {
 			try {
-				mIsStopRecord.set(true);
 				mIsRecording.set(false);
-			
-				if(videoEncodeThread!=null){
-					videoEncodeThread.join();
-					videoEncodeThread=null;
+				
+				if(audioEncodeThread!=null){
+					audioEncodeThread.join();
+					audioEncodeThread=null;
 				}
+				
 				if(audioSampleThread!=null){
 					audioSampleThread.join();
 					audioSampleThread=null;
 				}
 				
-				if(audioEncodeThread!=null){
-					audioEncodeThread.join();
-					audioEncodeThread=null;
+				if(videoEncodeThread!=null){
+					videoEncodeThread.join();
+					videoEncodeThread=null;
 				}
 				
 				if(mEncoder!=null){
@@ -199,7 +196,7 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
    */
 	public String stopRecord() {
 		
-		if (mIsRecording.get() && !mIsStopRecord.get()) {
+		if (mIsRecording.get()) {
 			pauseRecord();
 		}
 		
@@ -232,7 +229,7 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 
 	public void release() {
 		
-		if (mIsRecording.get() && !mIsStopRecord.get()) {
+		if (mIsRecording.get()) {
 			pauseRecord();
 		}
 		
@@ -400,21 +397,11 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 
 		@Override
 		public void run() {
-			while (true) {
-				if (mIsRecording.get()) {
+			while (mIsRecording.get()) {
 					if (!audioFrameQ.isEmpty()) {
 						OpenFrame v = audioFrameQ.poll();
 						mEncoder.pushAudioData(v.data,v.ts);
 					}
-				}
-				if (mIsStopRecord.get()) {
-					if (!audioFrameQ.isEmpty()) {
-						OpenFrame v = audioFrameQ.poll();
-						mEncoder.pushAudioData(v.data,v.ts);
-					} else {
-						break;
-					}
-				}
 			}
 		}
 	}
@@ -424,29 +411,20 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 
 		@Override
 		public void run() {
-			while (true) {
-				if (mIsRecording.get()) {
-					if (!videoFrameQ.isEmpty()) {
-						
-						OpenFrame v = videoFrameQ.poll();
-						int degree=cameraManager.isUseBackCamera()?90:270;
-						
-						mEncoder.pushVideoData(v.data,previewSize[0],previewSize[1],degree,v.ts);
-					}
-				}
-				
-				if (mIsStopRecord.get()) {
-					if (!videoFrameQ.isEmpty()) {
-						OpenFrame v = videoFrameQ.poll();
-						int degree=cameraManager.isUseBackCamera()?90:270;
-						mEncoder.pushVideoData(v.data,previewSize[0],previewSize[1],degree,v.ts);
-						
-					} else {
-						break;
-					}
+			while (mIsRecording.get()) {
+				if (!videoFrameQ.isEmpty()) {
+					
+					OpenFrame v = videoFrameQ.poll();
+					int degree=cameraManager.isUseBackCamera()?90:270;
+					mEncoder.pushVideoData(v.data,previewSize[0],previewSize[1],degree,v.ts);
 				}
 			}
-			//停止后, 如果有没有录制完的, 则录制完!!!!
+			//最后的帧数
+			while (!videoFrameQ.isEmpty()) {
+				OpenFrame v = videoFrameQ.poll();
+				int degree=cameraManager.isUseBackCamera()?90:270;
+				mEncoder.pushVideoData(v.data,previewSize[0],previewSize[1],degree,v.ts);
+			}
 		}
 	}
 
@@ -541,6 +519,14 @@ public class OpenSegmentsRecorder implements PreviewCallback, SurfaceHolder.Call
 		}
 		
 		return cameraManager.supportFocus();
+	}
+	public boolean isFaceFront()
+	{
+		if(cameraManager!=null){
+			return cameraManager.isFaceFront();
+		}else{
+			return false;
+		}
 	}
 	public boolean isPreviewing() {
 		if(cameraManager==null){

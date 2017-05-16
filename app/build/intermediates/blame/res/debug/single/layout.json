@@ -24,12 +24,12 @@
         "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\activity_player.xml"
     },
     {
-        "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\view5.xml",
-        "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\view5.xml"
-    },
-    {
         "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\video_edit_demo_layout.xml",
         "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\video_edit_demo_layout.xml"
+    },
+    {
+        "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\view5.xml",
+        "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\view5.xml"
     },
     {
         "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\view2.xml",
@@ -64,12 +64,12 @@
         "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\activity_main.xml"
     },
     {
-        "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\view3.xml",
-        "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\view3.xml"
-    },
-    {
         "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\start_layout3.xml",
         "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\start_layout3.xml"
+    },
+    {
+        "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\view3.xml",
+        "source": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\src\\main\\res\\layout\\view3.xml"
     },
     {
         "merged": "E:\\0000Coodec\\publish_sdk\\LanSoEditor_commonAS_github\\LanSoEditor_common\\app\\build\\intermediates\\res\\merged\\debug\\layout\\custom_function_layout.xml",

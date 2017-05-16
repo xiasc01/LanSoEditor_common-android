@@ -229,9 +229,6 @@ public class AVEditorDemoActivity extends Activity implements OnClickListener{
 				case R.string.demo_id_videogetoneframe:
 					DemoFunctions.demoGetOneFrame(mEditor, srcVideo, dstVideo);
 					break;
-				case R.string.demo_id_videozeroangle:
-					DemoFunctions.demoGetOneFrame(mEditor, srcVideo, dstVideo);
-					break;
 				case R.string.demo_id_videoclockwise90:
 					DemoFunctions.demoVideoRotate90Clockwise(mEditor, srcVideo, dstVideo);
 					break;
